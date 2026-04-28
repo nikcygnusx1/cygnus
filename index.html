@@ -1,1960 +1,2024 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CYGNUS — AI-Native Hedge Fund</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
-<style>
-/* ============================================================
-   ROOT SYSTEM
-============================================================ */
-:root{
-  --void:#020409;
-  --deep:#040912;
-  --surface:#07111e;
-  --panel:#0b1a2e;
-  --glass:rgba(7,17,30,0.75);
-  --c1:#00e8d0;        /* primary cyan */
-  --c2:rgba(0,232,208,0.12);
-  --c3:rgba(0,232,208,0.04);
-  --g1:#d4920a;        /* gold */
-  --g2:rgba(212,146,10,0.15);
-  --g3:rgba(212,146,10,0.06);
-  --r1:#ff2851;        /* risk red */
-  --p1:#6c3bff;        /* plasma purple */
-  --gr:#00c87a;        /* green */
-  --w:#f0f4ff;
-  --muted:rgba(240,244,255,0.42);
-  --faint:rgba(240,244,255,0.18);
-  --b1:rgba(0,232,208,0.1);
-  --b2:rgba(0,232,208,0.06);
-  --mono:'Space Mono',monospace;
-  --sans:'DM Sans',sans-serif;
-  --disp:'Syne',sans-serif;
-}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{
-  background:var(--void);
-  color:var(--w);
-  font-family:var(--sans);
-  font-size:15px;
-  line-height:1.7;
-  overflow-x:hidden;
-  cursor:none;
-}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Cygnus X-1 is an AI-native hedge fund in paper trading, built around autonomous agents, risk containment, market ontology, and continuous learning.">
+  <meta name="theme-color" content="#030403">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23030403'/%3E%3Ccircle cx='32' cy='32' r='21' fill='none' stroke='%2300f5a0' stroke-width='2.5'/%3E%3Ccircle cx='32' cy='32' r='7' fill='none' stroke='%23ff7a45' stroke-width='2'/%3E%3Ccircle cx='43' cy='21' r='4' fill='%23f4efe6'/%3E%3C/svg%3E">
+  <title>Cygnus X-1 | AI-Native Hedge Fund</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --void: #030403;
+      --void-2: #070908;
+      --panel: rgba(9, 12, 11, 0.76);
+      --panel-2: rgba(16, 20, 18, 0.86);
+      --bone: #f4efe6;
+      --bone-2: #d6cec0;
+      --muted: #908a80;
+      --line: rgba(244, 239, 230, 0.14);
+      --line-2: rgba(244, 239, 230, 0.26);
+      --green: #00f5a0;
+      --green-2: #b6ffdf;
+      --orange: #ff7a45;
+      --blue: #7aa7ff;
+      --violet: #b38cff;
+      --red: #ff5d65;
+      --radius: 8px;
+      --max: 1220px;
+      --shadow: 0 30px 120px rgba(0, 0, 0, 0.42);
+      --mono: "SFMono-Regular", "IBM Plex Mono", Consolas, "Liberation Mono", monospace;
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
 
-/* CURSOR */
-#cur{position:fixed;width:10px;height:10px;border-radius:50%;background:var(--c1);pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .2s,height .2s,background .2s}
-#cur-ring{position:fixed;width:36px;height:36px;border-radius:50%;border:1px solid rgba(0,232,208,0.5);pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .1s ease,top .1s ease;mix-blend-mode:screen}
-body.cursor-hover #cur{width:20px;height:20px;background:var(--g1)}
-body.cursor-hover #cur-ring{border-color:rgba(212,146,10,0.6);width:52px;height:52px}
+    * {
+      box-sizing: border-box;
+    }
 
-/* GRAIN + SCANLINES */
-body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);pointer-events:none;z-index:200}
-body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.045'/%3E%3C/svg%3E");pointer-events:none;z-index:199;opacity:.5}
+    html {
+      scroll-behavior: smooth;
+      background: var(--void);
+    }
 
-/* CANVAS BG */
-#cosmos{position:fixed;inset:0;z-index:0;pointer-events:none}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--sans);
+      color: var(--bone);
+      background:
+        radial-gradient(circle at 82% 12%, rgba(0, 245, 160, 0.08), transparent 28rem),
+        radial-gradient(circle at 12% 72%, rgba(255, 122, 69, 0.08), transparent 34rem),
+        linear-gradient(180deg, #030403 0%, #050706 48%, #030403 100%);
+      line-height: 1.45;
+      letter-spacing: 0;
+      overflow-x: hidden;
+    }
 
-/* ============================================================
-   NAVIGATION
-============================================================ */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:600;
-  display:flex;align-items:center;justify-content:space-between;
-  padding:22px 56px;
-  transition:background .4s;
-}
-nav.scrolled{background:rgba(2,4,9,.92);backdrop-filter:blur(20px);border-bottom:1px solid var(--b2)}
-.nav-logo{
-  font-family:var(--disp);font-weight:800;font-size:17px;
-  letter-spacing:.25em;text-transform:uppercase;
-  color:var(--w);text-decoration:none;
-  display:flex;align-items:center;gap:10px;
-}
-.logo-mark{
-  width:28px;height:28px;border:1.5px solid var(--c1);
-  border-radius:50%;display:grid;place-items:center;
-  position:relative;
-}
-.logo-mark::before{
-  content:'';width:8px;height:8px;border-radius:50%;
-  background:var(--c1);
-}
-.logo-mark::after{
-  content:'';position:absolute;width:100%;height:100%;
-  border-radius:50%;border:1px solid var(--c1);
-  animation:logoRing 2s infinite;
-}
-@keyframes logoRing{0%{opacity:.6;transform:scale(1)}100%{opacity:0;transform:scale(1.7)}}
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -4;
+      pointer-events: none;
+      opacity: 0.28;
+      background-image:
+        linear-gradient(rgba(244, 239, 230, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(244, 239, 230, 0.04) 1px, transparent 1px);
+      background-size: 56px 56px;
+      -webkit-mask-image: linear-gradient(to bottom, black 0%, black 46%, transparent 100%);
+      mask-image: linear-gradient(to bottom, black 0%, black 46%, transparent 100%);
+    }
 
-.nav-center{display:flex;gap:36px;list-style:none}
-.nav-center a{
-  font-family:var(--mono);font-size:9px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--muted);
-  text-decoration:none;transition:color .2s;position:relative;
-}
-.nav-center a:hover{color:var(--c1)}
-.nav-center a::after{content:'';position:absolute;bottom:-4px;left:0;width:0;height:1px;background:var(--c1);transition:width .3s}
-.nav-center a:hover::after{width:100%}
-.nav-right{display:flex;align-items:center;gap:20px}
-.sys-status{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:8px;letter-spacing:.15em;color:var(--muted)}
-.sys-dot{width:5px;height:5px;border-radius:50%;background:var(--gr);animation:pulse 2s infinite}
-.nav-btn{
-  padding:9px 22px;border:1px solid var(--c1);background:transparent;
-  color:var(--c1);font-family:var(--mono);font-size:9px;letter-spacing:.18em;
-  text-transform:uppercase;cursor:none;text-decoration:none;
-  transition:all .25s;position:relative;overflow:hidden;
-}
-.nav-btn::before{content:'';position:absolute;inset:0;background:var(--c1);transform:translateX(-101%);transition:transform .25s cubic-bezier(.4,0,.2,1)}
-.nav-btn:hover{color:var(--void)}
-.nav-btn:hover::before{transform:translateX(0)}
-.nav-btn span{position:relative;z-index:1}
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
 
-/* STATUS STRIP */
-.sys-strip{
-  position:fixed;bottom:0;left:0;right:0;z-index:600;
-  padding:9px 56px;background:rgba(2,4,9,.85);backdrop-filter:blur(10px);
-  border-top:1px solid var(--b2);
-  display:flex;align-items:center;gap:32px;
-  font-family:var(--mono);font-size:8px;letter-spacing:.18em;color:var(--faint);
-}
-.sys-strip .live{color:var(--c1)}
-.sys-strip .sep{color:var(--b1)}
+    p {
+      margin: 0;
+    }
 
-/* ============================================================
-   COMMON ELEMENTS
-============================================================ */
-.section-tag{
-  font-family:var(--mono);font-size:9px;letter-spacing:.35em;
-  color:var(--c1);text-transform:uppercase;
-  display:flex;align-items:center;gap:14px;margin-bottom:18px;
-}
-.section-tag::before{content:'';display:block;width:28px;height:1px;background:var(--c1)}
-.section-heading{
-  font-family:var(--disp);font-weight:800;
-  font-size:clamp(34px,5vw,64px);line-height:1;
-  letter-spacing:-.02em;color:var(--w);
-  margin-bottom:20px;
-}
-.section-sub{
-  font-size:15px;color:var(--muted);
-  max-width:580px;line-height:1.8;margin-bottom:60px;
-}
-.gold{color:var(--g1)}
-.cyan{color:var(--c1)}
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+      touch-action: manipulation;
+    }
 
-.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s,transform .8s}
-.reveal.visible{opacity:1;transform:none}
-.reveal-delay-1{transition-delay:.1s}
-.reveal-delay-2{transition-delay:.2s}
-.reveal-delay-3{transition-delay:.3s}
-.reveal-delay-4{transition-delay:.4s}
+    #universe {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -5;
+      background: #020302;
+      will-change: transform;
+    }
 
-/* ============================================================
-   HERO — STATE 1: ENTRY
-============================================================ */
-#hero{
-  position:relative;z-index:10;
-  min-height:100vh;
-  display:flex;flex-direction:column;justify-content:center;align-items:center;
-  text-align:center;padding:0 48px;
-  background:radial-gradient(ellipse 70% 55% at 50% 45%,rgba(0,232,208,.04),transparent 70%);
-}
-.hero-eyebrow{
-  font-family:var(--mono);font-size:9px;letter-spacing:.45em;
-  color:var(--c1);text-transform:uppercase;
-  margin-bottom:36px;
-  opacity:0;animation:fadeUp .8s .4s forwards;
-  display:flex;align-items:center;gap:16px;
-}
-.hero-eyebrow::before,.hero-eyebrow::after{content:'';display:block;height:1px;width:40px;background:var(--c1)}
-.hero-main{
-  font-family:var(--disp);font-weight:800;
-  font-size:clamp(64px,12vw,152px);
-  line-height:.88;letter-spacing:-.03em;
-  color:var(--w);margin-bottom:12px;
-  opacity:0;animation:fadeUp .9s .7s forwards;
-}
-.hero-main .glitch-wrap{position:relative;display:inline-block}
-.hero-main .glitch-wrap::before,.hero-main .glitch-wrap::after{
-  content:attr(data-text);position:absolute;left:0;top:0;width:100%;height:100%;
-}
-.hero-main .glitch-wrap::before{color:var(--r1);animation:g1 5s infinite;clip-path:polygon(0 15%,100% 15%,100% 40%,0 40%)}
-.hero-main .glitch-wrap::after{color:var(--g1);animation:g2 5s infinite;clip-path:polygon(0 65%,100% 65%,100% 85%,0 85%)}
-.hero-sub-word{
-  font-family:var(--disp);font-weight:400;font-size:clamp(18px,3vw,36px);
-  letter-spacing:.15em;text-transform:uppercase;
-  color:var(--muted);margin-bottom:36px;
-  opacity:0;animation:fadeUp .8s 1s forwards;
-}
-.hero-desc{
-  font-size:clamp(14px,1.4vw,17px);color:var(--muted);
-  max-width:560px;line-height:1.9;margin:0 auto 52px;
-  opacity:0;animation:fadeUp .8s 1.3s forwards;
-}
-.hero-cta-row{
-  display:flex;align-items:center;gap:20px;justify-content:center;
-  opacity:0;animation:fadeUp .8s 1.6s forwards;
-  flex-wrap:wrap;
-}
-.cta-primary{
-  position:relative;display:inline-flex;align-items:center;gap:14px;
-  padding:16px 44px;border:1px solid var(--c1);
-  color:var(--c1);font-family:var(--mono);font-size:10px;
-  letter-spacing:.25em;text-transform:uppercase;cursor:none;
-  text-decoration:none;transition:all .3s;overflow:hidden;
-}
-.cta-primary::before{content:'';position:absolute;inset:0;background:var(--c1);transform:translateX(-101%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
-.cta-primary:hover{color:var(--void)}
-.cta-primary:hover::before{transform:translateX(0)}
-.cta-primary>*{position:relative;z-index:1}
-.cta-secondary{
-  display:inline-flex;align-items:center;gap:10px;
-  font-family:var(--mono);font-size:10px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--muted);cursor:none;text-decoration:none;
-  transition:color .2s;
-}
-.cta-secondary:hover{color:var(--w)}
-.arrow{display:inline-block;transition:transform .25s}
-.cta-secondary:hover .arrow,.cta-primary:hover .arrow{transform:translateX(6px)}
+    .progress {
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 2px;
+      width: 0;
+      z-index: 100;
+      background: linear-gradient(90deg, var(--green), var(--blue), var(--orange));
+      transform-origin: left center;
+    }
 
-.hero-metrics{
-  display:flex;gap:56px;justify-content:center;
-  margin-top:80px;
-  opacity:0;animation:fadeUp .8s 2s forwards;
-}
-.metric{text-align:center;position:relative}
-.metric-val{
-  font-family:var(--disp);font-size:clamp(28px,4vw,48px);
-  font-weight:800;color:var(--g1);display:block;line-height:1;
-}
-.metric-lbl{font-family:var(--mono);font-size:8px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:8px;display:block}
-.metric::after{content:'';position:absolute;right:-28px;top:50%;height:60%;width:1px;background:var(--b1);transform:translateY(-50%)}
-.metric:last-child::after{display:none}
+    .skip-link {
+      position: absolute;
+      left: 1rem;
+      top: -4rem;
+      z-index: 100;
+      background: var(--bone);
+      color: var(--void);
+      padding: 0.7rem 1rem;
+      border-radius: 4px;
+    }
 
-.scroll-indicator{
-  position:absolute;bottom:40px;left:50%;transform:translateX(-50%);
-  display:flex;flex-direction:column;align-items:center;gap:10px;
-  opacity:0;animation:fadeUp .8s 2.4s forwards;
-}
-.scroll-indicator span{font-family:var(--mono);font-size:8px;letter-spacing:.25em;color:var(--faint);text-transform:uppercase}
-.scroll-line{width:1px;height:44px;background:linear-gradient(var(--c1),transparent);animation:scrollPulse 2s infinite}
+    .skip-link:focus {
+      top: 1rem;
+    }
 
-/* ============================================================
-   ERA TIMELINE — "THREE ERAS"
-============================================================ */
-#eras{
-  position:relative;z-index:10;
-  padding:120px 56px;
-  background:linear-gradient(to bottom,var(--void),var(--deep),var(--void));
-}
-.eras-grid{
-  display:grid;grid-template-columns:1fr 1fr 1fr;
-  gap:2px;max-width:1200px;margin:0 auto;
-}
-.era-card{
-  position:relative;padding:48px 40px;
-  background:var(--panel);border:1px solid var(--b2);
-  transition:border-color .3s;overflow:hidden;
-}
-.era-card::before{content:'';position:absolute;inset:0;opacity:0;transition:opacity .4s}
-.era-card:nth-child(3)::before{background:radial-gradient(ellipse 80% 80% at 50% 0%,rgba(212,146,10,.06),transparent)}
-.era-card:nth-child(3):hover::before{opacity:1}
-.era-card.active{border-color:rgba(212,146,10,.3)}
-.era-num{font-family:var(--mono);font-size:9px;letter-spacing:.3em;color:var(--faint);margin-bottom:24px}
-.era-badge{
-  display:inline-block;font-family:var(--mono);font-size:8px;
-  letter-spacing:.2em;text-transform:uppercase;padding:4px 12px;
-  border:1px solid var(--g2);color:var(--g1);background:var(--g3);
-  margin-bottom:16px;
-}
-.era-title{font-family:var(--disp);font-size:28px;font-weight:800;margin-bottom:8px;line-height:1.1}
-.era-period{font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--muted);margin-bottom:24px}
-.era-body{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px}
-.era-players{font-family:var(--mono);font-size:9px;letter-spacing:.1em;color:var(--faint);border-top:1px solid var(--b2);padding-top:16px}
-.era-limit{
-  position:absolute;bottom:0;left:0;right:0;
-  padding:10px 20px;font-family:var(--mono);font-size:8px;
-  letter-spacing:.15em;text-align:center;
-}
-.era-card:nth-child(1) .era-limit{background:rgba(240,244,255,.04);color:var(--muted)}
-.era-card:nth-child(2) .era-limit{background:rgba(0,232,208,.06);color:var(--c1)}
-.era-card:nth-child(3) .era-limit{background:rgba(212,146,10,.08);color:var(--g1)}
-.you-are-here{
-  position:absolute;top:-1px;left:0;right:0;
-  background:var(--g1);
-  padding:5px;text-align:center;
-  font-family:var(--mono);font-size:8px;letter-spacing:.2em;
-  color:var(--void);font-weight:700;
-}
+    .shell {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
 
-/* ============================================================
-   SIGNAL SECTION — 11 Sources
-============================================================ */
-#signals{
-  position:relative;z-index:10;
-  padding:120px 56px;
-  background:radial-gradient(ellipse 60% 40% at 50% 60%,rgba(0,232,208,.03),transparent);
-}
-.signals-layout{display:grid;grid-template-columns:1fr 1.4fr;gap:80px;max-width:1200px;margin:0 auto;align-items:start}
-.signals-intro .section-heading{font-size:clamp(34px,4vw,56px)}
-.signal-grid{
-  display:grid;grid-template-columns:1fr 1fr;gap:12px;
-}
-.signal-card{
-  padding:20px;border:1px solid var(--b2);
-  background:var(--panel);position:relative;overflow:hidden;
-  transition:border-color .25s,background .25s;cursor:none;
-}
-.signal-card:hover{border-color:var(--b1);background:rgba(0,232,208,.03)}
-.sig-num{
-  font-family:var(--mono);font-size:8px;letter-spacing:.15em;
-  color:var(--faint);position:absolute;top:14px;right:14px;
-}
-.sig-icon{
-  width:32px;height:32px;border-radius:50%;
-  display:grid;place-items:center;margin-bottom:12px;font-size:14px;
-}
-.sig-title{font-family:var(--disp);font-size:13px;font-weight:700;margin-bottom:6px;line-height:1.2}
-.sig-edge{font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--c1)}
-.signal-card.wide{grid-column:1/3;display:flex;align-items:center;gap:24px}
-.signal-card.wide .sig-title{font-size:14px}
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      border-bottom: 1px solid var(--line);
+      background: rgba(3, 4, 3, 0.78);
+      -webkit-backdrop-filter: blur(22px);
+      backdrop-filter: blur(22px);
+    }
 
-/* ============================================================
-   ARCHITECTURE
-============================================================ */
-#architecture{
-  position:relative;z-index:10;padding:120px 56px;
-  background:linear-gradient(to bottom,transparent,var(--deep) 30%,var(--deep) 70%,transparent);
-}
-.arch-wrap{max-width:1200px;margin:0 auto}
-.arch-layers{display:flex;flex-direction:column;gap:3px;margin-top:60px}
-.arch-layer{
-  display:grid;grid-template-columns:160px 1fr;
-  border:1px solid var(--b2);overflow:hidden;
-  transition:border-color .3s;
-}
-.arch-layer:hover{border-color:var(--b1)}
-.layer-label{
-  padding:20px 24px;
-  display:flex;flex-direction:column;justify-content:center;
-  border-right:1px solid var(--b2);
-  background:var(--panel);
-}
-.layer-num{font-family:var(--mono);font-size:8px;letter-spacing:.2em;color:var(--faint);margin-bottom:4px}
-.layer-name{font-family:var(--mono);font-size:9px;letter-spacing:.15em;font-weight:700;text-transform:uppercase}
-.layer-content{
-  padding:20px 32px;
-  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
-  background:var(--surface);
-}
-.layer-pill{
-  padding:6px 14px;border:1px solid;
-  font-family:var(--mono);font-size:8px;letter-spacing:.12em;
-  white-space:nowrap;border-radius:2px;
-}
-/* Agent swarm row */
-.arch-layer.swarm-row{
-  background:var(--panel);
-  border:1px solid rgba(212,146,10,.25);
-}
-.swarm-row .layer-label{background:rgba(212,146,10,.06);border-right-color:rgba(212,146,10,.2)}
-.swarm-row .layer-name{color:var(--g1)}
-.swarm-pills{padding:20px 32px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;background:rgba(7,17,30,.6)}
-.agent-pill{
-  padding:8px 16px;border:1px solid;font-family:var(--mono);
-  font-size:8px;letter-spacing:.12em;font-weight:700;
-  position:relative;transition:all .2s;cursor:none;
-}
-.agent-pill:hover{transform:translateY(-2px)}
+    .nav {
+      min-height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
 
-/* ============================================================
-   STRATEGIES
-============================================================ */
-#strategies{position:relative;z-index:10;padding:120px 56px}
-.strat-header{max-width:1200px;margin:0 auto 60px}
-.strat-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:2px;max-width:1200px;margin:0 auto;
-}
-.strat-card{
-  padding:36px 32px;border:1px solid var(--b2);
-  background:var(--panel);position:relative;overflow:hidden;
-  transition:border-color .3s,background .3s;cursor:none;
-  group:true;
-}
-.strat-card::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  transform:scaleX(0);transform-origin:left;transition:transform .4s;
-}
-.strat-card:hover{background:rgba(0,232,208,.02)}
-.strat-card:hover::after{transform:scaleX(1)}
-.strat-num{
-  font-family:var(--mono);font-size:9px;letter-spacing:.25em;
-  color:var(--faint);margin-bottom:20px;display:flex;align-items:center;gap:10px;
-}
-.strat-num::after{content:'';display:block;flex:1;height:1px;background:var(--b2)}
-.strat-title{font-family:var(--disp);font-size:20px;font-weight:800;margin-bottom:8px;line-height:1.15}
-.strat-sub{font-family:var(--mono);font-size:9px;letter-spacing:.1em;margin-bottom:16px}
-.strat-body{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:24px}
-.strat-tags{display:flex;gap:8px;flex-wrap:wrap}
-.strat-tag{
-  padding:4px 10px;border:1px solid;font-family:var(--mono);
-  font-size:7px;letter-spacing:.15em;text-transform:uppercase;
-}
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.78rem;
+      min-width: max-content;
+    }
 
-/* ============================================================
-   AGENT SWARM — INTERACTIVE
-============================================================ */
-#agents{
-  position:relative;z-index:10;padding:120px 56px;
-  background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(212,146,10,.03),transparent);
-}
-.agents-layout{display:grid;grid-template-columns:1fr 1.2fr;gap:80px;max-width:1200px;margin:0 auto;align-items:center}
-.agent-canvas-wrap{position:relative;height:520px;border:1px solid var(--b2);background:var(--panel)}
-#agentCanvas{width:100%;height:100%}
-.agent-list{display:flex;flex-direction:column;gap:4px}
-.agent-row{
-  padding:18px 22px;border:1px solid var(--b2);
-  background:var(--panel);cursor:none;
-  transition:all .25s;position:relative;overflow:hidden;
-}
-.agent-row::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--c1);transform:scaleY(0);transition:transform .25s}
-.agent-row:hover,.agent-row.active{border-color:var(--b1)}
-.agent-row:hover::before,.agent-row.active::before{transform:scaleY(1)}
-.agent-name{font-family:var(--mono);font-size:9px;letter-spacing:.18em;font-weight:700;margin-bottom:2px}
-.agent-role-label{font-family:var(--sans);font-size:11px;color:var(--muted)}
-.agent-detail{
-  margin-top:20px;padding:28px;border:1px solid var(--b2);
-  background:var(--panel);min-height:140px;
-}
-.agent-detail-name{font-family:var(--disp);font-size:20px;font-weight:800;margin-bottom:4px}
-.agent-detail-role{font-family:var(--mono);font-size:9px;letter-spacing:.15em;margin-bottom:16px}
-.agent-detail-body{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:16px}
-.agent-detail-stat{font-family:var(--mono);font-size:9px;letter-spacing:.12em;padding:8px 14px;border:1px solid;display:inline-block}
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      border: 1px solid var(--line-2);
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle, rgba(0, 245, 160, 0.18), rgba(0, 0, 0, 0) 58%);
+    }
 
-/* ============================================================
-   TECHNOLOGY STACK
-============================================================ */
-#techstack{
-  position:relative;z-index:10;padding:120px 56px;
-  background:linear-gradient(to bottom,transparent,var(--deep),transparent);
-}
-.tech-grid{
-  display:grid;grid-template-columns:repeat(4,1fr);
-  gap:2px;max-width:1200px;margin:60px auto 0;
-}
-.tech-block{padding:36px 32px;border:1px solid var(--b2);background:var(--panel)}
-.tech-block-title{
-  font-family:var(--disp);font-size:15px;font-weight:700;
-  margin-bottom:6px;padding-bottom:16px;border-bottom:1px solid var(--b2);
-  margin-bottom:20px;
-}
-.tech-item{
-  font-family:var(--mono);font-size:9px;letter-spacing:.1em;
-  color:var(--muted);padding:8px 0;border-bottom:1px solid var(--b2);
-  display:flex;align-items:center;gap:8px;
-}
-.tech-item:last-child{border:none}
-.tech-dot{width:4px;height:4px;border-radius:50%;flex-shrink:0}
+    .brand-mark::before,
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 245, 160, 0.52);
+    }
 
-/* ============================================================
-   RESEARCH ENGINE
-============================================================ */
-#research{position:relative;z-index:10;padding:120px 56px}
-.research-layout{display:grid;grid-template-columns:1.2fr 1fr;gap:80px;max-width:1200px;margin:0 auto;align-items:center}
-.research-steps{display:flex;flex-direction:column;gap:0}
-.research-step{
-  display:grid;grid-template-columns:60px 1fr;gap:0;
-  border-left:1px solid var(--b2);padding:0 0 0 28px;
-  position:relative;transition:border-color .3s;
-}
-.research-step:hover{border-left-color:var(--c1)}
-.step-num-wrap{
-  position:absolute;left:-18px;top:28px;
-  width:34px;height:34px;border-radius:50%;
-  background:var(--panel);border:1px solid var(--b2);
-  display:grid;place-items:center;
-  font-family:var(--mono);font-size:9px;
-  transition:all .3s;
-}
-.research-step:hover .step-num-wrap{border-color:var(--c1);background:rgba(0,232,208,.1);color:var(--c1)}
-.step-body{padding:24px 0}
-.step-title{font-family:var(--disp);font-size:17px;font-weight:700;margin-bottom:6px}
-.step-desc{font-size:13px;color:var(--muted);line-height:1.7}
+    .brand-mark::before {
+      width: 24px;
+      height: 24px;
+      animation: spin 13s linear infinite;
+    }
 
-.research-metrics{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.r-metric{padding:28px;border:1px solid var(--b2);background:var(--panel);text-align:center}
-.r-metric-val{font-family:var(--disp);font-size:clamp(26px,3vw,40px);font-weight:800;display:block;line-height:1;margin-bottom:8px}
-.r-metric-lbl{font-family:var(--mono);font-size:8px;letter-spacing:.15em;color:var(--muted);line-height:1.5}
+    .brand-mark::after {
+      width: 6px;
+      height: 6px;
+      background: var(--orange);
+      border-color: var(--orange);
+      transform: translate(8px, -9px);
+      box-shadow: 0 0 18px rgba(255, 122, 69, 0.74);
+    }
 
-/* ============================================================
-   RISK INTELLIGENCE
-============================================================ */
-#risk{
-  position:relative;z-index:10;padding:120px 56px;
-  background:radial-gradient(ellipse 50% 40% at 50% 50%,rgba(255,40,81,.03),transparent);
-}
-.risk-principle{
-  max-width:1200px;margin:0 auto 48px;
-  padding:24px 32px;border:1px solid rgba(255,40,81,.2);
-  background:rgba(255,40,81,.03);display:flex;align-items:start;gap:20px;
-}
-.risk-principle-label{font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--r1);white-space:nowrap;margin-top:2px}
-.risk-principle-text{font-size:14px;color:var(--muted);line-height:1.7}
-.risk-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:2px;max-width:1200px;margin:0 auto;
-}
-.risk-card{
-  padding:36px 32px;border:1px solid var(--b2);background:var(--panel);
-  position:relative;overflow:hidden;
-}
-.risk-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--r1);transform:scaleX(.25);transform-origin:left;transition:transform .5s}
-.risk-card:hover::before{transform:scaleX(1)}
-.risk-icon{width:40px;height:40px;border:1px solid rgba(255,40,81,.25);border-radius:50%;display:grid;place-items:center;margin-bottom:20px;font-size:16px;background:rgba(255,40,81,.06)}
-.risk-title{font-family:var(--disp);font-size:17px;font-weight:700;margin-bottom:10px}
-.risk-body{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:18px}
-.risk-auto{font-family:var(--mono);font-size:8px;letter-spacing:.1em;color:var(--r1);border-top:1px solid rgba(255,40,81,.15);padding-top:14px}
+    .brand-name {
+      display: block;
+      font-size: 0.98rem;
+      font-weight: 760;
+      letter-spacing: 0;
+    }
 
-/* ============================================================
-   MOAT
-============================================================ */
-#moat{position:relative;z-index:10;padding:120px 56px;
-  background:linear-gradient(to bottom,transparent,var(--deep),transparent)}
-.moat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;max-width:1200px;margin:60px auto 0}
-.moat-card{padding:36px 32px;border:1px solid var(--b2);background:var(--panel);position:relative;overflow:hidden}
-.moat-card:hover{background:rgba(0,232,208,.01)}
-.moat-icon{font-size:24px;margin-bottom:20px;display:block}
-.moat-title{font-family:var(--disp);font-size:18px;font-weight:700;margin-bottom:10px}
-.moat-body{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:14px}
-.moat-metric{font-family:var(--mono);font-size:8px;letter-spacing:.12em;color:var(--c1)}
+    .brand-meta {
+      display: block;
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
 
-/* ============================================================
-   AUTONOMY SCALE
-============================================================ */
-#autonomy{position:relative;z-index:10;padding:120px 56px}
-.autonomy-wrap{max-width:1200px;margin:0 auto}
-.autonomy-bar{
-  display:grid;grid-template-columns:repeat(6,1fr);
-  gap:2px;margin:48px 0 4px;
-}
-.auto-seg{
-  padding:22px 16px;text-align:center;font-family:var(--mono);
-  font-size:20px;font-weight:700;position:relative;transition:all .3s;cursor:none;
-}
-.auto-seg-label{font-size:9px;letter-spacing:.1em;font-weight:400;margin-top:4px;display:block}
-.auto-marker{
-  display:flex;justify-content:space-between;
-  padding:0 0 40px;
-}
-.auto-marker-item{font-family:var(--mono);font-size:8px;letter-spacing:.12em;color:var(--faint);display:flex;flex-direction:column;align-items:center;gap:8px}
-.auto-marker-item .marker-line{width:1px;height:20px}
-.auto-cards{display:grid;grid-template-columns:repeat(6,1fr);gap:2px}
-.auto-card{padding:24px 16px;border:1px solid var(--b2);background:var(--panel)}
-.auto-card-name{font-family:var(--disp);font-size:12px;font-weight:700;margin-bottom:6px}
-.auto-card-desc{font-size:10px;color:var(--muted);line-height:1.6;margin-bottom:12px}
-.auto-card-badge{font-family:var(--mono);font-size:7px;letter-spacing:.12em;padding:4px 10px;display:inline-block}
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      color: var(--bone-2);
+      font-size: 0.88rem;
+    }
 
-/* ============================================================
-   PLATFORM VISION
-============================================================ */
-#platform{
-  position:relative;z-index:10;padding:120px 56px;
-  background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(108,59,255,.04),transparent);
-}
-.platform-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;max-width:1200px;margin:0 auto;align-items:start}
-.platform-phases{display:flex;flex-direction:column;gap:0}
-.phase-item{
-  display:grid;grid-template-columns:48px 1fr;gap:0;
-  border-left:1px solid var(--b2);padding:0 0 0 28px;margin-bottom:0;
-  position:relative;padding-bottom:32px;
-}
-.phase-item:last-child{padding-bottom:0;border-left-color:transparent}
-.phase-dot{
-  position:absolute;left:-10px;top:4px;
-  width:18px;height:18px;border-radius:50%;
-  border:1px solid var(--b2);background:var(--panel);
-  display:grid;place-items:center;
-}
-.phase-dot::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--muted)}
-.phase-item.current .phase-dot{border-color:var(--g1)}
-.phase-item.current .phase-dot::before{background:var(--g1)}
-.phase-label{font-family:var(--mono);font-size:8px;letter-spacing:.2em;color:var(--faint);margin-bottom:4px}
-.phase-title{font-family:var(--disp);font-size:18px;font-weight:700;margin-bottom:6px}
-.phase-desc{font-size:13px;color:var(--muted);line-height:1.7}
-.phase-time{font-family:var(--mono);font-size:8px;letter-spacing:.12em;color:var(--c1);margin-top:8px}
+    .nav-links a {
+      border-bottom: 1px solid transparent;
+      padding: 0.45rem 0;
+    }
 
-.platform-modules{display:flex;flex-direction:column;gap:12px;margin-top:60px}
-.pmod{padding:24px 28px;border:1px solid var(--b2);background:var(--panel);transition:border-color .3s}
-.pmod:hover{border-color:rgba(108,59,255,.3)}
-.pmod-title{font-family:var(--disp);font-size:15px;font-weight:700;margin-bottom:6px}
-.pmod-desc{font-size:13px;color:var(--muted);line-height:1.6}
+    .nav-links a:hover,
+    .nav-links a:focus-visible {
+      color: var(--bone);
+      border-color: var(--green);
+      outline: none;
+    }
 
-.platform-quote{
-  margin-top:32px;padding:24px;border:1px solid rgba(212,146,10,.2);
-  background:var(--g3);
-}
-.platform-quote p{font-size:14px;color:var(--muted);line-height:1.8;font-style:italic;margin-bottom:10px}
-.platform-quote cite{font-family:var(--mono);font-size:8px;letter-spacing:.15em;color:var(--g1)}
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+    }
 
-/* ============================================================
-   TEAM
-============================================================ */
-#team{position:relative;z-index:10;padding:120px 56px;background:linear-gradient(to bottom,transparent,var(--deep),transparent)}
-.team-layout{display:grid;grid-template-columns:1fr 1fr;gap:80px;max-width:1200px;margin:0 auto;align-items:start}
-.founder-card{border:1px solid rgba(212,146,10,.2);background:var(--panel);padding:48px}
-.founder-avatar{
-  width:80px;height:80px;border-radius:50%;
-  border:2px solid var(--g1);
-  background:linear-gradient(135deg,rgba(212,146,10,.2),rgba(0,232,208,.1));
-  display:grid;place-items:center;
-  font-family:var(--disp);font-size:24px;font-weight:800;color:var(--g1);
-  margin-bottom:24px;
-}
-.founder-name{font-family:var(--disp);font-size:28px;font-weight:800;margin-bottom:4px}
-.founder-title{font-family:var(--mono);font-size:9px;letter-spacing:.18em;color:var(--g1);margin-bottom:28px}
-.founder-exp{display:flex;flex-direction:column;gap:0}
-.exp-row{
-  display:grid;grid-template-columns:100px 1fr;
-  padding:12px 0;border-bottom:1px solid var(--b2);gap:16px;
-  font-size:13px;
-}
-.exp-row:last-child{border:none}
-.exp-org{color:var(--c1);font-weight:500}
-.exp-note{color:var(--muted)}
-.founder-skills{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;padding-top:24px;border-top:1px solid var(--b2)}
-.skill-tag{font-family:var(--mono);font-size:8px;letter-spacing:.12em;padding:5px 12px;border:1px solid var(--b2);color:var(--muted)}
-.founder-link{
-  display:inline-flex;align-items:center;gap:10px;
-  margin-top:24px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;
-  color:var(--c1);text-decoration:none;
-  border-bottom:1px solid rgba(0,232,208,.3);padding-bottom:2px;
-  transition:border-color .2s;
-}
-.founder-link:hover{border-color:var(--c1)}
-.hiring-section{display:flex;flex-direction:column;gap:12px}
-.hiring-card{
-  padding:24px 28px;border:1px solid var(--b2);background:var(--panel);
-  position:relative;overflow:hidden;transition:border-color .3s;
-}
-.hiring-card:hover{border-color:var(--b1)}
-.hiring-role{font-family:var(--disp);font-size:16px;font-weight:700;margin-bottom:6px}
-.hiring-meta{display:flex;gap:12px;margin-bottom:10px}
-.hiring-tag{font-family:var(--mono);font-size:7px;letter-spacing:.15em;padding:3px 10px;border:1px solid}
-.hiring-desc{font-size:12px;color:var(--muted);line-height:1.6}
+    .menu-toggle {
+      display: none;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(244, 239, 230, 0.04);
+      color: var(--bone);
+      cursor: pointer;
+    }
 
-/* ============================================================
-   ACCESS — CTA
-============================================================ */
-#access{
-  position:relative;z-index:10;padding:160px 56px;
-  text-align:center;
-  background:radial-gradient(ellipse 60% 50% at 50% 50%,rgba(0,232,208,.05),transparent 65%);
-}
-.access-label{font-family:var(--mono);font-size:9px;letter-spacing:.35em;color:var(--c1);text-transform:uppercase;margin-bottom:24px;display:block}
-.access-heading{
-  font-family:var(--disp);font-size:clamp(40px,7vw,90px);
-  font-weight:800;line-height:.95;letter-spacing:-.02em;
-  max-width:900px;margin:0 auto 32px;
-}
-.access-sub{font-size:16px;color:var(--muted);max-width:520px;margin:0 auto 56px;line-height:1.8}
-.access-cta-row{display:flex;align-items:center;gap:20px;justify-content:center;flex-wrap:wrap}
-.access-primary{
-  position:relative;display:inline-flex;align-items:center;gap:14px;
-  padding:20px 52px;border:1px solid var(--c1);background:transparent;
-  color:var(--c1);font-family:var(--mono);font-size:11px;
-  letter-spacing:.28em;text-transform:uppercase;cursor:none;
-  text-decoration:none;transition:all .3s;overflow:hidden;
-}
-.access-primary::before{content:'';position:absolute;inset:0;background:var(--c1);transform:translateX(-101%);transition:transform .3s cubic-bezier(.4,0,.2,1)}
-.access-primary:hover{color:var(--void)}
-.access-primary:hover::before{transform:translateX(0)}
-.access-primary>*{position:relative;z-index:1}
-.access-classifier{
-  margin-top:60px;padding:16px 32px;
-  border:1px solid var(--b2);background:var(--panel);
-  font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--faint);
-  display:inline-block;
-}
+    .menu-toggle span {
+      display: block;
+      width: 18px;
+      height: 1px;
+      margin: 5px auto;
+      background: currentColor;
+    }
 
-/* ============================================================
-   FOOTER
-============================================================ */
-footer{
-  position:relative;z-index:10;padding:48px 56px;
-  border-top:1px solid var(--b2);
-  display:flex;justify-content:space-between;align-items:center;
-  background:var(--deep);flex-wrap:wrap;gap:16px;
-}
-.footer-logo{font-family:var(--disp);font-size:14px;font-weight:800;letter-spacing:.2em;color:var(--faint)}
-.footer-copy{font-family:var(--mono);font-size:8px;letter-spacing:.15em;color:var(--faint)}
-.footer-links{display:flex;gap:24px}
-.footer-links a{font-family:var(--mono);font-size:8px;letter-spacing:.15em;color:var(--faint);text-decoration:none;transition:color .2s}
-.footer-links a:hover{color:var(--c1)}
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 44px;
+      padding: 0.78rem 1.05rem;
+      border-radius: 6px;
+      border: 1px solid var(--line-2);
+      color: var(--bone);
+      background: rgba(244, 239, 230, 0.045);
+      font-weight: 760;
+      font-size: 0.92rem;
+      cursor: pointer;
+      transition: transform 0.18s ease, background 0.18s ease, border-color 0.18s ease;
+      white-space: nowrap;
+    }
 
-/* ============================================================
-   ANIMATIONS
-============================================================ */
-@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:none}}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.6;transform:scale(.85)}}
-@keyframes scrollPulse{0%{opacity:0;transform:scaleY(0);transform-origin:top}50%{opacity:1}100%{opacity:0;transform:scaleY(1);transform-origin:top}}
-@keyframes g1{0%,97%,100%{clip-path:polygon(0 15%,100% 15%,100% 40%,0 40%);transform:translate(0)}98%{clip-path:polygon(0 15%,100% 15%,100% 40%,0 40%);transform:translate(-4px,1px)}}
-@keyframes g2{0%,94%,97%,100%{clip-path:polygon(0 65%,100% 65%,100% 85%,0 85%);transform:translate(0)}95%{clip-path:polygon(0 65%,100% 65%,100% 85%,0 85%);transform:translate(3px,-1px)}96%{clip-path:polygon(0 65%,100% 65%,100% 85%,0 85%);transform:translate(-2px,0)}}
-@keyframes dataFlow{0%{stroke-dashoffset:100}100%{stroke-dashoffset:0}}
-@keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
-@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+    .btn:hover,
+    .btn:focus-visible {
+      transform: translateY(-1px);
+      background: rgba(0, 245, 160, 0.08);
+      border-color: rgba(0, 245, 160, 0.62);
+      outline: none;
+    }
 
-/* ticker strip */
-.ticker-strip{
-  position:relative;z-index:10;overflow:hidden;
-  border-top:1px solid var(--b2);border-bottom:1px solid var(--b2);
-  padding:12px 0;background:var(--panel);
-}
-.ticker-inner{display:flex;gap:0;white-space:nowrap;animation:ticker 30s linear infinite}
-.ticker-item{
-  display:inline-flex;align-items:center;gap:12px;
-  padding:0 32px;font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--muted);
-  border-right:1px solid var(--b2);
-}
-.ticker-item .tk{color:var(--c1)}
-.ticker-item .up{color:var(--gr)}
+    .btn.primary {
+      background: var(--bone);
+      color: var(--void);
+      border-color: var(--bone);
+    }
 
-/* live data bar */
-.live-bar{
-  position:relative;z-index:10;
-  padding:10px 56px;background:var(--panel);
-  border-bottom:1px solid var(--b2);
-  display:flex;gap:40px;align-items:center;flex-wrap:wrap;
-}
-.live-item{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:8px;letter-spacing:.12em}
-.live-item-label{color:var(--faint)}
-.live-item-val{color:var(--c1)}
+    .btn.primary:hover,
+    .btn.primary:focus-visible {
+      background: white;
+      border-color: white;
+    }
 
-/* highlight spans */
-.hl{
-  position:relative;display:inline;
-  background:linear-gradient(to right,rgba(0,232,208,.08),transparent);
-  padding:0 4px;
-}
+    .hero {
+      min-height: calc(100vh - 74px);
+      min-height: calc(100svh - 74px);
+      display: grid;
+      align-items: center;
+      padding: clamp(4.5rem, 7vw, 7rem) 0 clamp(2.5rem, 5vw, 4rem);
+      border-bottom: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+    }
 
-/* comparison table */
-.comp-table{max-width:1200px;margin:60px auto 0;overflow:auto}
-.comp-table table{width:100%;border-collapse:collapse}
-.comp-table th,.comp-table td{
-  padding:14px 20px;text-align:center;
-  border:1px solid var(--b2);font-family:var(--mono);font-size:9px;letter-spacing:.1em;
-}
-.comp-table th{background:var(--panel);color:var(--g1);font-weight:700;letter-spacing:.15em}
-.comp-table td:first-child{text-align:left;color:var(--w);font-weight:700}
-.comp-table tr.cygnus-row td{background:rgba(0,232,208,.04);border-color:rgba(0,232,208,.2);color:var(--c1)}
-.comp-table .chk{color:var(--gr)}
-.comp-table .cross{color:rgba(240,244,255,.2)}
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: auto 0 0;
+      height: 26vh;
+      pointer-events: none;
+      background: linear-gradient(180deg, transparent, var(--void));
+    }
 
-/* manifesto */
-.manifesto-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:2px;max-width:1200px;margin:60px auto 0}
-.manifesto-item{padding:32px;border:1px solid var(--b2);background:var(--panel);display:grid;grid-template-columns:52px 1fr;gap:16px;align-items:start}
-.manifesto-num{font-family:var(--disp);font-size:36px;font-weight:800;color:rgba(0,232,208,.15);line-height:1}
-.manifesto-title{font-family:var(--disp);font-size:15px;font-weight:700;margin-bottom:6px}
-.manifesto-body{font-size:13px;color:var(--muted);line-height:1.7}
+    .hero-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 0.92fr) minmax(420px, 0.62fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
 
-/* responsive */
-@media(max-width:900px){
-  .eras-grid,.strat-grid,.risk-grid,.moat-grid,.tech-grid{grid-template-columns:1fr}
-  .agents-layout,.signals-layout,.research-layout,.platform-layout,.team-layout{grid-template-columns:1fr}
-  .agent-canvas-wrap{height:300px}
-  nav{padding:18px 24px}
-  .nav-center{display:none}
-  .state{padding:100px 24px 60px}
-  nav,.sys-strip{padding-left:24px;padding-right:24px}
-  .hero-metrics{flex-wrap:wrap;gap:32px}
-}
-</style>
+    .hero-copy {
+      min-width: 0;
+      display: grid;
+      gap: 1.3rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--green-2);
+      font-family: var(--mono);
+      font-size: clamp(0.72rem, 1.3vw, 0.82rem);
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .pulse {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 0 7px rgba(0, 245, 160, 0.12);
+    }
+
+    h1,
+    h2,
+    h3 {
+      margin: 0;
+      line-height: 1;
+      letter-spacing: 0;
+    }
+
+    h1 {
+      max-width: 860px;
+      font-size: clamp(3.6rem, 7.4vw, 7.4rem);
+      font-weight: 780;
+      text-transform: uppercase;
+    }
+
+    .lead {
+      max-width: 720px;
+      color: var(--bone-2);
+      font-size: clamp(1.12rem, 2.3vw, 1.5rem);
+      line-height: 1.34;
+    }
+
+    .lead strong {
+      color: var(--bone);
+      font-weight: 800;
+    }
+
+    .hero-actions,
+    .section-actions,
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .quiet-note {
+      max-width: 720px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.55;
+    }
+
+    .collider {
+      min-width: 0;
+      display: grid;
+      gap: 1rem;
+    }
+
+    .collider-stage {
+      aspect-ratio: 1;
+      min-height: 420px;
+      border: 1px solid var(--line-2);
+      border-radius: 50%;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(0, 245, 160, 0.15), transparent 8rem),
+        radial-gradient(circle at 52% 47%, rgba(122, 167, 255, 0.12), transparent 13rem),
+        rgba(3, 4, 3, 0.54);
+      box-shadow: var(--shadow), inset 0 0 80px rgba(0, 245, 160, 0.08);
+    }
+
+    .ring {
+      position: absolute;
+      inset: 7%;
+      border-radius: 50%;
+      border: 1px solid rgba(244, 239, 230, 0.18);
+      animation: spin 42s linear infinite;
+    }
+
+    .ring:nth-child(2) {
+      inset: 17%;
+      border-color: rgba(122, 167, 255, 0.28);
+      animation-duration: 30s;
+      animation-direction: reverse;
+    }
+
+    .ring:nth-child(3) {
+      inset: 28%;
+      border-color: rgba(255, 122, 69, 0.32);
+      animation-duration: 22s;
+    }
+
+    .ring::before,
+    .ring::after {
+      content: "";
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      top: 50%;
+      left: -5px;
+      background: var(--green);
+      box-shadow: 0 0 22px rgba(0, 245, 160, 0.88);
+    }
+
+    .ring::after {
+      left: auto;
+      right: -5px;
+      background: var(--orange);
+      box-shadow: 0 0 22px rgba(255, 122, 69, 0.82);
+    }
+
+    .event-horizon {
+      position: absolute;
+      inset: 35%;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, #000 0 34%, rgba(0, 0, 0, 0.82) 36% 48%, rgba(0, 245, 160, 0.1) 49%, transparent 70%);
+      border: 1px solid rgba(244, 239, 230, 0.18);
+      box-shadow:
+        0 0 45px rgba(0, 245, 160, 0.18),
+        0 0 90px rgba(255, 122, 69, 0.14);
+      animation: breathe 5s ease-in-out infinite;
+    }
+
+    .collision-line {
+      position: absolute;
+      left: 8%;
+      right: 8%;
+      top: 50%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 245, 160, 0.92), white, rgba(255, 122, 69, 0.85), transparent);
+      filter: drop-shadow(0 0 10px rgba(0, 245, 160, 0.5));
+      animation: beam 2.8s ease-in-out infinite;
+    }
+
+    .detector {
+      position: absolute;
+      inset: 12%;
+      border-radius: 50%;
+      background:
+        conic-gradient(from 0deg, transparent 0 10deg, rgba(244, 239, 230, 0.1) 10deg 11deg, transparent 11deg 21deg),
+        radial-gradient(circle, transparent 0 62%, rgba(244, 239, 230, 0.06) 63% 65%, transparent 66%);
+      opacity: 0.78;
+      animation: spin 80s linear infinite reverse;
+    }
+
+    .collider-readout {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      border: 1px solid var(--line);
+      background: var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .readout {
+      background: rgba(7, 9, 8, 0.84);
+      padding: 0.9rem;
+      min-height: 92px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.7rem;
+    }
+
+    .readout span {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      text-transform: uppercase;
+    }
+
+    .readout b {
+      font-size: 1.25rem;
+      line-height: 1;
+    }
+
+    .status-strip {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: rgba(9, 12, 11, 0.72);
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--line);
+      border-left: 1px solid var(--line);
+      border-right: 1px solid var(--line);
+    }
+
+    .status-cell {
+      min-height: 126px;
+      padding: 1rem;
+      background: rgba(3, 4, 3, 0.9);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 0.9rem;
+    }
+
+    .status-cell span,
+    .kicker,
+    .agent-index,
+    .tiny-label {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0;
+    }
+
+    .status-cell b {
+      font-size: clamp(1.55rem, 3vw, 2.35rem);
+      line-height: 1;
+    }
+
+    .status-cell p {
+      color: var(--bone-2);
+      font-size: 0.9rem;
+      line-height: 1.48;
+    }
+
+    section {
+      padding: clamp(4.5rem, 8vw, 7rem) 0;
+      border-bottom: 1px solid var(--line);
+      position: relative;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(310px, 0.52fr);
+      gap: clamp(1.5rem, 4vw, 4rem);
+      align-items: end;
+      margin-bottom: clamp(2rem, 4.8vw, 3.5rem);
+    }
+
+    .section-head > * {
+      min-width: 0;
+    }
+
+    .kicker {
+      color: var(--orange);
+      margin-bottom: 0.9rem;
+    }
+
+    h2 {
+      max-width: 980px;
+      font-size: clamp(2.45rem, 6vw, 6rem);
+      font-weight: 780;
+      text-transform: uppercase;
+    }
+
+    h3 {
+      font-size: clamp(1.2rem, 2vw, 1.62rem);
+      font-weight: 760;
+      line-height: 1.08;
+    }
+
+    .section-copy {
+      color: var(--bone-2);
+      font-size: clamp(1rem, 1.8vw, 1.14rem);
+      line-height: 1.66;
+    }
+
+    .physics-grid,
+    .agent-grid,
+    .moat-grid {
+      display: grid;
+      gap: 1px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .physics-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .agent-grid {
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+    }
+
+    .moat-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .physics-tile,
+    .agent,
+    .moat,
+    .control-panel,
+    .access-card,
+    .founder,
+    .thesis-panel {
+      background: linear-gradient(180deg, rgba(244, 239, 230, 0.045), rgba(244, 239, 230, 0.015)), var(--void-2);
+    }
+
+    .physics-tile {
+      min-height: 340px;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1.4rem;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .physics-tile::before {
+      content: "";
+      position: absolute;
+      inset: auto -20% -34% -20%;
+      height: 58%;
+      background: radial-gradient(circle, rgba(0, 245, 160, 0.14), transparent 64%);
+      transform: rotate(12deg);
+    }
+
+    .physics-icon {
+      width: 100%;
+      aspect-ratio: 1.8;
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: rgba(3, 4, 3, 0.52);
+    }
+
+    .physics-icon .orbit {
+      position: absolute;
+      inset: 22%;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 245, 160, 0.34);
+      animation: spin 18s linear infinite;
+    }
+
+    .physics-icon .orbit:nth-child(2) {
+      inset: 32% 14%;
+      border-color: rgba(122, 167, 255, 0.3);
+      animation-direction: reverse;
+      animation-duration: 23s;
+    }
+
+    .physics-icon .orbit:nth-child(3) {
+      inset: 40% 26%;
+      border-color: rgba(255, 122, 69, 0.38);
+      animation-duration: 12s;
+    }
+
+    .physics-icon .dot {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--bone);
+      box-shadow: 0 0 20px rgba(244, 239, 230, 0.65);
+      transform: translate(-50%, -50%);
+    }
+
+    .physics-text {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .physics-text p,
+    .agent p,
+    .moat p,
+    .control-panel p,
+    .founder p,
+    .thesis-panel p {
+      color: var(--bone-2);
+      line-height: 1.62;
+    }
+
+    .ontology {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(360px, 0.64fr);
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    .map {
+      min-height: 560px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(rgba(244, 239, 230, 0.045) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(244, 239, 230, 0.045) 1px, transparent 1px),
+        rgba(3, 4, 3, 0.64);
+      background-size: 40px 40px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, transparent 0 28%, rgba(0, 0, 0, 0.64) 76%);
+      pointer-events: none;
+    }
+
+    .node {
+      position: absolute;
+      width: 142px;
+      min-height: 92px;
+      border: 1px solid var(--line-2);
+      border-radius: var(--radius);
+      padding: 0.8rem;
+      background: rgba(9, 12, 11, 0.92);
+      box-shadow: 0 18px 50px rgba(0, 0, 0, 0.24);
+      z-index: 1;
+    }
+
+    .node span {
+      display: block;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      margin-bottom: 0.45rem;
+    }
+
+    .node b {
+      display: block;
+      line-height: 1.08;
+    }
+
+    .node.core {
+      width: 190px;
+      min-height: 128px;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-color: rgba(0, 245, 160, 0.62);
+      background: rgba(4, 16, 12, 0.92);
+    }
+
+    .node.n1 { left: 7%; top: 10%; }
+    .node.n2 { right: 7%; top: 9%; }
+    .node.n3 { left: 9%; bottom: 12%; }
+    .node.n4 { right: 7%; bottom: 13%; }
+    .node.n5 { left: 40%; top: 7%; }
+    .node.n6 { left: 40%; bottom: 7%; }
+
+    .map-line {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 1px;
+      height: 46%;
+      background: linear-gradient(transparent, rgba(0, 245, 160, 0.72), transparent);
+      transform-origin: top center;
+      z-index: 0;
+    }
+
+    .map-line:nth-child(1) { transform: rotate(0deg); }
+    .map-line:nth-child(2) { transform: rotate(60deg); }
+    .map-line:nth-child(3) { transform: rotate(120deg); }
+    .map-line:nth-child(4) { transform: rotate(180deg); }
+    .map-line:nth-child(5) { transform: rotate(240deg); }
+    .map-line:nth-child(6) { transform: rotate(300deg); }
+
+    .control-stack {
+      display: grid;
+      gap: 1px;
+      border: 1px solid var(--line);
+      background: var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .control-panel {
+      padding: 1.15rem;
+      min-height: 132px;
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .control-panel header {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: baseline;
+    }
+
+    .agent {
+      min-height: 230px;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .agent-index {
+      color: var(--green-2);
+    }
+
+    .risk-lab {
+      display: grid;
+      grid-template-columns: minmax(0, 0.78fr) minmax(360px, 0.62fr);
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    .blackbox {
+      min-height: 560px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      position: relative;
+      overflow: hidden;
+      background: radial-gradient(circle at center, #000 0 12%, rgba(0, 0, 0, 0.92) 13% 20%, transparent 21%), rgba(3, 4, 3, 0.6);
+    }
+
+    .blackbox::before {
+      content: "";
+      position: absolute;
+      inset: 11%;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 122, 69, 0.44);
+      box-shadow: 0 0 70px rgba(255, 122, 69, 0.18);
+      animation: spin 18s linear infinite;
+    }
+
+    .blackbox::after {
+      content: "";
+      position: absolute;
+      inset: 24%;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 245, 160, 0.36);
+      box-shadow: 0 0 80px rgba(0, 245, 160, 0.16);
+      animation: spin 24s linear infinite reverse;
+    }
+
+    .risk-beam {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 50%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green), white, var(--orange), transparent);
+      transform: rotate(-18deg);
+      animation: beam 3.4s ease-in-out infinite;
+    }
+
+    .risk-label {
+      position: absolute;
+      padding: 0.7rem 0.8rem;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(9, 12, 11, 0.86);
+      font-family: var(--mono);
+      color: var(--bone-2);
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      z-index: 2;
+    }
+
+    .risk-label.l1 { left: 8%; top: 12%; }
+    .risk-label.l2 { right: 8%; top: 19%; }
+    .risk-label.l3 { left: 10%; bottom: 18%; }
+    .risk-label.l4 { right: 9%; bottom: 13%; }
+
+    .risk-list {
+      display: grid;
+      gap: 1px;
+      border: 1px solid var(--line);
+      background: var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .risk-item {
+      padding: 1.1rem;
+      background: var(--panel-2);
+      display: grid;
+      gap: 0.6rem;
+    }
+
+    .risk-item p {
+      color: var(--bone-2);
+      line-height: 1.62;
+    }
+
+    .thesis-wrap,
+    .access-wrap {
+      display: grid;
+      grid-template-columns: minmax(0, 0.76fr) minmax(360px, 0.58fr);
+      gap: 1.25rem;
+      align-items: stretch;
+      min-width: 0;
+    }
+
+    .thesis-visual {
+      min-height: 470px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 50% 45%, rgba(0, 245, 160, 0.16), transparent 9rem),
+        radial-gradient(circle at 40% 52%, rgba(122, 167, 255, 0.15), transparent 14rem),
+        rgba(3, 4, 3, 0.7);
+    }
+
+    .thesis-visual::before {
+      content: "";
+      position: absolute;
+      inset: 9%;
+      border: 1px solid rgba(244, 239, 230, 0.14);
+      border-radius: 50%;
+      animation: spin 30s linear infinite;
+    }
+
+    .thesis-visual::after {
+      content: "";
+      position: absolute;
+      inset: 19%;
+      border: 1px solid rgba(255, 122, 69, 0.28);
+      border-radius: 50%;
+      animation: spin 18s linear infinite reverse;
+    }
+
+    .thesis-title {
+      position: absolute;
+      inset: auto 1.4rem 1.4rem;
+      display: grid;
+      gap: 1rem;
+      z-index: 2;
+    }
+
+    .thesis-title h3 {
+      max-width: 520px;
+      font-size: clamp(2.2rem, 5vw, 4.6rem);
+      text-transform: uppercase;
+    }
+
+    .deck-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      border: 1px solid var(--line);
+      background: var(--line);
+    }
+
+    .deck-stat {
+      padding: 0.85rem;
+      background: rgba(3, 4, 3, 0.84);
+    }
+
+    .deck-stat b {
+      display: block;
+      font-size: 1.5rem;
+      line-height: 1;
+    }
+
+    .deck-stat span {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      text-transform: uppercase;
+    }
+
+    .thesis-panel,
+    .access-card,
+    .founder {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: clamp(1.1rem, 2.4vw, 1.6rem);
+      min-width: 0;
+    }
+
+    .persona-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .persona-tabs button {
+      min-height: 38px;
+      padding: 0.55rem 0.75rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(244, 239, 230, 0.04);
+      color: var(--bone-2);
+      cursor: pointer;
+      font-size: 0.84rem;
+    }
+
+    .persona-tabs button[aria-selected="true"] {
+      background: var(--green-2);
+      color: var(--void);
+      border-color: var(--green-2);
+      font-weight: 760;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 0.85rem;
+      margin-top: 1rem;
+    }
+
+    label {
+      display: grid;
+      gap: 0.45rem;
+      color: var(--bone-2);
+      font-size: 0.84rem;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      border: 1px solid var(--line-2);
+      border-radius: 6px;
+      background: rgba(3, 4, 3, 0.78);
+      color: var(--bone);
+      padding: 0.72rem 0.8rem;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+    }
+
+    textarea {
+      min-height: 110px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--green);
+      box-shadow: 0 0 0 3px rgba(0, 245, 160, 0.12);
+    }
+
+    .founder {
+      display: grid;
+      grid-template-columns: 92px 1fr;
+      gap: 1rem;
+      align-items: start;
+      margin-top: 1.25rem;
+    }
+
+    .avatar {
+      width: 92px;
+      aspect-ratio: 1;
+      border-radius: var(--radius);
+      display: grid;
+      place-items: center;
+      color: var(--void);
+      font-size: 1.55rem;
+      font-weight: 850;
+      background: conic-gradient(from 180deg, var(--green), var(--bone), var(--orange), var(--blue), var(--green));
+    }
+
+    .contact-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-top: 1rem;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      min-height: 34px;
+      padding: 0.45rem 0.7rem;
+      background: rgba(244, 239, 230, 0.04);
+      color: var(--bone-2);
+      font-size: 0.83rem;
+    }
+
+    .fine-print {
+      color: var(--muted);
+      font-size: 0.83rem;
+      line-height: 1.56;
+    }
+
+    footer {
+      padding: 2.5rem 0 5rem;
+      background: #020302;
+      color: var(--muted);
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .footer-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 0.8rem;
+    }
+
+    [data-reveal] {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    [data-reveal].is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Mobile: NEVER hide content — bypass the reveal system entirely */
+    @media (max-width: 1024px) {
+      [data-reveal] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes breathe {
+      0%, 100% { transform: scale(1); opacity: 0.88; }
+      50% { transform: scale(1.06); opacity: 1; }
+    }
+
+    @keyframes beam {
+      0%, 100% { opacity: 0.36; filter: blur(0); }
+      50% { opacity: 1; filter: blur(0.4px); }
+    }
+
+    @media (max-width: 1080px) {
+      .hero-grid,
+      .ontology,
+      .risk-lab,
+      .thesis-wrap,
+      .access-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .collider {
+        max-width: 680px;
+      }
+
+      .physics-grid,
+      .moat-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .agent-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+      }
+
+      .section-head {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 860px) {
+      .nav-links,
+      .nav-actions .secondary-nav {
+        display: none;
+      }
+
+      .menu-toggle {
+        display: inline-block;
+      }
+
+      .site-header[data-open="true"] .nav-links {
+        position: absolute;
+        left: 16px;
+        right: 16px;
+        top: 74px;
+        display: grid;
+        gap: 0;
+        padding: 0.75rem;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: rgba(3, 4, 3, 0.96);
+        box-shadow: var(--shadow);
+      }
+
+      .site-header[data-open="true"] .nav-links a {
+        padding: 0.86rem;
+      }
+
+      .status-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 680px) {
+      .shell {
+        width: min(100% - 24px, var(--max));
+      }
+
+      .nav {
+        min-height: 66px;
+      }
+
+      .site-header[data-open="true"] .nav-links {
+        top: 66px;
+      }
+
+      .nav-actions > .btn.primary {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        padding: 4rem 0 2.5rem;
+      }
+
+      h1 {
+        font-size: clamp(2.65rem, 15vw, 4.4rem);
+      }
+
+      h2 {
+        font-size: clamp(2.1rem, 12vw, 3.7rem);
+        overflow-wrap: anywhere;
+      }
+
+      .lead {
+        font-size: 1.06rem;
+      }
+
+      .hero-actions .btn,
+      .section-actions .btn,
+      .form-actions .btn {
+        width: 100%;
+      }
+
+      .collider-stage {
+        min-height: auto;
+      }
+
+      .collider-readout,
+      .status-grid,
+      .physics-grid,
+      .agent-grid,
+      .moat-grid,
+      .deck-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .map {
+        min-height: 720px;
+      }
+
+      .node,
+      .node.core {
+        width: calc(100% - 32px);
+        min-height: 82px;
+        left: 16px;
+        right: auto;
+        transform: none;
+      }
+
+      .map .node {
+        left: 16px;
+        right: auto;
+        width: calc(100% - 32px);
+      }
+
+      .node.core { top: 18px; }
+      .node.n1 { top: 126px; }
+      .node.n2 { top: 234px; }
+      .node.n3 { top: 342px; bottom: auto; }
+      .node.n4 { top: 450px; bottom: auto; }
+      .node.n5 { top: 558px; }
+      .node.n6 { top: 636px; bottom: auto; }
+
+      .map-line {
+        display: none;
+      }
+
+      .blackbox {
+        min-height: 420px;
+      }
+
+      .risk-beam {
+        left: 0;
+        right: 0;
+      }
+
+      .risk-label {
+        font-size: 0.66rem;
+      }
+
+      .founder,
+      .footer-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-links {
+        justify-content: flex-start;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+      }
+    }
+  </style>
 </head>
 <body>
+  <canvas id="universe" aria-hidden="true"></canvas>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-<!-- CURSOR -->
-<div id="cur"></div>
-<div id="cur-ring"></div>
-
-<!-- BG CANVAS -->
-<canvas id="cosmos"></canvas>
-
-<!-- NAV -->
-<nav id="mainNav">
-  <a href="#" class="nav-logo">
-    <div class="logo-mark"></div>
-    CYGNUS
-  </a>
-  <ul class="nav-center">
-    <li><a href="#eras">Overview</a></li>
-    <li><a href="#signals">Intelligence</a></li>
-    <li><a href="#agents">Agents</a></li>
-    <li><a href="#strategies">Strategies</a></li>
-    <li><a href="#architecture">Architecture</a></li>
-    <li><a href="#platform">Vision</a></li>
-    <li><a href="#team">Team</a></li>
-  </ul>
-  <div class="nav-right">
-    <div class="sys-status"><div class="sys-dot"></div>SYSTEM ACTIVE</div>
-    <a href="https://www.linkedin.com/in/nikhil-cygnus/" target="_blank" class="nav-btn" rel="noopener"><span>Request Access →</span></a>
-  </div>
-</nav>
-
-<!-- LIVE DATA BAR -->
-<div class="live-bar" style="position:relative;z-index:10;margin-top:0;padding-top:72px">
-  <div class="live-item"><span class="live-item-label">EXPERIMENTS TODAY</span><span class="live-item-val" id="expCount">10,247</span></div>
-  <div class="live-item"><span class="live-item-label">SYSTEM CLOCK</span><span class="live-item-val" id="liveTime">--:--:-- UTC</span></div>
-  <div class="live-item"><span class="live-item-label">AGENTS ACTIVE</span><span class="live-item-val">07 / 07</span></div>
-  <div class="live-item"><span class="live-item-label">SIGNALS LIVE</span><span class="live-item-val">11 / 11</span></div>
-  <div class="live-item"><span class="live-item-label">AUTONOMY LEVEL</span><span class="live-item-val gold">L3 → L5</span></div>
-</div>
-
-<!-- TICKER -->
-<div class="ticker-strip">
-  <div class="ticker-inner" id="tickerInner">
-    <!-- filled by JS -->
-  </div>
-</div>
-
-<!-- ============ HERO ============ -->
-<section id="hero">
-  <div class="hero-eyebrow">AI-Native Hedge Fund &nbsp;·&nbsp; Est. 2025</div>
-  <h1 class="hero-main">
-    <span class="glitch-wrap" data-text="CYGNUS">CYGNUS</span>
-  </h1>
-  <p class="hero-sub-word">Navigating Markets By The Stars</p>
-  <p class="hero-desc">
-    An autonomous agent swarm that ingests the world's financial signals, invents novel trading strategies, and executes across every asset class — 24/7, at machine speed, with no human ceiling.
-  </p>
-  <div class="hero-cta-row">
-    <a href="https://www.linkedin.com/in/nikhil-cygnus/" target="_blank" rel="noopener" class="cta-primary">
-      <span>Enter the System</span>
-      <span class="arrow">→</span>
-    </a>
-    <a href="#eras" class="cta-secondary">
-      Learn the Architecture <span class="arrow">↓</span>
-    </a>
-  </div>
-  <div class="hero-metrics">
-    <div class="metric"><span class="metric-val">7</span><span class="metric-lbl">Specialist Agents</span></div>
-    <div class="metric"><span class="metric-val">9</span><span class="metric-lbl">Strategy Modules</span></div>
-    <div class="metric"><span class="metric-val">11</span><span class="metric-lbl">Signal Sources</span></div>
-    <div class="metric"><span class="metric-val">24/7</span><span class="metric-lbl">Continuous Operation</span></div>
-    <div class="metric"><span class="metric-val gold">L5</span><span class="metric-lbl">Target Autonomy</span></div>
-  </div>
-  <div class="scroll-indicator">
-    <span>Scroll to enter</span>
-    <div class="scroll-line"></div>
-  </div>
-</section>
-
-<!-- ============ THREE ERAS ============ -->
-<section id="eras" style="position:relative;z-index:10;padding:120px 56px;background:linear-gradient(to bottom,var(--void),var(--deep),var(--void))">
-  <div style="max-width:1200px;margin:0 auto 60px">
-    <div class="section-tag reveal">The Paradigm Shift</div>
-    <h2 class="section-heading reveal reveal-delay-1">Three Eras of Finance</h2>
-    <p class="section-sub reveal reveal-delay-2">The same structural leap that quant funds made over human traders is now happening to quant funds themselves. We are at the inflection.</p>
-  </div>
-  <div class="eras-grid reveal">
-    <div class="era-card">
-      <div class="era-num">ERA I</div>
-      <div class="era-title" style="color:var(--muted)">Human Trading</div>
-      <div class="era-period">1900s — 1980s</div>
-      <div class="era-body">Manual analysis, relationship alpha, intuition-driven decisions. Speed measured in days. Human cognitive bandwidth is the hard ceiling on everything that can be discovered.</div>
-      <div class="era-players">Floor traders · Fundamental analysts · Macro PMs</div>
-      <div class="era-limit">CEILING: Human bandwidth</div>
-    </div>
-    <div class="era-card">
-      <div class="era-num">ERA II</div>
-      <div class="era-title" style="color:var(--c1)">Quant Trading</div>
-      <div class="era-period">1980s — 2024</div>
-      <div class="era-body">Rule-based algorithms, statistical models, systematic backtesting. Speed measured in microseconds. Human-designed strategy ceiling emerges — models saturate available edge.</div>
-      <div class="era-players">Renaissance · Two Sigma · Citadel · D.E. Shaw</div>
-      <div class="era-limit">CEILING: Human-designed strategy</div>
-    </div>
-    <div class="era-card active">
-      <div class="you-are-here">YOU ARE HERE</div>
-      <div class="era-num" style="margin-top:32px">ERA III</div>
-      <div class="era-badge">AI-Native</div>
-      <div class="era-title" style="color:var(--g1)">Autonomous Trading</div>
-      <div class="era-period">2025 — ∞</div>
-      <div class="era-body">Autonomous agent swarms, self-invented strategies, 24/7 reinforcement learning from live markets. No human ceiling. Continuously adaptive. Strategies emerge that no human could conceive.</div>
-      <div class="era-players">Cygnus · and a handful of pioneers globally</div>
-      <div class="era-limit">NO CEILING — AI invents its own strategies</div>
-    </div>
-  </div>
-  <!-- YC Quote -->
-  <div style="max-width:1200px;margin:40px auto 0;padding:28px 36px;border:1px solid rgba(212,146,10,.2);background:rgba(212,146,10,.04)" class="reveal">
-    <div style="font-size:22px;color:rgba(212,146,10,.4);line-height:1;margin-bottom:12px">"</div>
-    <p style="font-size:15px;color:var(--muted);line-height:1.8;font-style:italic">The hedge funds of the future won't just bolt AI onto their existing strategies. They'll use it to come up with entirely new ones. That's where the alpha is. Imagine swarms of agents doing what hedge fund traders do now — combing through 10-Ks, earnings calls, and SEC filings, synthesizing analyst ideas and making trades.</p>
-    <p style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--g1);margin-top:16px">Y COMBINATOR — SPRING 2026 REQUEST FOR STARTUPS</p>
-  </div>
-</section>
-
-<!-- ============ SYSTEM ARCHITECTURE ============ -->
-<section id="architecture">
-  <div class="arch-wrap">
-    <div class="section-tag reveal">System Architecture</div>
-    <h2 class="section-heading reveal reveal-delay-1">End-to-End Architecture</h2>
-    <p class="section-sub reveal reveal-delay-2">Five interlocked layers. Every decision is traceable. Every outcome feeds the learning loop. Human override at L3.</p>
-    <div class="arch-layers reveal reveal-delay-3">
-      <!-- Layer 1 -->
-      <div class="arch-layer">
-        <div class="layer-label">
-          <div class="layer-num" style="color:var(--faint)">LAYER 01</div>
-          <div class="layer-name" style="color:var(--muted)">Data Universe</div>
-        </div>
-        <div class="layer-content">
-          <span class="layer-pill" style="border-color:rgba(0,232,208,.2);color:var(--c1)">Market Feeds</span>
-          <span class="layer-pill" style="border-color:rgba(0,232,208,.2);color:var(--c1)">Order Books</span>
-          <span class="layer-pill" style="border-color:rgba(0,232,208,.2);color:var(--c1)">On-Chain Data</span>
-          <span class="layer-pill" style="border-color:rgba(0,232,208,.2);color:var(--c1)">SEC Filings</span>
-          <span class="layer-pill" style="border-color:rgba(0,232,208,.2);color:var(--c1)">News / NLP</span>
-          <span class="layer-pill" style="border-color:rgba(0,232,208,.2);color:var(--c1)">Satellite</span>
-          <span class="layer-pill" style="border-color:rgba(0,232,208,.2);color:var(--c1)">Social Alpha</span>
-          <span class="layer-pill" style="border-color:rgba(0,232,208,.2);color:var(--c1)">Options Flow</span>
-          <span class="layer-pill" style="border-color:rgba(0,232,208,.2);color:var(--c1)">Macro Signals</span>
-          <span class="layer-pill" style="border-color:rgba(0,232,208,.2);color:var(--c1)">Alt Data</span>
-        </div>
-      </div>
-      <!-- Layer 2 -->
-      <div class="arch-layer">
-        <div class="layer-label">
-          <div class="layer-num" style="color:var(--faint)">LAYER 02</div>
-          <div class="layer-name" style="color:var(--c1)">Intelligence</div>
-        </div>
-        <div class="layer-content">
-          <span class="layer-pill" style="border-color:rgba(0,232,208,.25);color:var(--c1)">Signal Processor</span>
-          <span class="layer-pill" style="border-color:rgba(14,165,233,.25);color:#0ea5e9">Knowledge Graph</span>
-          <span class="layer-pill" style="border-color:rgba(108,59,255,.25);color:var(--p1)">Regime Detector</span>
-          <span class="layer-pill" style="border-color:rgba(212,146,10,.25);color:var(--g1)">Hypothesis Engine</span>
-        </div>
-      </div>
-      <!-- Layer 3 — SWARM -->
-      <div class="arch-layer swarm-row">
-        <div class="layer-label">
-          <div class="layer-num" style="color:rgba(212,146,10,.4)">LAYER 03</div>
-          <div class="layer-name">Agent Swarm</div>
-        </div>
-        <div class="swarm-pills">
-          <span class="agent-pill" style="border-color:rgba(0,232,208,.4);color:var(--c1)">SIGNAL</span>
-          <span class="agent-pill" style="border-color:rgba(14,165,233,.4);color:#0ea5e9">RESEARCH</span>
-          <span class="agent-pill" style="border-color:rgba(212,146,10,.4);color:var(--g1)">STRATEGY</span>
-          <span class="agent-pill" style="border-color:rgba(255,40,81,.4);color:var(--r1)">RISK</span>
-          <span class="agent-pill" style="border-color:rgba(0,200,122,.4);color:var(--gr)">EXECUTION</span>
-          <span class="agent-pill" style="border-color:rgba(108,59,255,.4);color:var(--p1)">LEARN</span>
-          <span class="agent-pill" style="border-color:rgba(212,146,10,.6);color:var(--g1)">✦ SYNTHESIS</span>
-        </div>
-      </div>
-      <!-- Layer 4 -->
-      <div class="arch-layer">
-        <div class="layer-label">
-          <div class="layer-num" style="color:var(--faint)">LAYER 04</div>
-          <div class="layer-name" style="color:var(--r1)">Risk + Execution</div>
-        </div>
-        <div class="layer-content" style="display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0;flex:1">
-          <div style="padding:20px 28px;border-right:1px solid var(--b2)">
-            <div style="font-family:var(--mono);font-size:8px;letter-spacing:.15em;color:var(--r1);margin-bottom:8px">RISK LAYER</div>
-            <div style="font-size:12px;color:var(--muted)">Delta-neutral · Kill switches · VaR · Drawdown limits · Correlation budget</div>
-          </div>
-          <div style="padding:20px 28px">
-            <div style="font-family:var(--mono);font-size:8px;letter-spacing:.15em;color:var(--gr);margin-bottom:8px">EXECUTION ENGINE</div>
-            <div style="font-size:12px;color:var(--muted)">FIX/WebSocket · Smart routing · 20+ venues · &lt;1ms latency · Cross-chain</div>
-          </div>
-        </div>
-      </div>
-      <!-- Layer 5 -->
-      <div class="arch-layer" style="border-color:rgba(108,59,255,.2)">
-        <div class="layer-label" style="background:rgba(108,59,255,.06)">
-          <div class="layer-num" style="color:rgba(108,59,255,.5)">LAYER 05</div>
-          <div class="layer-name" style="color:var(--p1)">RL Feedback</div>
-        </div>
-        <div class="layer-content" style="background:rgba(108,59,255,.04)">
-          <div style="font-size:13px;color:var(--muted)">Live trade outcomes → belief update → strategy weight adjustment → model retraining → improved signals <span style="font-family:var(--mono);font-size:9px;color:var(--p1)">[continuous, 24/7/365]</span></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ SIGNAL SOURCES ============ -->
-<section id="signals">
-  <div class="signals-layout">
-    <div class="signals-intro">
-      <div class="section-tag reveal">Intelligence Layer</div>
-      <h2 class="section-heading reveal reveal-delay-1">11 Signal<br>Sources</h2>
-      <p class="section-sub reveal reveal-delay-2">Each signal represents a distinct alpha channel. The AI synthesises all 11 simultaneously — a cognitive feat impossible for any human team.</p>
-      <div style="margin-top:32px" class="reveal reveal-delay-3">
-        <div style="font-family:var(--mono);font-size:9px;letter-spacing:.15em;color:var(--faint);margin-bottom:16px">WHY 11 SIMULTANEOUS SOURCES MATTER</div>
-        <p style="font-size:13px;color:var(--muted);line-height:1.7">Traditional funds process 2–4 data sources at a time. Human cognitive bandwidth limits parallel signal synthesis. Cygnus's SIGNAL AGENT processes all 11 in real-time, finding cross-signal correlations and anomalies that are invisible to single-source analysis.</p>
-      </div>
-    </div>
-    <div class="signal-grid reveal reveal-delay-2">
-      <div class="signal-card" style="border-left:2px solid var(--c1)">
-        <span class="sig-num">01</span>
-        <div class="sig-icon" style="background:rgba(0,232,208,.08);color:var(--c1)">⬡</div>
-        <div class="sig-title">On-Chain Liquidation Heatmaps</div>
-        <div class="sig-edge">Predicts volatility 15–60min in advance</div>
-      </div>
-      <div class="signal-card" style="border-left:2px solid var(--c1)">
-        <span class="sig-num">02</span>
-        <div class="sig-icon" style="background:rgba(0,232,208,.08);color:var(--c1)">≋</div>
-        <div class="sig-title">VPIN / Kyle's Lambda</div>
-        <div class="sig-edge">Identifies informed trading pre-move</div>
-      </div>
-      <div class="signal-card" style="border-left:2px solid var(--g1)">
-        <span class="sig-num">03</span>
-        <div class="sig-icon" style="background:rgba(212,146,10,.08);color:var(--g1)">◈</div>
-        <div class="sig-title">Funding Rate Divergence</div>
-        <div class="sig-edge" style="color:var(--g1)">Near risk-free carry signals</div>
-      </div>
-      <div class="signal-card" style="border-left:2px solid var(--g1)">
-        <span class="sig-num">04</span>
-        <div class="sig-icon" style="background:rgba(212,146,10,.08);color:var(--g1)">◉</div>
-        <div class="sig-title">Satellite Imagery</div>
-        <div class="sig-edge" style="color:var(--g1)">Commodity signals 2–4 weeks ahead</div>
-      </div>
-      <div class="signal-card" style="border-left:2px solid var(--c1)">
-        <span class="sig-num">05</span>
-        <div class="sig-icon" style="background:rgba(0,232,208,.08);color:var(--c1)">⊕</div>
-        <div class="sig-title">NLP on Regulatory Filings</div>
-        <div class="sig-edge">Info edge on 10,000+ securities</div>
-      </div>
-      <div class="signal-card" style="border-left:2px solid var(--c1)">
-        <span class="sig-num">06</span>
-        <div class="sig-icon" style="background:rgba(0,232,208,.08);color:var(--c1)">#</div>
-        <div class="sig-title">Social Media Alpha</div>
-        <div class="sig-edge">Crowd sentiment before consensus</div>
-      </div>
-      <div class="signal-card wide" style="border-left:2px solid var(--p1)">
-        <span class="sig-num">07</span>
-        <div class="sig-icon" style="background:rgba(108,59,255,.08);color:var(--p1);flex-shrink:0">◎</div>
-        <div>
-          <div class="sig-title">Macro Regime Detection</div>
-          <div class="sig-edge" style="color:var(--p1)">Strategy weights shift automatically with regime — 1 of 12 macro states classified in real-time</div>
-        </div>
-      </div>
-      <div class="signal-card" style="border-left:2px solid var(--g1)">
-        <span class="sig-num">08</span>
-        <div class="sig-icon" style="background:rgba(212,146,10,.08);color:var(--g1)">◐</div>
-        <div class="sig-title">Options Flow & Dark Pools</div>
-        <div class="sig-edge" style="color:var(--g1)">Institutional positioning pre-price</div>
-      </div>
-      <div class="signal-card" style="border-left:2px solid var(--c1)">
-        <span class="sig-num">09</span>
-        <div class="sig-icon" style="background:rgba(0,232,208,.08);color:var(--c1)">⊗</div>
-        <div class="sig-title">Cross-Asset Correlation</div>
-        <div class="sig-edge">Predicts contagion before prices</div>
-      </div>
-      <div class="signal-card" style="border-left:2px solid var(--p1)">
-        <span class="sig-num">10</span>
-        <div class="sig-icon" style="background:rgba(108,59,255,.08);color:var(--p1)">⬡</div>
-        <div class="sig-title">DeFi On-Chain Metrics</div>
-        <div class="sig-edge" style="color:var(--p1)">Fundamentals 1–24h before price</div>
-      </div>
-      <div class="signal-card wide" style="border-left:2px solid var(--g1)">
-        <span class="sig-num">11</span>
-        <div class="sig-icon" style="background:rgba(212,146,10,.08);color:var(--g1);flex-shrink:0">◈</div>
-        <div>
-          <div class="sig-title">Geopolitical & Policy Signals</div>
-          <div class="sig-edge" style="color:var(--g1)">Political risk priced 30–90min early — central bank NLP, sanctions, conflict escalation across 50+ jurisdictions</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ AGENT SWARM ============ -->
-<section id="agents">
-  <div style="max-width:1200px;margin:0 auto 60px">
-    <div class="section-tag reveal">Agent Swarm</div>
-    <h2 class="section-heading reveal reveal-delay-1">Seven Specialist<br>Agents</h2>
-    <p class="section-sub reveal reveal-delay-2">Each agent is a domain expert. All seven run in parallel, 24/7. SYNTHESIS orchestrates them into coherent portfolio decisions.</p>
-  </div>
-  <div class="agents-layout reveal">
-    <div>
-      <canvas id="agentCanvas" style="width:100%;height:520px;display:block;border:1px solid var(--b2);background:var(--panel)"></canvas>
-      <div class="agent-detail" id="agentPanel" style="margin-top:12px">
-        <div class="agent-detail-name" id="agentName">SIGNAL AGENT</div>
-        <div class="agent-detail-role" id="agentRole" style="color:var(--c1)">Market Intelligence</div>
-        <div class="agent-detail-body" id="agentDesc">Ingests all 11 signal sources in real-time. Detects anomalies, regime shifts, opportunity precursors. First mover in the pipeline — every other agent depends on its output.</div>
-        <div class="agent-detail-stat" id="agentStat" style="border-color:rgba(0,232,208,.3);color:var(--c1);background:rgba(0,232,208,.06)">10M+ data points/second</div>
-      </div>
-    </div>
-    <div class="agent-list" id="agentList">
-      <!-- filled by JS -->
-    </div>
-  </div>
-</section>
-
-<!-- ============ STRATEGIES ============ -->
-<section id="strategies" style="position:relative;z-index:10;padding:120px 56px">
-  <div class="strat-header">
-    <div class="section-tag reveal">Strategy Arsenal</div>
-    <h2 class="section-heading reveal reveal-delay-1">Nine Uncorrelated<br>Alpha Streams</h2>
-    <p class="section-sub reveal reveal-delay-2">Each strategy is a standalone alpha engine. The AI dynamically allocates capital across all nine based on regime state and real-time edge estimation.</p>
-  </div>
-  <div class="strat-grid reveal">
-    <!-- JS renders these -->
-  </div>
-</section>
-
-<!-- ============ TECH STACK ============ -->
-<section id="techstack">
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="section-tag reveal">Technology Stack</div>
-    <h2 class="section-heading reveal reveal-delay-1">Production to Production</h2>
-    <p class="section-sub reveal reveal-delay-2">Every layer chosen for performance, reliability, and AI-native compatibility. Modular architecture allows component-level upgrades without system downtime.</p>
-  </div>
-  <div class="tech-grid reveal reveal-delay-2">
-    <div class="tech-block" style="border-top:2px solid var(--g1)">
-      <div class="tech-block-title" style="color:var(--g1)">AI & ML Framework</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--g1)"></div>Claude / GPT-4o / Grok (LLM Agents)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--g1)"></div>LangGraph (agent orchestration)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--g1)"></div>CrewAI (role-based teams)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--g1)"></div>Stable-Baselines3 + Ray RLlib</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--g1)"></div>PyTorch / JAX (model training)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--g1)"></div>Z3 Theorem Prover (symbolic)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--g1)"></div>ONNX Runtime (inference)</div>
-    </div>
-    <div class="tech-block" style="border-top:2px solid var(--c1)">
-      <div class="tech-block-title" style="color:var(--c1)">Data Infrastructure</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--c1)"></div>Apache Kafka (event streaming)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--c1)"></div>TimescaleDB (time-series)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--c1)"></div>Pinecone / Weaviate (vector DB)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--c1)"></div>Neo4j (knowledge graph)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--c1)"></div>Redis (sub-ms cache)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--c1)"></div>Apache Flink (stream processing)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--c1)"></div>S3 / GCS (data lake)</div>
-    </div>
-    <div class="tech-block" style="border-top:2px solid var(--gr)">
-      <div class="tech-block-title" style="color:var(--gr)">Execution & Trading</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--gr)"></div>FIX 4.4/5.0 (order routing)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--gr)"></div>WebSocket (market data feeds)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--gr)"></div>Alpaca / IBKR API (broker)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--gr)"></div>Flashbots Protect (MEV)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--gr)"></div>web3.py / ethers.js (on-chain)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--gr)"></div>CCXT (exchange abstraction)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--gr)"></div>Co-location: SG / NYC / London</div>
-    </div>
-    <div class="tech-block" style="border-top:2px solid var(--p1)">
-      <div class="tech-block-title" style="color:var(--p1)">Infrastructure & Ops</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--p1)"></div>Kubernetes + Helm</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--p1)"></div>Terraform (IaC)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--p1)"></div>Prometheus + Grafana</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--p1)"></div>HashiCorp Vault (secrets)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--p1)"></div>GitHub Actions (CI/CD)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--p1)"></div>AWS / GCP (multi-cloud)</div>
-      <div class="tech-item"><div class="tech-dot" style="background:var(--p1)"></div>Docker (containerisation)</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ RESEARCH ENGINE ============ -->
-<section id="research" style="position:relative;z-index:10;padding:120px 56px;background:linear-gradient(to bottom,transparent,var(--deep),transparent)">
-  <div class="research-layout">
-    <div>
-      <div class="section-tag reveal">Research Engine</div>
-      <h2 class="section-heading reveal reveal-delay-1">10,000 Experiments<br>Per Day</h2>
-      <p class="section-sub reveal reveal-delay-2">The system doesn't find strategies — it invents them, tests them at scale, and only promotes those that survive rigorous, regime-aware validation.</p>
-      <div class="research-steps reveal reveal-delay-3">
-        <div class="research-step">
-          <div class="step-num-wrap">01</div>
-          <div class="step-body">
-            <div class="step-title">Orient</div>
-            <div class="step-desc">Load shared knowledge base. Review prior session lessons. Classify current market regime (1 of 12 macro states). Set research constraints.</div>
-          </div>
-        </div>
-        <div class="research-step">
-          <div class="step-num-wrap">02</div>
-          <div class="step-body">
-            <div class="step-title">Hypothesize</div>
-            <div class="step-desc">Generate 50–200 novel strategy candidates per session via STRATEGY + RESEARCH agent collaboration. Rank by novelty and expected Sharpe.</div>
-          </div>
-        </div>
-        <div class="research-step">
-          <div class="step-num-wrap">03</div>
-          <div class="step-body">
-            <div class="step-title">Evaluate</div>
-            <div class="step-desc">Regime-conditional backtests. Loss functions: SGD-Huber, QuantileRegression. Ensembles: Ridge, inv_var. QP with L2 turnover penalty. IC / Sharpe / Calmar / Sortino gates.</div>
-          </div>
-        </div>
-        <div class="research-step">
-          <div class="step-num-wrap">04</div>
-          <div class="step-body">
-            <div class="step-title">Validate</div>
-            <div class="step-desc">Forward-test on held-out regime. Stress-test across 2020 COVID, 2022 rate shock, 2024 crypto cycles. Out-of-sample must match in-sample within tolerance.</div>
-          </div>
-        </div>
-        <div class="research-step" style="padding-bottom:0">
-          <div class="step-num-wrap">05</div>
-          <div class="step-body">
-            <div class="step-title">Commit</div>
-            <div class="step-desc">Promoted strategy logged to KB with full reproducibility trace. Lessons written for LEARN AGENT. Portfolio updated via QP allocation optimisation.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div class="research-metrics reveal reveal-delay-2">
-      <div class="r-metric"><span class="r-metric-val" style="color:var(--g1)">38,482</span><span class="r-metric-lbl">Total Experiments<br>(Event Horizon benchmark)</span></div>
-      <div class="r-metric"><span class="r-metric-val" style="color:var(--c1)">12,042</span><span class="r-metric-lbl">Unique Strategies<br>Validated & Stored</span></div>
-      <div class="r-metric"><span class="r-metric-val" style="color:var(--gr)">6.12</span><span class="r-metric-lbl">Portfolio Sortino<br>(Live benchmark)</span></div>
-      <div class="r-metric"><span class="r-metric-val" style="color:var(--g1)">10,000+</span><span class="r-metric-lbl">Daily Experiments<br>Cygnus Target</span></div>
-      <div class="r-metric" style="grid-column:1/3"><span class="r-metric-val" style="color:var(--p1)">&lt; 5%</span><span class="r-metric-lbl">Strategy Promotion Rate — Quality gate ensures only the most robust strategies reach live capital</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ RISK ============ -->
-<section id="risk">
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="section-tag reveal">Risk Intelligence</div>
-    <h2 class="section-heading reveal reveal-delay-1">Every Edge Has a Hedge</h2>
-    <p class="section-sub reveal reveal-delay-2">Risk is not a constraint bolted on after strategy generation. It is a first-class specialist agent with full veto power at every stage of the pipeline.</p>
-  </div>
-  <div class="risk-principle reveal">
-    <div class="risk-principle-label">Core Principle</div>
-    <div class="risk-principle-text">The RISK AGENT runs in parallel to all trading agents. It can veto any trade before execution — not just after. Delta-neutral by architecture. Cygnus never holds directional exposure.</div>
-  </div>
-  <div class="risk-grid reveal reveal-delay-2">
-    <div class="risk-card">
-      <div class="risk-icon">⊿</div>
-      <div class="risk-title">Delta-Neutral Enforcement</div>
-      <div class="risk-body">All directional exposure hedged at portfolio level in real-time. Net delta ≈ 0 enforced across all positions dynamically via futures or options. Cygnus profits from spread, not price direction.</div>
-      <div class="risk-auto">Automated: Synthetic hedge within 50ms of any imbalance</div>
-    </div>
-    <div class="risk-card">
-      <div class="risk-icon">⊟</div>
-      <div class="risk-title">Execution Quality Control</div>
-      <div class="risk-body">Every order pre-validated against live order book depth. Rejected if liquidity is insufficient for clean fill at expected price ± tolerance band. No partial fills at adverse prices.</div>
-      <div class="risk-auto">Automated: Order split, rerouted, or cancelled if depth fails</div>
-    </div>
-    <div class="risk-card">
-      <div class="risk-icon">⊕</div>
-      <div class="risk-title">Correlation Budget Control</div>
-      <div class="risk-body">Real-time correlation matrix monitoring across all open positions. Concentration in correlated clusters is auto-reduced when portfolio correlation budget is breached. Prevents hidden concentration risk.</div>
-      <div class="risk-auto">Automated: Position scaling when correlation &gt; 0.7</div>
-    </div>
-    <div class="risk-card">
-      <div class="risk-icon">⊛</div>
-      <div class="risk-title">Fee & Slippage Oracle</div>
-      <div class="risk-body">Every trade pre-approved when net edge exceeds 2× estimated total cost (fees + gas + slippage). Dynamic oracle recalibrates minimum spread thresholds every 60 seconds. No negative-EV trades.</div>
-      <div class="risk-auto">Automated: No trade below positive expected value threshold</div>
-    </div>
-    <div class="risk-card">
-      <div class="risk-icon">⊗</div>
-      <div class="risk-title">MEV & Front-Run Protection</div>
-      <div class="risk-body">All DEX interactions use private RPC endpoints via Flashbots Protect. Order timing randomisation (±50ms). Strategy fingerprint obfuscation to prevent pattern detection by mempool surveillance bots.</div>
-      <div class="risk-auto">Automated: Flashbots bundle + private mempool for all DEX</div>
-    </div>
-    <div class="risk-card">
-      <div class="risk-icon">⊜</div>
-      <div class="risk-title">Counterparty Concentration</div>
-      <div class="risk-body">Hard limit: no single exchange holds &gt;20% of deployed capital. Auto-rebalancing between venues on breach. Multi-sig treasury (3-of-5 keys) for all reserves. Only trade on exchanges with verified volume.</div>
-      <div class="risk-auto">Automated: Capital redistributed when any venue exceeds 18%</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ MOAT ============ -->
-<section id="moat">
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="section-tag reveal">Proprietary Moat</div>
-    <h2 class="section-heading reveal reveal-delay-1">Harder to Beat<br>Over Time</h2>
-    <p class="section-sub reveal reveal-delay-2">Unlike traditional funds where alpha decays as markets adapt, Cygnus's structural advantages compound. The longer the system runs, the wider the gap grows.</p>
-  </div>
-  <div class="moat-grid reveal reveal-delay-2">
-    <div class="moat-card" style="border-top:2px solid var(--g1)">
-      <span class="moat-icon">◈</span>
-      <div class="moat-title">Proprietary Trading Dataset</div>
-      <div class="moat-body">Every trade executed generates labelled training data that cannot be purchased or replicated. After 18 months: 50M+ annotated trade events with signal→outcome attribution. Primary corpus for all future model improvements.</div>
-      <div class="moat-metric">18mo → 50M+ labelled events</div>
-    </div>
-    <div class="moat-card" style="border-top:2px solid var(--c1)">
-      <span class="moat-icon">⬡</span>
-      <div class="moat-title">Self-Improving Architecture</div>
-      <div class="moat-body">Evolutionary model architecture search + RL from live P&L + multi-agent knowledge sharing creates a compounding improvement loop. Year 2 Cygnus is materially better than Year 1 — automatically, without new investment.</div>
-      <div class="moat-metric">Performance ceiling rises, not decays</div>
-    </div>
-    <div class="moat-card" style="border-top:2px solid var(--p1)">
-      <span class="moat-icon">⊗</span>
-      <div class="moat-title">Multi-Venue Network Effect</div>
-      <div class="moat-body">20 venues × 9 strategies × 11 signals = 1,980 potential alpha combinations. Each additional exchange integration multiplies the opportunity set non-linearly. Adding venue 21 creates combinations across all existing strategies.</div>
-      <div class="moat-metric" style="color:var(--p1)">Coverage × strategies × signals = N²</div>
-    </div>
-    <div class="moat-card" style="border-top:2px solid var(--gr)">
-      <span class="moat-icon">◎</span>
-      <div class="moat-title">First-Mover Track Record</div>
-      <div class="moat-body">Institutional LPs require 12–18 months of audited performance before allocation. Every day Cygnus runs is irreplicable track record. The fund that starts first and performs is the fund that closes institutional capital first.</div>
-      <div class="moat-metric" style="color:var(--gr)">12–18mo LP due diligence window</div>
-    </div>
-    <div class="moat-card" style="border-top:2px solid var(--g1)">
-      <span class="moat-icon">◐</span>
-      <div class="moat-title">Crypto-Native Infrastructure</div>
-      <div class="moat-body">Traditional quant funds lack on-chain execution, DeFi protocol integration, and cross-chain settlement. Building this from scratch requires 18+ months. Cygnus builds it in Phase 1 — a structural moat vs. TradFi incumbents.</div>
-      <div class="moat-metric">DeFi moat vs. TradFi quants</div>
-    </div>
-    <div class="moat-card" style="border-top:2px solid var(--r1)">
-      <span class="moat-icon">⊕</span>
-      <div class="moat-title">Talent Rarity</div>
-      <div class="moat-body">Building an AI-native fund requires simultaneous expertise across: crypto-native DeFi, HFT infrastructure, ML/RL engineering, quantitative finance, and regulatory compliance. This profile is extremely rare — fewer than 200 people globally.</div>
-      <div class="moat-metric" style="color:var(--r1)">Team profile: &lt;200 people globally</div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ AUTONOMY SCALE ============ -->
-<section id="autonomy">
-  <div class="autonomy-wrap">
-    <div class="section-tag reveal">Autonomy Framework</div>
-    <h2 class="section-heading reveal reveal-delay-1">The L0→L5 Scale</h2>
-    <p class="section-sub reveal reveal-delay-2">Framework adapted from SAE J3016 autonomous driving taxonomy (Altbridge AI, SSRN 2025). Cygnus maps to this standard explicitly — launching at L3, targeting L5.</p>
-    <div class="autonomy-bar reveal reveal-delay-2">
-      <div class="auto-seg" style="background:rgba(90,90,90,.15);color:var(--muted)">L0<span class="auto-seg-label">Manual</span></div>
-      <div class="auto-seg" style="background:rgba(90,90,90,.2);color:var(--muted)">L1<span class="auto-seg-label">Assist</span></div>
-      <div class="auto-seg" style="background:rgba(14,165,233,.15);color:#0ea5e9">L2<span class="auto-seg-label">Partial</span></div>
-      <div class="auto-seg" style="background:rgba(0,232,208,.2);color:var(--c1);border:1px solid rgba(0,232,208,.4)">L3<span class="auto-seg-label">⚡ Launch</span></div>
-      <div class="auto-seg" style="background:rgba(212,146,10,.15);color:var(--g1)">L4<span class="auto-seg-label">Year 1-2</span></div>
-      <div class="auto-seg" style="background:rgba(0,200,122,.25);color:var(--gr);border:1px solid rgba(0,200,122,.4)">L5<span class="auto-seg-label">✦ Target</span></div>
-    </div>
-    <div class="auto-cards reveal reveal-delay-3">
-      <div class="auto-card">
-        <div class="auto-card-name" style="color:var(--muted)">Full Manual</div>
-        <div class="auto-card-desc">Human performs all investment tasks. AI provides data display only. No automation.</div>
-        <span class="auto-card-badge" style="border:1px solid rgba(255,255,255,.1);color:var(--faint)">Traditional AM</span>
-      </div>
-      <div class="auto-card">
-        <div class="auto-card-name" style="color:var(--muted)">Decision Assist</div>
-        <div class="auto-card-desc">AI surfaces insights. Human approves all trades individually.</div>
-        <span class="auto-card-badge" style="border:1px solid rgba(255,255,255,.1);color:var(--faint)">Most FinTech</span>
-      </div>
-      <div class="auto-card">
-        <div class="auto-card-name" style="color:#0ea5e9">Partial Auto</div>
-        <div class="auto-card-desc">AI executes defined strategies. Human oversees live P&L continuously.</div>
-        <span class="auto-card-badge" style="border:1px solid rgba(14,165,233,.3);color:#0ea5e9">Quant Funds</span>
-      </div>
-      <div class="auto-card" style="border:1px solid rgba(0,232,208,.3);background:rgba(0,232,208,.04)">
-        <div class="auto-card-name" style="color:var(--c1)">Conditional</div>
-        <div class="auto-card-desc">AI runs full strategy loop. Human for edge cases & override only.</div>
-        <span class="auto-card-badge" style="border:1px solid rgba(0,232,208,.4);color:var(--c1);background:rgba(0,232,208,.08)">⚡ Cygnus Launch</span>
-      </div>
-      <div class="auto-card">
-        <div class="auto-card-name" style="color:var(--g1)">High Autonomy</div>
-        <div class="auto-card-desc">AI handles all scenarios. Human sets guardrails only, not trades.</div>
-        <span class="auto-card-badge" style="border:1px solid rgba(212,146,10,.3);color:var(--g1)">Cygnus Year 1–2</span>
-      </div>
-      <div class="auto-card" style="border:1px solid rgba(0,200,122,.3);background:rgba(0,200,122,.04)">
-        <div class="auto-card-name" style="color:var(--gr)">Full Autonomy</div>
-        <div class="auto-card-desc">Zero human intervention. AI is fully self-governing end-to-end.</div>
-        <span class="auto-card-badge" style="border:1px solid rgba(0,200,122,.4);color:var(--gr);background:rgba(0,200,122,.08)">✦ Cygnus Target</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ COMPETITIVE LANDSCAPE ============ -->
-<section id="competitive" style="position:relative;z-index:10;padding:120px 56px;background:linear-gradient(to bottom,transparent,var(--deep),transparent)">
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="section-tag reveal">Competitive Landscape</div>
-    <h2 class="section-heading reveal reveal-delay-1">Where Cygnus Sits</h2>
-    <p class="section-sub reveal reveal-delay-2">The AI-native fund landscape is forming. Cygnus's architectural decisions place it ahead on the dimensions that determine long-term winners.</p>
-  </div>
-  <div class="comp-table reveal">
-    <table>
-      <thead>
-        <tr>
-          <th style="text-align:left">Fund</th>
-          <th>Multi-Asset</th>
-          <th>Arb Suite</th>
-          <th>Agent Swarm</th>
-          <th>Live RL</th>
-          <th>Neuro-Symbolic</th>
-          <th>11 Signals</th>
-          <th>L5 Roadmap</th>
-          <th>9 Strategies</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr class="cygnus-row">
-          <td>Cygnus ✦</td>
-          <td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td>
-          <td class="chk">✓</td><td class="chk">✓</td><td class="chk">✓</td>
-          <td class="chk">✓</td><td class="chk">✓</td>
-        </tr>
-        <tr>
-          <td>Altbridge AI</td>
-          <td class="chk">✓</td><td class="cross">✗</td><td class="chk">✓</td>
-          <td class="chk">✓</td><td class="chk">✓</td><td style="color:var(--muted)">3</td>
-          <td class="chk">L5</td><td style="color:var(--muted)">3</td>
-        </tr>
-        <tr>
-          <td>Earthian AI</td>
-          <td class="chk">✓</td><td class="cross">✗</td><td class="chk">✓</td>
-          <td class="cross">✗</td><td class="cross">✗</td><td style="color:var(--muted)">4</td>
-          <td style="color:var(--muted)">L3</td><td style="color:var(--muted)">2</td>
-        </tr>
-        <tr>
-          <td>Event Horizon Labs</td>
-          <td style="color:var(--muted)">Equities</td><td class="cross">✗</td><td class="chk">✓</td>
-          <td class="cross">✗</td><td class="cross">✗</td><td style="color:var(--muted)">5</td>
-          <td style="color:var(--muted)">L3</td><td style="color:var(--muted)">4</td>
-        </tr>
-        <tr>
-          <td>Traditional Quant</td>
-          <td class="chk">✓</td><td class="cross">✗</td><td class="cross">✗</td>
-          <td class="cross">✗</td><td class="cross">✗</td><td style="color:var(--muted)">3</td>
-          <td style="color:var(--muted)">L2</td><td style="color:var(--muted)">5</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div style="max-width:1200px;margin:24px auto 0;padding:20px 28px;border:1px solid rgba(0,232,208,.15);background:rgba(0,232,208,.03)" class="reveal">
-    <span style="font-family:var(--mono);font-size:8px;letter-spacing:.2em;color:var(--c1)">CYGNUS POSITION — </span>
-    <span style="font-size:13px;color:var(--muted)">The only fund combining full multi-asset coverage + neuro-symbolic reasoning + live RL + 11 signal sources + 9 strategy modules in a single agentic architecture designed from day one for L5 autonomy.</span>
-  </div>
-</section>
-
-<!-- ============ PLATFORM VISION ============ -->
-<section id="platform">
-  <div style="max-width:1200px;margin:0 auto 60px">
-    <div class="section-tag reveal">Platform Vision</div>
-    <h2 class="section-heading reveal reveal-delay-1">Beyond the Fund</h2>
-    <p class="section-sub reveal reveal-delay-2">The fund proves the concept. The platform is the endgame. Cygnus's architecture becomes the operating system for autonomous finance.</p>
-  </div>
-  <div class="platform-layout reveal">
-    <div>
-      <div class="platform-phases">
-        <div class="phase-item current">
-          <div class="phase-dot"></div>
-          <div>
-            <div class="phase-label">Phase 1 · 2025–2026</div>
-            <div class="phase-title">The Fund</div>
-            <div class="phase-desc">Deploy as proprietary AI-native hedge fund. Build audited track record on own capital. Prove the architecture generates alpha across all asset classes at L3→L4 autonomy.</div>
-            <div class="phase-time">Q3 2025 → Q4 2026</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-dot"></div>
-          <div>
-            <div class="phase-label">Phase 2 · 2026–2027</div>
-            <div class="phase-title">Institutional AUM</div>
-            <div class="phase-desc">Raise external AUM from qualified institutional investors (family offices, endowments, sovereign wealth funds). Track record de-risks the product for conservative LP mandates.</div>
-            <div class="phase-time">Q1 2026 → Q4 2027</div>
-          </div>
-        </div>
-        <div class="phase-item">
-          <div class="phase-dot"></div>
-          <div>
-            <div class="phase-label">Phase 3 · 2027–2030</div>
-            <div class="phase-title">The Platform</div>
-            <div class="phase-desc">License Cygnus's AI infrastructure as a modular platform — the "Bloomberg Terminal of autonomous trading." Asset managers, banks, and funds deploy Cygnus agents as their investment infrastructure.</div>
-            <div class="phase-time">Q1 2027 → 2030</div>
-          </div>
-        </div>
-        <div class="phase-item" style="padding-bottom:0">
-          <div class="phase-dot"></div>
-          <div>
-            <div class="phase-label">Phase 4 · 2030+</div>
-            <div class="phase-title">Industry Standard</div>
-            <div class="phase-desc">Cygnus becomes the de-facto AI-native fund operating system. Network effects compound as more institutions integrate — creating a data flywheel that accelerates strategy discovery.</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div>
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--muted);margin-bottom:20px">PLATFORM MODULES (PHASE 3)</div>
-      <div class="platform-modules">
-        <div class="pmod">
-          <div class="pmod-title" style="color:var(--c1)">Research-as-a-Service</div>
-          <div class="pmod-desc">Institutional clients subscribe to RESEARCH AGENT outputs — real-time investment theses, company knowledge graphs, and earnings call NLP.</div>
-        </div>
-        <div class="pmod">
-          <div class="pmod-title" style="color:var(--r1)">Risk Intelligence Layer</div>
-          <div class="pmod-desc">Deploy RISK AGENT as a standalone product for existing funds — institutional-grade, AI-powered risk monitoring for any portfolio.</div>
-        </div>
-        <div class="pmod">
-          <div class="pmod-title" style="color:var(--g1)">Strategy Generation API</div>
-          <div class="pmod-desc">STRATEGY AGENT's backtested signals delivered as a systematic alpha signal service — consumed by quant desks and systematic funds.</div>
-        </div>
-        <div class="pmod">
-          <div class="pmod-title" style="color:var(--p1)">Full Fund OS License</div>
-          <div class="pmod-desc">Complete Cygnus architecture licensed as white-label autonomous fund infrastructure. Institutions deploy their own AI-native fund in months, not years.</div>
-        </div>
-      </div>
-      <div class="platform-quote">
-        <p>"The Bloomberg Terminal analogy: Bloomberg didn't just trade — it became the infrastructure. Cygnus's endgame is the same."</p>
-        <cite>CYGNUS BUILD MANIFESTO</cite>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ BUILD MANIFESTO ============ -->
-<section id="manifesto" style="position:relative;z-index:10;padding:120px 56px;background:linear-gradient(to bottom,transparent,var(--deep),transparent)">
-  <div style="max-width:1200px;margin:0 auto">
-    <div class="section-tag reveal">Build Manifesto</div>
-    <h2 class="section-heading reveal reveal-delay-1">How We Build</h2>
-    <p class="section-sub reveal reveal-delay-2">Ten principles that guide every engineering, product, and operational decision at Cygnus.</p>
-  </div>
-  <div class="manifesto-grid reveal reveal-delay-2">
-    <div class="manifesto-item">
-      <div class="manifesto-num">01</div>
-      <div><div class="manifesto-title">AI is the PM, not the tool</div><div class="manifesto-body">Every architectural decision gives the AI more agency, not less. Human interfaces are for oversight, not micromanagement.</div></div>
-    </div>
-    <div class="manifesto-item">
-      <div class="manifesto-num">02</div>
-      <div><div class="manifesto-title">Every trade is training data</div><div class="manifesto-body">The boundary between production and training disappears. Live trades feed the RL loop continuously. There is no 'off' switch for learning.</div></div>
-    </div>
-    <div class="manifesto-item">
-      <div class="manifesto-num">03</div>
-      <div><div class="manifesto-title">Explainability is not optional</div><div class="manifesto-body">Every decision must be traceable to its signal, agent, and reasoning chain. If we can't explain it, we don't ship it.</div></div>
-    </div>
-    <div class="manifesto-item">
-      <div class="manifesto-num">04</div>
-      <div><div class="manifesto-title">Delta-neutral by default</div><div class="manifesto-body">Directional exposure is a bug, not a feature. Every strategy must have a risk-neutral variant before promotion to production.</div></div>
-    </div>
-    <div class="manifesto-item">
-      <div class="manifesto-num">05</div>
-      <div><div class="manifesto-title">Build for L5, ship at L3</div><div class="manifesto-body">Every component designed for full autonomy from day one. We deploy at L3 not because the system isn't ready — trust is earned sequentially.</div></div>
-    </div>
-    <div class="manifesto-item">
-      <div class="manifesto-num">06</div>
-      <div><div class="manifesto-title">Latency is alpha</div><div class="manifesto-body">Every millisecond lost is a millisecond of edge lost. Co-location, FPGA, and direct feeds are core infrastructure, not premature optimisation.</div></div>
-    </div>
-    <div class="manifesto-item">
-      <div class="manifesto-num">07</div>
-      <div><div class="manifesto-title">Data moats compound</div><div class="manifesto-body">The proprietary dataset built by live trading is our most defensible asset. Every architecture decision that enriches it is the right decision.</div></div>
-    </div>
-    <div class="manifesto-item">
-      <div class="manifesto-num">08</div>
-      <div><div class="manifesto-title">Compliance enables scale</div><div class="manifesto-body">Regulatory compliance is not a constraint — it is the mechanism by which institutional capital becomes accessible. We build it before we need it.</div></div>
-    </div>
-    <div class="manifesto-item">
-      <div class="manifesto-num">09</div>
-      <div><div class="manifesto-title">Agents over models</div><div class="manifesto-body">A single large model cannot be a hedge fund. Specialised agents with distinct roles outperform monolithic architectures on every dimension.</div></div>
-    </div>
-    <div class="manifesto-item">
-      <div class="manifesto-num">10</div>
-      <div><div class="manifesto-title">The platform is the product</div><div class="manifesto-body">The fund proves the thesis. The platform is the business. Every decision evaluated against both: does this make the fund better AND the platform licensable?</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ TEAM ============ -->
-<section id="team">
-  <div style="max-width:1200px;margin:0 auto 60px">
-    <div class="section-tag reveal">Team</div>
-    <h2 class="section-heading reveal reveal-delay-1">The Engine<br>Builders</h2>
-  </div>
-  <div class="team-layout reveal">
-    <div class="founder-card">
-      <div class="founder-avatar">NS</div>
-      <div class="founder-name">Nikhil Sharma</div>
-      <div class="founder-title">Founder & CEO — Cygnus AI-Native Hedge Fund</div>
-      <div class="founder-exp">
-        <div class="exp-row"><span class="exp-org">Cygnus.xyz</span><span class="exp-note">Business Developer — Web3 AI trading platform (current)</span></div>
-        <div class="exp-row"><span class="exp-org">LCX Exchange</span><span class="exp-note">Head of Growth — Digital asset exchange (Liechtenstein)</span></div>
-        <div class="exp-row"><span class="exp-org">Hillnick Capitals</span><span class="exp-note">Founder — Crypto fund management & BD</span></div>
-        <div class="exp-row"><span class="exp-org">KoinBX / ASVA / Antier</span><span class="exp-note">Builder — DeFi protocols, blockchain infrastructure</span></div>
-      </div>
-      <div class="founder-skills">
-        <span class="skill-tag">Blockchain & DeFi</span>
-        <span class="skill-tag">Crypto Markets</span>
-        <span class="skill-tag">Business Development</span>
-        <span class="skill-tag">Fund Operations</span>
-        <span class="skill-tag">Web3 Protocols</span>
-        <span class="skill-tag">Strategic BD</span>
-      </div>
-      <a href="https://www.linkedin.com/in/nikhil-cygnus/" target="_blank" rel="noopener" class="founder-link">
-        linkedin.com/in/nikhil-cygnus <span class="arrow">→</span>
+  <header class="site-header" id="siteHeader">
+    <div class="shell nav">
+      <a class="brand" href="#top" aria-label="Cygnus X-1 home">
+        <span class="brand-mark" aria-hidden="true"></span>
+        <span>
+          <span class="brand-name">CYGNUS X-1</span>
+          <span class="brand-meta">AI-native hedge fund</span>
+        </span>
       </a>
-    </div>
-    <div>
-      <div style="font-family:var(--mono);font-size:9px;letter-spacing:.2em;color:var(--muted);margin-bottom:20px">HIRING ROADMAP</div>
-      <div class="hiring-section">
-        <div class="hiring-card" style="border-left:3px solid var(--g1)">
-          <div class="hiring-role">Head of Engineering</div>
-          <div class="hiring-meta">
-            <span class="hiring-tag" style="border-color:rgba(212,146,10,.4);color:var(--g1)">Q3 2025</span>
-            <span class="hiring-tag" style="border-color:rgba(0,200,122,.4);color:var(--gr)">Actively Hiring</span>
-          </div>
-          <div class="hiring-desc">HFT / quant systems background. Builds full agent swarm infrastructure and execution engine. FPGA, co-location, FIX protocol expertise required.</div>
-        </div>
-        <div class="hiring-card" style="border-left:3px solid var(--g1)">
-          <div class="hiring-role">Quantitative Analyst</div>
-          <div class="hiring-meta">
-            <span class="hiring-tag" style="border-color:rgba(212,146,10,.4);color:var(--g1)">Q3 2025</span>
-            <span class="hiring-tag" style="border-color:rgba(14,165,233,.4);color:#0ea5e9">In Recruitment</span>
-          </div>
-          <div class="hiring-desc">Strategy design, backtesting, statistical validation. Math / CS PhD preferred. Experience with regime-conditional backtesting and factor models essential.</div>
-        </div>
-        <div class="hiring-card" style="border-left:3px solid var(--c1)">
-          <div class="hiring-role">ML / RL Engineer</div>
-          <div class="hiring-meta">
-            <span class="hiring-tag" style="border-color:rgba(0,232,208,.4);color:var(--c1)">Q4 2025</span>
-            <span class="hiring-tag" style="border-color:rgba(240,244,255,.2);color:var(--faint)">Pipeline</span>
-          </div>
-          <div class="hiring-desc">Builds and trains all RL models, LLM agent chains, and neuro-symbolic components. LangGraph, Stable-Baselines3, PyTorch expertise required.</div>
-        </div>
-        <div class="hiring-card" style="border-left:3px solid var(--p1)">
-          <div class="hiring-role">Head of Risk</div>
-          <div class="hiring-meta">
-            <span class="hiring-tag" style="border-color:rgba(108,59,255,.4);color:var(--p1)">Q4 2025</span>
-            <span class="hiring-tag" style="border-color:rgba(212,146,10,.3);color:var(--g1)">Advisor Engaged</span>
-          </div>
-          <div class="hiring-desc">Institutional risk framework. Real-time P&L, drawdown controls, compliance architecture. SR 11-7 model risk management background essential.</div>
-        </div>
-      </div>
-      <div style="margin-top:16px;padding:20px 24px;border:1px solid var(--b2);background:var(--panel)">
-        <div style="font-family:var(--mono);font-size:8px;letter-spacing:.15em;color:var(--g1);margin-bottom:8px">ECOSYSTEM PARTNERS (TARGETED)</div>
-        <div style="font-size:12px;color:var(--muted);line-height:1.8">Flashbots · Chainlink · Alchemy / Infura · Polygon · Coinbase Institutional · FalconX (prime brokerage)</div>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#physics">Collider</a>
+        <a href="#ontology">Ontology</a>
+        <a href="#agents">Agents</a>
+        <a href="#risk">Risk</a>
+        <a href="#access">Access</a>
+      </nav>
+      <div class="nav-actions">
+        <a class="btn secondary-nav" href="https://cal.com/nik.xyz" target="_blank" rel="noreferrer">Book call</a>
+        <a class="btn primary" href="mailto:nik@cygnusx1.xyz?subject=Cygnus%20X-1%20Access%20Request">Request access</a>
+        <button class="menu-toggle" type="button" aria-label="Toggle navigation" aria-expanded="false">
+          <span></span><span></span>
+        </button>
       </div>
     </div>
-  </div>
-</section>
+  </header>
 
-<!-- ============ ACCESS / CTA ============ -->
-<section id="access">
-  <span class="access-label">Restricted Access</span>
-  <h2 class="access-heading reveal">
-    The System<br>Is <span class="cyan">Running</span>
-  </h2>
-  <p class="access-sub reveal reveal-delay-1">Cygnus operates for qualified institutional participants and strategic partners. If you're building the future of finance — this is where the conversation begins.</p>
-  <div class="access-cta-row reveal reveal-delay-2">
-    <a href="https://www.linkedin.com/in/nikhil-cygnus/" target="_blank" rel="noopener" class="access-primary">
-      <span>Request Access</span>
-      <span class="arrow">→</span>
-    </a>
-    <a href="https://www.linkedin.com/company/cygnusx" target="_blank" rel="noopener" class="cta-secondary">
-      View LinkedIn <span class="arrow">↗</span>
-    </a>
-  </div>
-  <div class="access-classifier reveal reveal-delay-3">
-    QUALIFIED / ACCREDITED INVESTORS ONLY &nbsp;·&nbsp; NOT FOR PUBLIC DISTRIBUTION &nbsp;·&nbsp; CYGNUS AI-NATIVE HEDGE FUND
-  </div>
-</section>
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="shell hero-grid">
+        <div class="hero-copy" data-reveal>
+          <div class="eyebrow"><span class="pulse" aria-hidden="true"></span> Paper trading now - raising fund - L3 autonomy at launch</div>
+          <h1>Market signals, collided.</h1>
+          <p class="lead">
+            Cygnus X-1 is an <strong>AI-native hedge fund</strong> built like a financial collider: agents accelerate data, collide hypotheses, observe anomalies, contain risk, and learn from every simulated trade.
+          </p>
+          <div class="hero-actions">
+            <a class="btn primary" href="mailto:nik@cygnusx1.xyz?subject=Cygnus%20X-1%20Access%20Request&amp;body=Hi%20Nik%2C%0A%0AI%20would%20like%20to%20request%20access%20to%20Cygnus%20X-1.%0A%0AProfile%3A%0AAllocation%20interest%3A%0AQuestions%3A%0A">Request access</a>
+            <a class="btn" href="https://cal.com/nik.xyz" target="_blank" rel="noreferrer">Book a call</a>
+            <a class="btn" href="cygnus-thesis.pdf" target="_blank" rel="noreferrer">Read thesis</a>
+          </div>
+          <p class="quiet-note">Private access for qualified investors, crypto-native capital, strategic partners, and senior builders evaluating the AI-native fund category.</p>
+        </div>
 
-<!-- FOOTER -->
-<footer>
-  <div class="footer-logo">CYGNUS</div>
-  <div class="footer-copy">© 2025 Cygnus AI-Native Hedge Fund. All rights reserved. Proprietary & Confidential.</div>
-  <div class="footer-links">
-    <a href="https://www.linkedin.com/in/nikhil-cygnus/" target="_blank" rel="noopener">LinkedIn</a>
-    <a href="https://www.linkedin.com/company/cygnusx" target="_blank" rel="noopener">Company</a>
-  </div>
-</footer>
-
-<!-- STATUS STRIP -->
-<div class="sys-strip">
-  <div class="sys-dot" style="flex-shrink:0"></div>
-  <span class="live">SYSTEM ACTIVE</span>
-  <span class="sep">·</span>
-  <span id="sysTime2">--:--:-- UTC</span>
-  <span class="sep">·</span>
-  <span>AGENTS: <span class="live">7/7 ONLINE</span></span>
-  <span class="sep">·</span>
-  <span>EXPERIMENTS: <span class="live" id="expCount2">10,247</span></span>
-  <span class="sep">·</span>
-  <span>AUTONOMY: <span style="color:var(--g1)">L3 ACTIVE</span></span>
-  <span class="sep">·</span>
-  <span>TARGET: <span style="color:var(--gr)">L5</span></span>
-</div>
-
-<script>
-/* ================================================================
-   CURSOR
-================================================================ */
-const cur=document.getElementById('cur');
-const curRing=document.getElementById('cur-ring');
-let mx=0,my=0,rx=0,ry=0;
-document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px'});
-function animCursor(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;curRing.style.left=rx+'px';curRing.style.top=ry+'px';requestAnimationFrame(animCursor)}
-animCursor();
-document.querySelectorAll('a,button,[class*="card"],[class*="row"],[class*="btn"],[class*="cta"]').forEach(el=>{
-  el.addEventListener('mouseenter',()=>document.body.classList.add('cursor-hover'));
-  el.addEventListener('mouseleave',()=>document.body.classList.remove('cursor-hover'));
-});
-
-/* ================================================================
-   COSMOS CANVAS — Enhanced particle system
-================================================================ */
-const canvas=document.getElementById('cosmos');
-const ctx=canvas.getContext('2d');
-let W,H;
-function resizeCosmos(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}
-resizeCosmos();window.addEventListener('resize',resizeCosmos);
-
-class Star{
-  constructor(){this.reset()}
-  reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*1.2+.2;this.a=Math.random()*.5+.1;this.vx=(Math.random()-.5)*.12;this.vy=(Math.random()-.5)*.12;this.life=0;this.maxLife=Math.random()*300+200}
-  update(){this.x+=this.vx;this.y+=this.vy;this.life++;if(this.x<0||this.x>W||this.y<0||this.y>H||this.life>this.maxLife)this.reset()}
-  draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(0,232,208,${this.a})`;ctx.fill()}
-}
-class GoldStar{
-  constructor(){this.reset()}
-  reset(){this.x=Math.random()*W;this.y=Math.random()*H;this.r=Math.random()*.8+.1;this.a=Math.random()*.3+.05;this.vx=(Math.random()-.5)*.06;this.vy=(Math.random()-.5)*.06}
-  update(){this.x+=this.vx;this.y+=this.vy;if(this.x<0||this.x>W||this.y<0||this.y>H)this.reset()}
-  draw(){ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,Math.PI*2);ctx.fillStyle=`rgba(212,146,10,${this.a})`;ctx.fill()}
-}
-class DataLine{
-  constructor(){this.reset()}
-  reset(){this.x=Math.random()*W;this.y=-50;this.len=Math.random()*60+20;this.speed=Math.random()*.4+.2;this.a=Math.random()*.06+.02}
-  update(){this.y+=this.speed;if(this.y>H+100)this.reset()}
-  draw(){ctx.beginPath();ctx.moveTo(this.x,this.y);ctx.lineTo(this.x,this.y-this.len);ctx.strokeStyle=`rgba(0,232,208,${this.a})`;ctx.lineWidth=.5;ctx.stroke()}
-}
-
-const stars=[...Array(180)].map(()=>new Star());
-const golds=[...Array(60)].map(()=>new GoldStar());
-const lines=[...Array(25)].map(()=>new DataLine());
-
-function drawConnections(){
-  for(let i=0;i<stars.length;i+=2){
-    for(let j=i+2;j<stars.length;j+=2){
-      const dx=stars[i].x-stars[j].x,dy=stars[i].y-stars[j].y;
-      const d=Math.sqrt(dx*dx+dy*dy);
-      if(d<90){ctx.beginPath();ctx.moveTo(stars[i].x,stars[i].y);ctx.lineTo(stars[j].x,stars[j].y);ctx.strokeStyle=`rgba(0,232,208,${.03*(1-d/90)})`;ctx.lineWidth=.3;ctx.stroke()}
-    }
-  }
-}
-
-function animCosmos(){
-  ctx.fillStyle='rgba(2,4,9,.25)';ctx.fillRect(0,0,W,H);
-  lines.forEach(l=>{l.update();l.draw()});
-  drawConnections();
-  stars.forEach(s=>{s.update();s.draw()});
-  golds.forEach(g=>{g.update();g.draw()});
-  requestAnimationFrame(animCosmos);
-}
-animCosmos();
-
-/* ================================================================
-   NAV SCROLL
-================================================================ */
-const nav=document.getElementById('mainNav');
-window.addEventListener('scroll',()=>{nav.classList.toggle('scrolled',scrollY>60)});
-
-/* ================================================================
-   REVEALS
-================================================================ */
-const observer=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');observer.unobserve(e.target)}});
-},{threshold:.08});
-document.querySelectorAll('.reveal').forEach(r=>observer.observe(r));
-
-/* ================================================================
-   TICKER
-================================================================ */
-const tickerItems=[
-  {lbl:'BTC',val:'$68,420',chg:'+2.3%'},
-  {lbl:'ETH',val:'$3,842',chg:'+1.8%'},
-  {lbl:'SOL',val:'$142.5',chg:'+4.1%'},
-  {lbl:'BNB',val:'$412',chg:'+0.9%'},
-  {lbl:'AGENTS',val:'7/7',chg:'ACTIVE'},
-  {lbl:'SIGNALS',val:'11/11',chg:'LIVE'},
-  {lbl:'EXPERIMENTS',val:'10,247+',chg:'TODAY'},
-  {lbl:'STRATEGIES',val:'12,042',chg:'VALIDATED'},
-  {lbl:'AUTONOMY',val:'L3',chg:'OPERATIONAL'},
-  {lbl:'TARGET',val:'L5',chg:'FULL AUTONOMY'},
-  {lbl:'SORTINO',val:'6.12',chg:'PORTFOLIO'},
-  {lbl:'COVERAGE',val:'20+',chg:'VENUES'},
-];
-function buildTicker(){
-  const inner=document.getElementById('tickerInner');
-  const html=[...tickerItems,...tickerItems].map(t=>`<span class="ticker-item"><span class="tk">${t.lbl}</span> ${t.val} <span class="up">${t.chg}</span></span>`).join('');
-  inner.innerHTML=html;
-}
-buildTicker();
-
-/* ================================================================
-   LIVE CLOCKS + COUNTERS
-================================================================ */
-let expBase=10247;
-function updateLive(){
-  const now=new Date();
-  const utc=now.toUTCString().split(' ')[4]+' UTC';
-  const el1=document.getElementById('liveTime'),el2=document.getElementById('sysTime2');
-  if(el1)el1.textContent=utc;
-  if(el2)el2.textContent=utc;
-}
-setInterval(updateLive,1000);updateLive();
-setInterval(()=>{
-  expBase+=Math.floor(Math.random()*4)+1;
-  const fmt=expBase.toLocaleString();
-  const e1=document.getElementById('expCount'),e2=document.getElementById('expCount2');
-  if(e1)e1.textContent=fmt;if(e2)e2.textContent=fmt;
-},600);
-
-/* ================================================================
-   AGENT CANVAS
-================================================================ */
-const agentData=[
-  {name:'SIGNAL AGENT',    role:'Market Intelligence',      desc:'Ingests all 11 signal sources in real-time. Detects anomalies, regime shifts, opportunity precursors. First mover in the pipeline — every other agent depends on its output.',stat:'10M+ data points/second',color:'#00e8d0'},
-  {name:'RESEARCH AGENT',  role:'Fundamental Intelligence', desc:'Reads every 10-K, earnings transcript, and news article. Builds knowledge graphs. Generates investment theses autonomously via LLM reasoning. Replaces an entire research team.',stat:'Replaces 20+ analysts',color:'#d4920a'},
-  {name:'STRATEGY AGENT',  role:'Strategy Generation',      desc:'Takes signals and theses. Generates, backtests, and ranks strategies across all 9 modules. Runs 10,000+ experiments per day. Discovers strategies no human would design.',stat:'Discovers novel strategies',color:'#6c3bff'},
-  {name:'RISK AGENT',      role:'Risk Intelligence',         desc:'Real-time portfolio risk monitor. Enforces delta-neutrality, position limits, drawdown stops. Predictive — anticipates regime shifts before they hit. Full veto power on any trade.',stat:'Pre-emptive, not reactive',color:'#ff2851'},
-  {name:'EXECUTION AGENT', role:'Optimal Execution',         desc:'Routes orders across 20+ venues to minimise market impact. Uses RL to learn optimal execution timing, venue selection, and order sizing in real-time.',stat:'RL-optimised per trade',color:'#00c87a'},
-  {name:'LEARN AGENT',     role:'Continuous Learning',       desc:'Attributes every P&L outcome to signal, strategy, and execution decision. Feeds weight updates to all other agents continuously after every trade. System improves 24/7.',stat:'Improves after every trade',color:'#0ea5e9'},
-  {name:'SYNTHESIS AGENT', role:'Portfolio Orchestration',   desc:'The meta-coordinator. Aggregates all 6 agents. Resolves conflicts. Constructs final portfolio allocation with full explainability and audit trail. Every decision traceable.',stat:'Full decision traceability',color:'#d4920a'},
-];
-
-// Build agent list
-const agentList=document.getElementById('agentList');
-agentData.forEach((ag,i)=>{
-  const div=document.createElement('div');
-  div.className='agent-row'+(i===0?' active':'');
-  div.dataset.agent=i;
-  div.innerHTML=`<div class="agent-name" style="color:${ag.color}">${ag.name}</div><div class="agent-role-label">${ag.role}</div>`;
-  div.addEventListener('click',()=>{
-    document.querySelectorAll('.agent-row').forEach(r=>r.classList.remove('active'));
-    div.classList.add('active');selectedAgent=i;
-    document.getElementById('agentName').textContent=ag.name;
-    document.getElementById('agentName').style.color=ag.color;
-    document.getElementById('agentRole').textContent=ag.role;
-    document.getElementById('agentRole').style.color=ag.color;
-    document.getElementById('agentDesc').textContent=ag.desc;
-    const stat=document.getElementById('agentStat');
-    stat.textContent=ag.stat;stat.style.borderColor=ag.color+'50';
-    stat.style.color=ag.color;stat.style.background=ag.color+'18';
-    document.getElementById('agentPanel').style.borderColor=ag.color+'35';
-  });
-  agentList.appendChild(div);
-});
-
-// Agent canvas
-const ac=document.getElementById('agentCanvas');
-const ax=ac.getContext('2d');
-let AW,AH;
-function resizeAC(){AW=ac.width=ac.offsetWidth;AH=ac.height=ac.offsetHeight}
-resizeAC();window.addEventListener('resize',resizeAC);
-let selectedAgent=0,aTime=0;
-const angleBase=agentData.map((_,i)=>(i/agentData.length)*Math.PI*2-Math.PI/2);
-
-function drawAgents(){
-  ax.clearRect(0,0,AW,AH);
-  const cx=AW/2,cy=AH/2;
-  const R=Math.min(AW,AH)*.35;
-
-  // Grid lines
-  ax.strokeStyle='rgba(0,232,208,.04)';ax.lineWidth=.5;
-  for(let i=0;i<5;i++){ax.beginPath();ax.arc(cx,cy,R*(i+1)/3,0,Math.PI*2);ax.stroke()}
-
-  // Center
-  ax.beginPath();ax.arc(cx,cy,30,0,Math.PI*2);
-  ax.fillStyle='rgba(212,146,10,.1)';ax.fill();
-  ax.strokeStyle='rgba(212,146,10,.7)';ax.lineWidth=1.5;ax.stroke();
-  ax.fillStyle='#d4920a';ax.font='bold 7px "Space Mono"';ax.textAlign='center';ax.textBaseline='middle';
-  ax.fillText('SYNTHESIS',cx,cy-5);ax.fillText('AGENT',cx,cy+6);
-
-  agentData.forEach((ag,i)=>{
-    const angle=angleBase[i]+aTime*.004;
-    const nx=cx+Math.cos(angle)*R,ny=cy+Math.sin(angle)*R;
-    const isSel=i===selectedAgent;
-
-    // Line
-    ax.beginPath();ax.moveTo(cx,cy);ax.lineTo(nx,ny);
-    ax.strokeStyle=isSel?ag.color+'80':'rgba(0,232,208,.06)';
-    ax.lineWidth=isSel?1.5:.4;
-    if(!isSel)ax.setLineDash([3,6]);
-    ax.stroke();ax.setLineDash([]);
-
-    // Data pulse
-    const pf=(aTime*.007+i*.2)%1;
-    const px=cx+(nx-cx)*pf,py=cy+(ny-cy)*pf;
-    ax.beginPath();ax.arc(px,py,isSel?2.5:1.5,0,Math.PI*2);
-    ax.fillStyle=ag.color;ax.fill();
-
-    // Node
-    const nr=isSel?22:14;
-    if(isSel){
-      ax.beginPath();ax.arc(nx,ny,nr+6+Math.sin(aTime*.06)*3,0,Math.PI*2);
-      ax.strokeStyle=ag.color+'25';ax.lineWidth=1;ax.stroke();
-    }
-    ax.beginPath();ax.arc(nx,ny,nr,0,Math.PI*2);
-    ax.fillStyle=isSel?ag.color+'28':'rgba(7,17,30,.85)';ax.fill();
-    ax.strokeStyle=isSel?ag.color:'rgba(0,232,208,.35)';
-    ax.lineWidth=isSel?2:1;ax.stroke();
-
-    // Label
-    const lSize=isSel?9:7;
-    ax.fillStyle=isSel?ag.color:'rgba(240,244,255,.45)';
-    ax.font=`${isSel?'bold ':''} ${lSize}px "Space Mono"`;
-    ax.textAlign='center';
-    const lp=nr+14;
-    ax.textBaseline=Math.sin(angle)>0.2?'top':Math.sin(angle)<-0.2?'bottom':'middle';
-    const lx=nx+(Math.cos(angle)>0.3?lp:Math.cos(angle)<-0.3?-lp:0);
-    const ly=ny+(Math.sin(angle)>0.3?lp:Math.sin(angle)<-0.3?-lp:0);
-    const shortName=ag.name.replace(' AGENT','');
-    ax.fillText(shortName,Math.cos(angle)>0.3||Math.cos(angle)<-0.3?lx:nx,Math.sin(angle)>0.2||Math.sin(angle)<-0.2?ly:ny+(Math.sin(angle)>0?lp:-lp));
-  });
-  aTime++;requestAnimationFrame(drawAgents);
-}
-drawAgents();
-
-/* ================================================================
-   STRATEGIES
-================================================================ */
-const strategies=[
-  {n:'01',color:'#00e8d0',title:'Crypto Arbitrage',sub:'Cross-venue, DEX/CEX, triangular, funding rate',body:'Cross-exchange price gaps, AMM pricing lag, triangular intra-exchange loops, funding rate carry. 24/7 — the highest-frequency, lowest-risk strategy module.',edge:'0.3–5%',freq:'Very High',regime:'All'},
-  {n:'02',color:'#0ea5e9',title:'Long / Short Equity',sub:'AI-driven fundamental + technical signal stack',body:'NLP on filings + management guidance delta + quant technicals. AI builds long/short books at 10,000 stock scale — impossible without autonomous research agents.',edge:'Absolute',freq:'Low–Med',regime:'All'},
-  {n:'03',color:'#d4920a',title:'Macro Trend Following',sub:'Regime-adaptive trend — rates, FX, commodities',body:'CTA-style trend following with ML-adaptive lookback periods. Macro regime detector identifies trend regime state. Signal weights update continuously based on regime probability.',edge:'High',freq:'Low',regime:'Trending'},
-  {n:'04',color:'#00e8d0',title:'Sentiment Momentum',sub:'NLP-driven crowd sentiment + news flow',body:'Aggregates social media, news, and alternative data sentiment. Builds momentum portfolios where crowd positioning creates persistent price trends. Distinguishes retail noise from institutional signal.',edge:'Medium',freq:'Medium',regime:'Volatile'},
-  {n:'05',color:'#0ea5e9',title:'Statistical Arbitrage',sub:'Pairs trading, cointegration, mean reversion',body:'AI identifies cointegrated pairs across assets and asset classes. ML-enhanced spread models account for regime shifts and non-stationarity missed by classic econometric approaches.',edge:'0.2–1%',freq:'High',regime:'Mean-Rev'},
-  {n:'06',color:'#6c3bff',title:'Volatility Strategies',sub:'Vol surface trading, gamma scalping, vol regime',body:'ML model maps full volatility surface across strikes and tenors. Identifies mis-priced implied volatility, term structure trades, and vol regime transitions via GARCH + neural nets.',edge:'Variable',freq:'Low–Med',regime:'Low-Vol'},
-  {n:'07',color:'#00c87a',title:'DeFi Yield Optimisation',sub:'Protocol rotation, liquidity provision, on-chain',body:'Real-time on-chain yield scanner across 500+ DeFi protocols. AI rotates capital to maximise risk-adjusted yield. Smart contract interaction monitoring for protocol risk signals.',edge:'5–50% APY',freq:'Med',regime:'DeFi'},
-  {n:'08',color:'#d4920a',title:'Event-Driven Trading',sub:'Earnings, M&A, macro announcements, regulatory',body:'NLP pre-processing of earnings calls, M&A filings, and regulatory announcements. AI builds event-specific models per company based on historical event response patterns.',edge:'High',freq:'Low',regime:'Event'},
-  {n:'09',color:'#00c87a',title:'Cross-Asset Macro',sub:'Inter-market correlation, risk-on/off rotation',body:'Cross-asset correlation matrix engine identifies regime-level dislocations. Exploits breakdowns in historical relationships (equities ↔ bonds ↔ crypto) as early regime-shift signals.',edge:'High',freq:'Low',regime:'Crisis'},
-];
-
-const stratGrid=document.querySelector('.strat-grid');
-if(stratGrid){
-  strategies.forEach(s=>{
-    const d=document.createElement('div');
-    d.className='strat-card reveal';
-    d.style.cssText=`--sc:${s.color}`;
-    d.innerHTML=`
-      <div class="strat-num" style="color:${s.color}">${s.n}</div>
-      <div class="strat-title">${s.title}</div>
-      <div class="strat-sub" style="color:${s.color}">${s.sub}</div>
-      <div class="strat-body">${s.body}</div>
-      <div class="strat-tags">
-        <span class="strat-tag" style="border-color:${s.color}40;color:${s.color}">Edge: ${s.edge}</span>
-        <span class="strat-tag" style="border-color:rgba(240,244,255,.15);color:var(--muted)">Freq: ${s.freq}</span>
-        <span class="strat-tag" style="border-color:rgba(240,244,255,.15);color:var(--muted)">Regime: ${s.regime}</span>
+        <div class="collider" data-reveal>
+          <div class="collider-stage" aria-label="Animated collider visualization">
+            <div class="detector"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="ring"></div>
+            <div class="collision-line"></div>
+            <div class="event-horizon"></div>
+          </div>
+          <div class="collider-readout" aria-label="Cygnus live status">
+            <div class="readout"><span>Autonomy</span><b>L3</b></div>
+            <div class="readout"><span>Swarm</span><b>7 agents</b></div>
+            <div class="readout"><span>Signals</span><b>11 sources</b></div>
+          </div>
+        </div>
       </div>
-    `;
-    d.style.cssText+=`; --border-bottom:${s.color}`;
-    d.addEventListener('mouseenter',()=>{d.style.borderColor=s.color+'40'});
-    d.addEventListener('mouseleave',()=>{d.style.borderColor='var(--b2)'});
-    d.querySelector('.strat-num')?.parentElement;
-    // bottom accent line
-    const accent=document.createElement('div');
-    accent.style.cssText=`position:absolute;bottom:0;left:0;right:0;height:2px;background:${s.color};transform:scaleX(0);transform-origin:left;transition:transform .4s;`;
-    d.style.position='relative';d.style.overflow='hidden';
-    d.appendChild(accent);
-    d.addEventListener('mouseenter',()=>{accent.style.transform='scaleX(1)'});
-    d.addEventListener('mouseleave',()=>{accent.style.transform='scaleX(0)'});
-    stratGrid.appendChild(d);
-    observer.observe(d);
-  });
-}
+    </section>
 
-/* ================================================================
-   RANDOM GLITCH
-================================================================ */
-function randomGlitch(){
-  const els=[...document.querySelectorAll('.section-heading')];
-  if(!els.length)return;
-  const el=els[Math.floor(Math.random()*els.length)];
-  el.style.clipPath='polygon(0 0,100% 0,100% 42%,0 42%)';
-  el.style.transform='translate(-2px,0)';
-  setTimeout(()=>{el.style.clipPath='';el.style.transform=''},80);
-}
-setInterval(randomGlitch,5000);
-</script>
+    <div class="status-strip">
+      <div class="shell status-grid">
+        <div class="status-cell">
+          <span>Current phase</span>
+          <b>Paper</b>
+          <p>Validation before external capital deployment.</p>
+        </div>
+        <div class="status-cell">
+          <span>Launch mode</span>
+          <b>L3</b>
+          <p>AI runs the loop; humans retain override.</p>
+        </div>
+        <div class="status-cell">
+          <span>Engine</span>
+          <b>9 x 11</b>
+          <p>Strategy modules multiplied by signal channels.</p>
+        </div>
+        <div class="status-cell">
+          <span>Material</span>
+          <b>Thesis</b>
+          <p>Deck available for qualified conversations.</p>
+        </div>
+      </div>
+    </div>
+
+    <section id="physics">
+      <div class="shell">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="kicker">Collider logic</div>
+            <h2>Scientific instruments, translated into capital systems.</h2>
+          </div>
+          <p class="section-copy">The design language is drawn from particle physics, not as decoration but as operating philosophy: accelerate data, isolate fragile states, infer hidden mass, and govern everything from a control room.</p>
+        </div>
+
+        <div class="physics-grid">
+          <article class="physics-tile" data-reveal>
+            <div class="physics-icon" aria-hidden="true">
+              <div class="orbit"></div><div class="orbit"></div><div class="orbit"></div><div class="dot"></div>
+            </div>
+            <div class="physics-text">
+              <span class="tiny-label">Hadron collider</span>
+              <h3>Collide independent signals.</h3>
+              <p>Market feeds, on-chain flows, filings, sentiment, volatility, and macro regimes are accelerated into the same decision chamber.</p>
+            </div>
+          </article>
+
+          <article class="physics-tile" data-reveal>
+            <div class="physics-icon" aria-hidden="true">
+              <div class="orbit"></div><div class="orbit"></div><div class="orbit"></div><div class="dot"></div>
+            </div>
+            <div class="physics-text">
+              <span class="tiny-label">Antimatter trap</span>
+              <h3>Contain opposing exposure.</h3>
+              <p>Risk is treated like unstable matter: isolate it, constrain it, and prevent accidental contact with the portfolio core.</p>
+            </div>
+          </article>
+
+          <article class="physics-tile" data-reveal>
+            <div class="physics-icon" aria-hidden="true">
+              <div class="orbit"></div><div class="orbit"></div><div class="orbit"></div><div class="dot"></div>
+            </div>
+            <div class="physics-text">
+              <span class="tiny-label">Dark matter</span>
+              <h3>Infer what markets cannot show.</h3>
+              <p>Hidden liquidity, missing momentum, silent rotations, and cross-asset gravity become signal candidates for agent debate.</p>
+            </div>
+          </article>
+
+          <article class="physics-tile" data-reveal>
+            <div class="physics-icon" aria-hidden="true">
+              <div class="orbit"></div><div class="orbit"></div><div class="orbit"></div><div class="dot"></div>
+            </div>
+            <div class="physics-text">
+              <span class="tiny-label">Control centre</span>
+              <h3>Govern the machine in real time.</h3>
+              <p>Human oversight at launch focuses on guardrails, overrides, model drift, reporting, and system-level readiness.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="ontology">
+      <div class="shell">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="kicker">Market ontology</div>
+            <h2>A living map of data, logic, actions, and audit.</h2>
+          </div>
+          <p class="section-copy">Cygnus is designed as an operational graph. Assets, venues, wallets, filings, signals, strategies, limits, and actions are connected so agents can reason over the market as a living system.</p>
+        </div>
+
+        <div class="ontology">
+          <div class="map" data-reveal aria-label="Cygnus market ontology map">
+            <div class="map-line"></div><div class="map-line"></div><div class="map-line"></div><div class="map-line"></div><div class="map-line"></div><div class="map-line"></div>
+            <div class="node core"><span>Core</span><b>Portfolio state and decision memory</b></div>
+            <div class="node n1"><span>Data</span><b>Feeds, flows, filings, order books</b></div>
+            <div class="node n2"><span>Logic</span><b>Regimes, strategies, cost models</b></div>
+            <div class="node n3"><span>Action</span><b>Route, size, hedge, reject</b></div>
+            <div class="node n4"><span>Security</span><b>Limits, custody, access, approvals</b></div>
+            <div class="node n5"><span>Agents</span><b>Research, risk, execution, learn</b></div>
+            <div class="node n6"><span>Audit</span><b>Trace, version, explain, report</b></div>
+          </div>
+
+          <div class="control-stack" data-reveal>
+            <article class="control-panel">
+              <header><span class="tiny-label">01</span><span class="tiny-label">Objects</span></header>
+              <h3>Markets become inspectable entities.</h3>
+              <p>Assets, venues, protocols, wallets, instruments, and events are represented as connected objects with state.</p>
+            </article>
+            <article class="control-panel">
+              <header><span class="tiny-label">02</span><span class="tiny-label">Decisions</span></header>
+              <h3>Signals become candidate actions.</h3>
+              <p>Agents turn raw information into hypotheses, backtests, risk checks, sizing, routing, and rejection logic.</p>
+            </article>
+            <article class="control-panel">
+              <header><span class="tiny-label">03</span><span class="tiny-label">Feedback</span></header>
+              <h3>Outcomes become memory.</h3>
+              <p>Every validated trade outcome can update beliefs, strategy weights, execution heuristics, and reporting.</p>
+            </article>
+            <article class="control-panel">
+              <header><span class="tiny-label">04</span><span class="tiny-label">Governance</span></header>
+              <h3>Autonomy remains accountable.</h3>
+              <p>The system is designed for traceable claims, model versioning, human override, and investor-grade diligence.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="agents">
+      <div class="shell">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="kicker">Agent swarm</div>
+            <h2>Seven specialist agents operating as one fund brain.</h2>
+          </div>
+          <p class="section-copy">Each agent has a job. The value is not a single model producing a prediction; it is an orchestrated research, risk, execution, and learning loop.</p>
+        </div>
+
+        <div class="agent-grid">
+          <article class="agent" data-reveal><span class="agent-index">01</span><h3>Signal</h3><p>Detects anomalies, flows, regime changes, and signal collisions.</p></article>
+          <article class="agent" data-reveal><span class="agent-index">02</span><h3>Research</h3><p>Builds theses from filings, news, market structure, and context.</p></article>
+          <article class="agent" data-reveal><span class="agent-index">03</span><h3>Strategy</h3><p>Generates, ranks, and tests strategy candidates across modules.</p></article>
+          <article class="agent" data-reveal><span class="agent-index">04</span><h3>Risk</h3><p>Vetoes trades, watches exposure, controls drawdown, and contains failure.</p></article>
+          <article class="agent" data-reveal><span class="agent-index">05</span><h3>Execution</h3><p>Routes orders, estimates cost, manages venue selection, and learns fills.</p></article>
+          <article class="agent" data-reveal><span class="agent-index">06</span><h3>Learn</h3><p>Attributes outcomes and distributes updated beliefs to the swarm.</p></article>
+          <article class="agent" data-reveal><span class="agent-index">07</span><h3>Synthesis</h3><p>Coordinates agents into a final portfolio action with audit context.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section id="risk">
+      <div class="shell">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="kicker">Risk containment</div>
+            <h2>The risk layer is the event horizon.</h2>
+          </div>
+          <p class="section-copy">The fund cannot be credible unless autonomy has hard boundaries. Cygnus launches with L3 oversight, pre-trade risk veto, kill switches, model drift monitoring, and clear reporting discipline.</p>
+        </div>
+
+        <div class="risk-lab">
+          <div class="blackbox" data-reveal aria-label="Risk containment visualization">
+            <div class="risk-beam"></div>
+            <div class="risk-label l1">Delta neutral check</div>
+            <div class="risk-label l2">Liquidity gate</div>
+            <div class="risk-label l3">Drawdown boundary</div>
+            <div class="risk-label l4">Human override</div>
+          </div>
+          <div class="risk-list" data-reveal>
+            <article class="risk-item">
+              <span class="tiny-label">Pre-trade veto</span>
+              <h3>No trade passes only because a model likes it.</h3>
+              <p>Every candidate action is checked against liquidity, exposure, cost, counterparty concentration, and drawdown constraints before execution.</p>
+            </article>
+            <article class="risk-item">
+              <span class="tiny-label">Decision trace</span>
+              <h3>Every action needs a chain of custody.</h3>
+              <p>Signal, hypothesis, backtest, model version, risk decision, route, and outcome are part of the decision record.</p>
+            </article>
+            <article class="risk-item">
+              <span class="tiny-label">Autonomy ladder</span>
+              <h3>L3 first. Higher autonomy only after proof.</h3>
+              <p>Launch mode keeps humans available for edge cases and override. L4 and L5 remain milestones earned through evidence.</p>
+            </article>
+            <article class="risk-item">
+              <span class="tiny-label">Investor proof</span>
+              <h3>External capital follows validation.</h3>
+              <p>The paper-trading phase is used to prove controls, repeatability, reporting, and system readiness before live fund deployment.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="kicker">Compounding moat</div>
+            <h2>The longer the system runs, the more proprietary the memory becomes.</h2>
+          </div>
+          <p class="section-copy">Cygnus is built around a simple long-term idea: every signal, trade, rejection, fill, hedge, and failed hypothesis can become labelled operating data.</p>
+        </div>
+
+        <div class="moat-grid">
+          <article class="moat" data-reveal>
+            <div class="status-cell">
+              <span>01</span>
+              <h3>Trade memory</h3>
+              <p>Signal to outcome attribution becomes proprietary training material.</p>
+            </div>
+          </article>
+          <article class="moat" data-reveal>
+            <div class="status-cell">
+              <span>02</span>
+              <h3>Venue graph</h3>
+              <p>Each new venue expands the opportunity surface across signals and strategies.</p>
+            </div>
+          </article>
+          <article class="moat" data-reveal>
+            <div class="status-cell">
+              <span>03</span>
+              <h3>Agent memory</h3>
+              <p>Research, risk, execution, and learning agents improve from shared outcomes.</p>
+            </div>
+          </article>
+          <article class="moat" data-reveal>
+            <div class="status-cell">
+              <span>04</span>
+              <h3>Fund OS</h3>
+              <p>The fund proves the operating system; the platform becomes the long horizon.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="shell thesis-wrap">
+        <div class="thesis-visual" data-reveal aria-label="Cygnus thesis deck preview">
+          <div class="thesis-title">
+            <span class="kicker">30-page thesis</span>
+            <h3>Navigating markets by the stars</h3>
+            <div class="deck-stats">
+              <div class="deck-stat"><b>7</b><span>Agents</span></div>
+              <div class="deck-stat"><b>9</b><span>Modules</span></div>
+              <div class="deck-stat"><b>11</b><span>Signals</span></div>
+              <div class="deck-stat"><b>L3</b><span>Launch</span></div>
+            </div>
+          </div>
+        </div>
+        <div class="thesis-panel" data-reveal>
+          <div class="kicker">Investor material</div>
+          <h2>Read the thesis before the call.</h2>
+          <p class="section-copy">The deck covers the paradigm shift, autonomy framework, AI engine, risk controls, compliance posture, technology stack, build roadmap, team, and platform vision.</p>
+          <div class="section-actions" style="margin-top: 1.25rem;">
+            <a class="btn primary" href="cygnus-thesis.pdf" target="_blank" rel="noreferrer">Open thesis PDF</a>
+            <a class="btn" href="mailto:nik@cygnusx1.xyz?subject=Cygnus%20X-1%20Thesis%20Questions">Ask a thesis question</a>
+          </div>
+          <p class="fine-print" style="margin-top: 1rem;">The thesis is proprietary and confidential. Do not forward investor materials without permission.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="access">
+      <div class="shell">
+        <div class="section-head" data-reveal>
+          <div>
+            <div class="kicker">Access</div>
+            <h2>Private conversations for capital, partners, and builders.</h2>
+          </div>
+          <p class="section-copy">Request access if you want to review the thesis, discuss allocation readiness, explore infrastructure partnerships, or contribute to the build.</p>
+        </div>
+
+        <div class="access-wrap">
+          <div class="access-card" data-reveal>
+            <div class="persona-tabs" role="tablist" aria-label="Audience paths">
+              <button type="button" role="tab" aria-selected="true" data-persona="lp">LP / family office</button>
+              <button type="button" role="tab" aria-selected="false" data-persona="crypto">Crypto-native capital</button>
+              <button type="button" role="tab" aria-selected="false" data-persona="partner">Strategic partner</button>
+              <button type="button" role="tab" aria-selected="false" data-persona="builder">Builder / advisor</button>
+            </div>
+            <h3 id="personaTitle">Discuss allocation readiness and diligence path.</h3>
+            <p id="personaText" class="section-copy" style="margin-top: 0.85rem;">Best for institutional LPs, family offices, endowments, and allocators who want to review stage, fund formation, controls, reporting, and the evidence required before capital.</p>
+            <div class="section-actions" style="margin-top: 1.25rem;">
+              <a class="btn primary" id="personaPrimary" href="https://cal.com/nik.xyz" target="_blank" rel="noreferrer">Book diligence call</a>
+              <a class="btn" id="personaSecondary" href="mailto:nik@cygnusx1.xyz?subject=Cygnus%20X-1%20LP%20Diligence">Email Nik</a>
+            </div>
+          </div>
+
+          <form class="access-card" id="accessForm" data-reveal>
+            <div class="kicker">Fast request</div>
+            <h3>Send a structured access note.</h3>
+            <div class="form-grid">
+              <label>
+                Your email
+                <input name="email" type="email" autocomplete="email" placeholder="name@firm.com" required>
+              </label>
+              <label>
+                Profile
+                <select name="profile" required>
+                  <option value="Institutional LP">Institutional LP</option>
+                  <option value="Family office">Family office</option>
+                  <option value="Crypto-native investor">Crypto-native investor</option>
+                  <option value="Strategic partner">Strategic partner</option>
+                  <option value="Builder / advisor">Builder / advisor</option>
+                </select>
+              </label>
+              <label>
+                Context
+                <textarea name="context" placeholder="Allocation interest, partnership angle, technical background, or specific thesis questions." required></textarea>
+              </label>
+              <div class="form-actions">
+                <button class="btn primary" type="submit">Prepare email</button>
+                <a class="btn" href="https://x.com/xenothene" target="_blank" rel="noreferrer">X</a>
+                <a class="btn" href="https://www.linkedin.com/in/nikhil-cygnus" target="_blank" rel="noreferrer">LinkedIn</a>
+              </div>
+            </div>
+          </form>
+        </div>
+
+        <div class="founder" data-reveal>
+          <div class="avatar" aria-hidden="true">NS</div>
+          <div>
+            <h3>Nikhil Sharma</h3>
+            <p>Founder, Cygnus X-1. Crypto markets operator and builder of Hillnick Capital, a decentralized crypto hedge fund. Focus areas include fund operations, DeFi strategy, digital-asset market structure, and institutional relationships.</p>
+            <div class="contact-list">
+              <a class="chip" href="mailto:nik@cygnusx1.xyz">nik@cygnusx1.xyz</a>
+              <a class="chip" href="https://cal.com/nik.xyz" target="_blank" rel="noreferrer">cal.com/nik.xyz</a>
+              <a class="chip" href="https://x.com/xenothene" target="_blank" rel="noreferrer">x.com/xenothene</a>
+              <a class="chip" href="https://www.linkedin.com/in/nikhil-cygnus" target="_blank" rel="noreferrer">linkedin.com/in/nikhil-cygnus</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-grid">
+      <div>
+        <div class="brand-name">CYGNUS X-1</div>
+        <p class="fine-print" style="max-width: 820px; margin-top: 0.65rem;">Qualified / accredited investors only. This site is informational and does not constitute an offer to sell securities, investment advice, or a public solicitation. Cygnus X-1 is in paper trading and fund-formation conversations. Performance, if discussed privately, should be treated as unaudited until independently verified.</p>
+      </div>
+      <div class="footer-links">
+        <a href="cygnus-thesis.pdf" target="_blank" rel="noreferrer">Thesis</a>
+        <a href="mailto:nik@cygnusx1.xyz">Email</a>
+        <a href="https://cal.com/nik.xyz" target="_blank" rel="noreferrer">Call</a>
+        <a href="https://x.com/xenothene" target="_blank" rel="noreferrer">X</a>
+        <a href="https://www.linkedin.com/in/nikhil-cygnus" target="_blank" rel="noreferrer">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // ── Nav menu ──────────────────────────────────────────────────────────────
+    const header = document.getElementById("siteHeader");
+    const menuToggle = document.querySelector(".menu-toggle");
+    const progress = document.getElementById("progress");
+
+    if (menuToggle) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = header.getAttribute("data-open") === "true";
+        header.setAttribute("data-open", String(!isOpen));
+        menuToggle.setAttribute("aria-expanded", String(!isOpen));
+      });
+    }
+
+    document.querySelectorAll(".nav-links a").forEach((link) => {
+      link.addEventListener("click", () => {
+        header.setAttribute("data-open", "false");
+        if (menuToggle) menuToggle.setAttribute("aria-expanded", "false");
+      });
+    });
+
+    // ── Persona tabs ──────────────────────────────────────────────────────────
+    const personaData = {
+      lp: {
+        title: "Discuss allocation readiness and diligence path.",
+        text: "Best for institutional LPs, family offices, endowments, and allocators who want to review stage, fund formation, controls, reporting, and the evidence required before capital.",
+        primary: "Book diligence call",
+        secondary: "Email LP questions",
+        subject: "Cygnus X-1 LP Diligence"
+      },
+      crypto: {
+        title: "Explore crypto-native capital and market-structure edge.",
+        text: "Best for crypto-native investors who understand 24/7 fragmented markets, CEX/DEX arbitrage, DeFi yield, funding divergence, and on-chain signal surfaces.",
+        primary: "Book market call",
+        secondary: "Email crypto thesis",
+        subject: "Cygnus X-1 Crypto-Native Capital"
+      },
+      partner: {
+        title: "Evaluate infrastructure, custody, data, or execution partnerships.",
+        text: "Best for prime brokers, exchanges, data vendors, custody providers, AI infrastructure teams, and strategic partners who can improve the system surface area.",
+        primary: "Book partner call",
+        secondary: "Email partnership note",
+        subject: "Cygnus X-1 Strategic Partnership"
+      },
+      builder: {
+        title: "Join or advise the autonomous fund build.",
+        text: "Best for HFT engineers, quant researchers, ML/RL engineers, risk leaders, fund formation counsel, and operators who can make L3 to L5 real.",
+        primary: "Book builder call",
+        secondary: "Email builder profile",
+        subject: "Cygnus X-1 Builder / Advisor"
+      }
+    };
+
+    const personaTitle = document.getElementById("personaTitle");
+    const personaText = document.getElementById("personaText");
+    const personaPrimary = document.getElementById("personaPrimary");
+    const personaSecondary = document.getElementById("personaSecondary");
+
+    document.querySelectorAll("[data-persona]").forEach((button) => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll("[data-persona]").forEach((item) => item.setAttribute("aria-selected", "false"));
+        button.setAttribute("aria-selected", "true");
+        const data = personaData[button.dataset.persona];
+        if (personaTitle) personaTitle.textContent = data.title;
+        if (personaText) personaText.textContent = data.text;
+        if (personaPrimary) personaPrimary.textContent = data.primary;
+        if (personaSecondary) {
+          personaSecondary.textContent = data.secondary;
+          personaSecondary.href = "mailto:nik@cygnusx1.xyz?subject=" + encodeURIComponent(data.subject);
+        }
+      });
+    });
+
+    // ── Access form ───────────────────────────────────────────────────────────
+    const accessForm = document.getElementById("accessForm");
+    if (accessForm) {
+      accessForm.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const form = new FormData(event.currentTarget);
+        const email = form.get("email");
+        const profile = form.get("profile");
+        const context = form.get("context");
+        const subject = "Cygnus X-1 access request - " + profile;
+        const body = [
+          "Hi Nik,", "", "I would like to request access to Cygnus X-1.", "",
+          "My email: " + email, "Profile: " + profile, "", "Context:", context, "", "Thanks."
+        ].join("\n");
+        window.location.href = "mailto:nik@cygnusx1.xyz?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+      });
+    }
+
+    // ── Reveal on scroll (desktop only — mobile bypassed via CSS !important) ──
+    if (window.matchMedia("(min-width: 1025px)").matches && "IntersectionObserver" in window) {
+      const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("is-visible");
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.05, rootMargin: "0px 0px -40px 0px" });
+
+      document.querySelectorAll("[data-reveal]").forEach((el) => revealObserver.observe(el));
+
+      // Hard fallback: anything still hidden after 2s gets revealed
+      setTimeout(() => {
+        document.querySelectorAll("[data-reveal]:not(.is-visible)").forEach((el) => {
+          el.classList.add("is-visible");
+        });
+      }, 2000);
+    }
+
+    // ── Scroll progress bar ────────────────────────────────────────────────────
+    function updateProgress() {
+      if (!progress) return;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const pct = max > 0 ? window.scrollY / max : 0;
+      progress.style.width = Math.max(0, Math.min(1, pct)) * 100 + "%";
+    }
+    window.addEventListener("scroll", updateProgress, { passive: true });
+    updateProgress();
+
+    // ── Canvas starfield ──────────────────────────────────────────────────────
+    const canvas = document.getElementById("universe");
+    const ctx = canvas ? canvas.getContext("2d") : null;
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let width = 0, height = 0, ratio = 1, particles = [], time = 0;
+    let pointerX = 0.5, pointerY = 0.5;
+    let rafId = null, animRunning = false;
+
+    function initCanvas() {
+      if (!canvas || !ctx) return;
+      ratio = Math.min(window.devicePixelRatio || 1, 2);
+      const w = canvas.offsetWidth || window.innerWidth;
+      const h = canvas.offsetHeight || window.innerHeight;
+      if (!w || !h) { requestAnimationFrame(initCanvas); return; }
+      width = w; height = h;
+      canvas.width = Math.floor(width * ratio);
+      canvas.height = Math.floor(height * ratio);
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      const count = Math.max(60, Math.min(150, Math.floor(width / 9)));
+      particles = Array.from({ length: count }, (_, i) => {
+        const side = i % 2 === 0 ? -1 : 1;
+        return {
+          x: side === -1 ? Math.random() * width * 0.42 : width * 0.58 + Math.random() * width * 0.42,
+          y: Math.random() * height,
+          vx: side * (0.28 + Math.random() * 0.7),
+          vy: (Math.random() - 0.5) * 0.28,
+          r: 0.8 + Math.random() * 1.8,
+          hue: i % 9 === 0 ? "orange" : i % 5 === 0 ? "blue" : "green",
+          phase: Math.random() * Math.PI * 2
+        };
+      });
+      if (!animRunning) { animRunning = true; drawUniverse(); }
+    }
+
+    function particleColor(p, alpha) {
+      if (p.hue === "orange") return "rgba(255,122,69," + alpha + ")";
+      if (p.hue === "blue") return "rgba(122,167,255," + alpha + ")";
+      return "rgba(0,245,160," + alpha + ")";
+    }
+
+    function drawUniverse() {
+      if (!ctx || document.hidden) { animRunning = false; return; }
+      time += 0.012;
+      ctx.clearRect(0, 0, width, height);
+      ctx.fillStyle = "#020302";
+      ctx.fillRect(0, 0, width, height);
+      const cx = width * (0.5 + (pointerX - 0.5) * 0.05);
+      const cy = height * (0.45 + (pointerY - 0.5) * 0.04);
+      ctx.save(); ctx.translate(cx, cy);
+      for (let i = 0; i < 5; i++) {
+        ctx.beginPath();
+        ctx.strokeStyle = "rgba(244,239,230," + (0.035 + i * 0.012) + ")";
+        ctx.lineWidth = 1;
+        ctx.ellipse(0, 0, 160 + i * 92, 58 + i * 37, time * (i % 2 ? -0.25 : 0.18), 0, Math.PI * 2);
+        ctx.stroke();
+      }
+      ctx.restore();
+      particles.forEach((p) => {
+        if (!reduceMotion) { p.x += p.vx; p.y += p.vy + Math.sin(time + p.phase) * 0.06; }
+        const dx = p.x - cx, dy = p.y - cy, d = Math.sqrt(dx*dx + dy*dy) || 1;
+        if (!reduceMotion && d < 190) {
+          const pull = (190 - d) / 190;
+          p.vx -= (dx / d) * pull * 0.025; p.vy -= (dy / d) * pull * 0.025;
+        }
+        if (p.x < -30) p.x = width + 30; if (p.x > width + 30) p.x = -30;
+        if (p.y < -30) p.y = height + 30; if (p.y > height + 30) p.y = -30;
+        ctx.fillStyle = particleColor(p, 0.66);
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fill();
+      });
+      for (let i = 0; i < particles.length; i++) {
+        const a = particles[i];
+        for (let j = i + 1; j < particles.length; j += 7) {
+          const b = particles[j], dx = a.x - b.x, dy = a.y - b.y;
+          const d = Math.sqrt(dx*dx + dy*dy);
+          if (d < 120) {
+            ctx.strokeStyle = particleColor(a, (1 - d / 120) * 0.13);
+            ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+          }
+        }
+      }
+      const g = ctx.createRadialGradient(cx, cy, 8, cx, cy, Math.max(width, height) * 0.52);
+      g.addColorStop(0, "rgba(0,0,0,0.08)"); g.addColorStop(0.18, "rgba(0,245,160,0.035)"); g.addColorStop(1, "rgba(0,0,0,0.56)");
+      ctx.fillStyle = g; ctx.fillRect(0, 0, width, height);
+      if (!reduceMotion) rafId = requestAnimationFrame(drawUniverse); else animRunning = false;
+    }
+
+    document.addEventListener("visibilitychange", () => {
+      if (!document.hidden && !animRunning && !reduceMotion) { animRunning = true; drawUniverse(); }
+    });
+
+    let resizeTimer;
+    window.addEventListener("resize", () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => { animRunning = false; if (rafId) cancelAnimationFrame(rafId); initCanvas(); }, 200);
+    }, { passive: true });
+
+    window.addEventListener("pointermove", (e) => {
+      pointerX = e.clientX / Math.max(1, window.innerWidth);
+      pointerY = e.clientY / Math.max(1, window.innerHeight);
+    }, { passive: true });
+
+    window.addEventListener("touchmove", (e) => {
+      if (e.touches.length) {
+        pointerX = e.touches[0].clientX / Math.max(1, window.innerWidth);
+        pointerY = e.touches[0].clientY / Math.max(1, window.innerHeight);
+      }
+    }, { passive: true });
+
+    if (document.readyState === "complete") {
+      requestAnimationFrame(initCanvas);
+    } else {
+      window.addEventListener("load", () => requestAnimationFrame(initCanvas), { once: true });
+    }
+  </script>
 </body>
 </html>
