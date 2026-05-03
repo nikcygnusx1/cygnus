@@ -2376,7 +2376,8 @@
 
     @media (max-width: 560px) {
       h1 {
-        font-size: clamp(3rem, 15vw, 4.3rem);
+        font-size: clamp(2.65rem, 13.2vw, 3.75rem);
+        line-height: 0.98;
       }
 
       h2 {
@@ -2434,6 +2435,21 @@
     }
 
     @media (max-width: 760px) {
+      [data-reveal] {
+        opacity: 1 !important;
+        transform: none !important;
+        transition: none !important;
+      }
+
+      section {
+        padding: 3.2rem 0;
+      }
+
+      #public-thesis,
+      #materials {
+        padding-top: 2.65rem;
+      }
+
       .pdf-reader {
         overflow: visible;
       }
@@ -3188,7 +3204,8 @@
       updateProgress();
 
       const revealNodes = $$("[data-reveal]");
-      if ("IntersectionObserver" in window && !reducedMotion) {
+      const mobileViewport = matchMedia("(max-width: 760px)").matches || matchMedia("(pointer: coarse)").matches;
+      if ("IntersectionObserver" in window && !reducedMotion && !mobileViewport) {
         const revealObserver = new IntersectionObserver((entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
