@@ -2451,18 +2451,19 @@
       }
 
       .pdf-reader {
-        overflow: visible;
+        overflow: hidden;
       }
 
       .thesis-page-stack {
-        height: auto;
-        min-height: 0;
-        overflow: visible;
-        scroll-snap-type: none;
+        height: 70vh;
+        min-height: 480px;
+        overflow: auto;
+        scroll-snap-type: y proximity;
+        -webkit-overflow-scrolling: touch;
       }
 
       .thesis-page {
-        scroll-snap-align: none;
+        scroll-snap-align: start;
       }
     }
 
