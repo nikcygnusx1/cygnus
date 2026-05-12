@@ -1,0 +1,2070 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="theme-color" content="#030403">
+  <meta name="description" content="Private investor review surface for Cygnus X-1. Simulation only. No live orders.">
+  <link rel="canonical" href="https://cygnusx1.xyz/investor/">
+  <meta property="og:title" content="Cygnus OS | Investor Access">
+  <meta property="og:description" content="Private investor review surface for Cygnus X-1. Simulation only. No live orders.">
+  <meta name="twitter:card" content="summary">
+  <title>Cygnus OS | Investor Access</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%23030403'/%3E%3Ccircle cx='32' cy='32' r='19' fill='none' stroke='%2300f0a8' stroke-width='3'/%3E%3Ccircle cx='32' cy='32' r='9' fill='%23000000'/%3E%3Ccircle cx='46' cy='18' r='4' fill='%23ffb454'/%3E%3C/svg%3E">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #030403;
+      --bg-2: #060806;
+      --bg-3: #090d0b;
+      --ink: #f7f1e8;
+      --ink-2: #d8d0c4;
+      --muted: #8b847a;
+      --dim: #56514a;
+      --line: rgba(247, 241, 232, 0.13);
+      --line-2: rgba(247, 241, 232, 0.24);
+      --green: #00f0a8;
+      --green-2: #9fffd8;
+      --blue: #75b9ff;
+      --amber: #ff9b54;
+      --red: #ff5967;
+      --paper: #f5efe4;
+      --paper-ink: #151611;
+      --panel: rgba(9, 13, 11, 0.78);
+      --panel-2: rgba(13, 20, 18, 0.92);
+      --radius: 8px;
+      --max: 1340px;
+      --nav: 76px;
+      --sans: "SF Pro Display", "SF Pro Text", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "SFMono-Regular", "IBM Plex Mono", "Roboto Mono", Consolas, monospace;
+      --ease: cubic-bezier(.2, .8, .2, 1);
+    }
+
+    * { box-sizing: border-box; min-width: 0; }
+    html { background: var(--bg); scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      font-family: var(--sans);
+      line-height: 1.5;
+      letter-spacing: 0;
+      background:
+        radial-gradient(circle at 72% 12%, rgba(117, 185, 255, .115), transparent 34vw),
+        radial-gradient(circle at 16% 80%, rgba(255, 155, 84, .075), transparent 36vw),
+        radial-gradient(circle at 54% 22%, rgba(0, 240, 168, .10), transparent 46vw),
+        linear-gradient(180deg, #030403 0%, #070a08 48%, #030403 100%);
+      overflow-x: hidden;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: -3;
+    }
+
+    body::before {
+      opacity: .44;
+      background-image:
+        linear-gradient(rgba(247, 241, 232, .07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(247, 241, 232, .07) 1px, transparent 1px),
+        radial-gradient(circle at 20% 16%, rgba(247,241,232,.28) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 82% 26%, rgba(117,185,255,.35) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 66% 78%, rgba(0,240,168,.24) 0 1px, transparent 1.5px);
+      background-size: 96px 96px, 96px 96px, 240px 180px, 280px 220px, 320px 260px;
+      mask-image: linear-gradient(to bottom, black 0%, black 58%, transparent 100%);
+    }
+
+    body::after {
+      opacity: .56;
+      background:
+        repeating-linear-gradient(104deg, transparent 0 38px, rgba(247,241,232,.038) 39px, transparent 40px 92px),
+        repeating-linear-gradient(180deg, rgba(255,255,255,.018) 0 1px, transparent 1px 5px);
+      mix-blend-mode: screen;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    p, figure { margin: 0; }
+    button, input, textarea { color: inherit; font: inherit; }
+    button { border: 0; cursor: pointer; }
+    ::selection { background: rgba(0, 240, 168, .26); color: var(--ink); }
+
+    .skip-link {
+      position: fixed;
+      top: -80px;
+      left: 1rem;
+      z-index: 300;
+      border-radius: 4px;
+      background: var(--ink);
+      color: var(--bg);
+      padding: .75rem 1rem;
+      font-weight: 800;
+    }
+
+    .skip-link:focus-visible { top: 1rem; outline: 2px solid var(--green); outline-offset: 3px; }
+    .shell { width: min(var(--max), calc(100% - 40px)); margin-inline: auto; }
+
+    .os-scanline {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 110;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--green), var(--blue), var(--amber), transparent);
+      background-size: 220% 100%;
+      animation: scanMove 8s linear infinite;
+      opacity: .82;
+    }
+
+    @keyframes scanMove { from { background-position: 0 0; } to { background-position: 220% 0; } }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--line);
+      background: rgba(3, 4, 3, .82);
+      backdrop-filter: blur(24px);
+    }
+
+    .nav {
+      min-height: var(--nav);
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr) auto;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .brand {
+      display: inline-grid;
+      grid-template-columns: 44px auto;
+      align-items: center;
+      gap: .8rem;
+      min-width: max-content;
+    }
+
+    .cyg-mark {
+      position: relative;
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(247,241,232,.22);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, #000 0 24%, rgba(0,0,0,.2) 25% 30%, transparent 32%),
+        radial-gradient(circle, rgba(0,240,168,.24), transparent 58%),
+        #030403;
+      box-shadow: inset 0 0 0 1px rgba(0,240,168,.1), 0 0 34px rgba(0,240,168,.16);
+      overflow: hidden;
+    }
+
+    .cyg-mark::before,
+    .cyg-mark::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px solid rgba(247,241,232,.38);
+      border-radius: 50%;
+      transform: rotate(-18deg) scaleX(1.42);
+      animation: orbitSpin 10s linear infinite;
+    }
+
+    .cyg-mark::after {
+      inset: 14px;
+      border-color: rgba(0,240,168,.72);
+      transform: rotate(20deg) scaleX(1.28);
+      animation-duration: 7s;
+      animation-direction: reverse;
+    }
+
+    .cyg-mark i {
+      position: absolute;
+      right: 7px;
+      top: 9px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--amber);
+      box-shadow: 0 0 16px rgba(255,155,84,.7);
+    }
+
+    @keyframes orbitSpin {
+      to { transform: rotate(342deg) scaleX(1.42); }
+    }
+
+    .brand strong {
+      display: block;
+      font-size: .78rem;
+      line-height: 1;
+      letter-spacing: .18em;
+    }
+
+    .brand span span {
+      display: block;
+      margin-top: .28rem;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .64rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      justify-self: center;
+      display: flex;
+      gap: clamp(.25rem, .75vw, .95rem);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .69rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .nav-links a {
+      position: relative;
+      border-radius: 4px;
+      padding: .46rem .35rem;
+      transition: color 180ms var(--ease);
+    }
+
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: .35rem;
+      right: .35rem;
+      bottom: .2rem;
+      height: 1px;
+      background: var(--green);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 180ms var(--ease);
+    }
+
+    .nav-links a:hover,
+    .nav-links a:focus-visible,
+    .nav-links a.is-active { color: var(--ink); outline: none; }
+    .nav-links a:hover::after,
+    .nav-links a:focus-visible::after,
+    .nav-links a.is-active::after { transform: scaleX(1); }
+
+    .nav-actions { display: flex; align-items: center; justify-content: flex-end; gap: .55rem; }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      min-height: 34px;
+      border: 1px solid rgba(0,240,168,.22);
+      border-radius: 999px;
+      background: rgba(0,240,168,.055);
+      color: var(--green-2);
+      padding: .45rem .68rem;
+      font-family: var(--mono);
+      font-size: .66rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .led {
+      width: .48rem;
+      height: .48rem;
+      flex: 0 0 auto;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px rgba(0,240,168,.78);
+      animation: ledPulse 1.8s ease-in-out infinite;
+    }
+
+    .led.amber { background: var(--amber); box-shadow: 0 0 18px rgba(255,155,84,.72); }
+    .led.red { background: var(--red); box-shadow: 0 0 18px rgba(255,89,103,.72); }
+    .led.blue { background: var(--blue); box-shadow: 0 0 18px rgba(117,185,255,.72); }
+    body.halt-active .led.risk-main { background: var(--red); box-shadow: 0 0 22px rgba(255,89,103,.85); }
+    @keyframes ledPulse { 0%,100% { opacity:.45; transform:scale(.88); } 50% { opacity:1; transform:scale(1); } }
+
+    .mobile-toggle { display: none; }
+
+    .btn,
+    .form-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      background: rgba(247,241,232,.038);
+      color: var(--ink);
+      padding: .72rem 1rem;
+      font-size: .78rem;
+      font-weight: 740;
+      letter-spacing: .06em;
+      line-height: 1;
+      text-transform: uppercase;
+      transition: transform 180ms var(--ease), border-color 180ms var(--ease), background 180ms var(--ease), box-shadow 180ms var(--ease);
+    }
+
+    .btn.small { min-height: 34px; padding: .52rem .72rem; font-size: .67rem; }
+    .btn.primary,
+    .form-button {
+      border-color: rgba(0,240,168,.42);
+      background: linear-gradient(135deg, rgba(0,240,168,.18), rgba(117,185,255,.10));
+      box-shadow: inset 0 0 0 1px rgba(0,240,168,.08), 0 16px 48px rgba(0,240,168,.09);
+    }
+
+    .btn.red {
+      border-color: rgba(255,89,103,.5);
+      background: rgba(255,89,103,.09);
+      color: #ffd7db;
+    }
+
+    .btn.ghost { background: transparent; }
+    .btn:disabled { cursor: not-allowed; opacity: .42; }
+    .btn:hover,
+    .form-button:hover { transform: translateY(-1px); border-color: rgba(247,241,232,.32); background: rgba(247,241,232,.07); }
+    .btn:focus-visible,
+    .form-button:focus-visible,
+    input:focus-visible,
+    textarea:focus-visible { outline: 2px solid rgba(0,240,168,.72); outline-offset: 3px; }
+
+    .route {
+      min-height: calc(100vh - var(--nav));
+      animation: routeIn 360ms var(--ease);
+    }
+    .route[hidden] { display: none !important; }
+    @keyframes routeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+    body.is-authenticated .public-only { display: none !important; }
+    .private-only { display: none !important; }
+    body.is-nda .private-only { display: inline-flex !important; }
+    .private-nav { display: none !important; }
+    body.is-nda .public-nav { display: none !important; }
+    body.is-nda .private-nav { display: flex !important; }
+
+    .hero-os {
+      position: relative;
+      min-height: calc(100vh - var(--nav));
+      display: grid;
+      align-items: center;
+      padding: clamp(3.5rem, 6vw, 7rem) 0 2rem;
+      overflow: hidden;
+    }
+
+    .hero-os::before {
+      content: "";
+      position: absolute;
+      inset: 12% -10% 0;
+      background:
+        linear-gradient(90deg, transparent 0 20%, rgba(0,240,168,.18) 20.2%, transparent 20.5% 62%, rgba(117,185,255,.13) 62.2%, transparent 62.5%),
+        linear-gradient(120deg, transparent 0 45%, rgba(247,241,232,.08) 45.2%, transparent 45.5%);
+      opacity: .42;
+      mask-image: radial-gradient(circle at 67% 42%, black, transparent 55%);
+    }
+
+    .hero-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, .9fr) minmax(390px, .7fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+    }
+
+    .no-break { white-space: nowrap; }
+
+    .eyebrow,
+    .kicker,
+    .micro {
+      color: var(--green);
+      font-family: var(--mono);
+      font-size: .72rem;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    h1, h2, h3 { margin: 0; color: var(--ink); letter-spacing: 0; }
+    h1 {
+      margin-top: .65rem;
+      font-size: clamp(4rem, 12.4vw, 12rem);
+      font-weight: 820;
+      line-height: .82;
+      letter-spacing: -.04em;
+    }
+
+    .route:not([data-route="home"]) h1 {
+      font-size: clamp(2.8rem, 7.4vw, 7.4rem);
+      line-height: .88;
+    }
+
+    h2 {
+      font-size: clamp(2rem, 4.3vw, 4.8rem);
+      font-weight: 790;
+      line-height: .96;
+      letter-spacing: -.02em;
+    }
+
+    h3 {
+      font-size: clamp(1.05rem, 1.5vw, 1.38rem);
+      font-weight: 740;
+      line-height: 1.14;
+    }
+
+    .lead {
+      max-width: 790px;
+      margin-top: 1.25rem;
+      color: var(--ink-2);
+      font-size: clamp(1.08rem, 1.65vw, 1.42rem);
+      line-height: 1.5;
+    }
+
+    .copy,
+    .section-copy { color: var(--ink-2); font-size: .98rem; line-height: 1.62; }
+    .muted { color: var(--muted); }
+
+    .actions,
+    .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.6rem; }
+
+    .hero-orbit {
+      position: relative;
+      min-height: 530px;
+      border: 1px solid rgba(247,241,232,.13);
+      border-radius: 12px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(0,240,168,.18), transparent 15%),
+        radial-gradient(circle at 50% 50%, rgba(117,185,255,.10), transparent 42%),
+        linear-gradient(180deg, rgba(247,241,232,.045), rgba(247,241,232,.015));
+      overflow: hidden;
+      box-shadow: 0 40px 130px rgba(0,0,0,.48);
+    }
+
+    .hero-orbit svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .orbit-ring {
+      fill: none;
+      stroke: rgba(247,241,232,.22);
+      stroke-width: .55;
+      transform-origin: 50% 50%;
+      animation: svgOrbit 18s linear infinite;
+    }
+
+    .orbit-ring.r2 { stroke: rgba(0,240,168,.34); animation-duration: 12s; animation-direction: reverse; }
+    .orbit-ring.r3 { stroke: rgba(117,185,255,.28); animation-duration: 24s; }
+    .orbit-line { stroke: rgba(247,241,232,.13); stroke-width: .65; }
+    .pulse-edge { stroke: var(--green); stroke-width: 1; stroke-dasharray: 8 18; animation: dash 3.8s linear infinite; opacity: .72; }
+    @keyframes svgOrbit { to { rotate: 360deg; } }
+    @keyframes dash { to { stroke-dashoffset: -104; } }
+
+    .singularity {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      width: 128px;
+      height: 128px;
+      border: 1px solid rgba(247,241,232,.18);
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, #000 0 36%, rgba(0,0,0,.75) 37% 48%, transparent 50%),
+        radial-gradient(circle, rgba(0,240,168,.25), transparent 64%);
+      transform: translate(-50%, -50%);
+      box-shadow: 0 0 80px rgba(0,240,168,.18), inset 0 0 18px rgba(0,0,0,.8);
+    }
+
+    .orbit-readout {
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: .7rem;
+    }
+
+    .system-strip {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(3,4,3,.76);
+      margin-top: clamp(2rem, 4vw, 4rem);
+      overflow: hidden;
+    }
+
+    .strip-cell {
+      border-right: 1px solid var(--line);
+      padding: .95rem 1rem;
+    }
+
+    .strip-cell:last-child { border-right: 0; }
+    .strip-cell span { display: block; color: var(--muted); font-family: var(--mono); font-size: .64rem; letter-spacing: .1em; text-transform: uppercase; }
+    .strip-cell b { display: block; margin-top: .25rem; font-size: .92rem; letter-spacing: .02em; }
+
+    .section { padding: clamp(3.2rem, 7vw, 6.5rem) 0; }
+    .page-hero { padding: clamp(3rem, 6vw, 5rem) 0 1.2rem; }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: minmax(0, .86fr) minmax(280px, .42fr);
+      align-items: end;
+      gap: 2rem;
+      margin-bottom: 1.2rem;
+    }
+
+    .section-head h2 { margin-top: .5rem; }
+
+    .os-panel,
+    .readout,
+    .memo-file,
+    .terminal,
+    .modal-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background:
+        linear-gradient(180deg, rgba(247,241,232,.045), rgba(247,241,232,.014)),
+        var(--panel);
+      box-shadow: 0 28px 100px rgba(0,0,0,.42);
+    }
+
+    .os-panel::before,
+    .readout::before,
+    .memo-file::before,
+    .terminal::before,
+    .modal-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(0,240,168,.08) 1px, transparent 1px),
+        linear-gradient(rgba(117,185,255,.045) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: .18;
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+    }
+
+    .panel-inner { position: relative; z-index: 1; padding: clamp(1rem, 2vw, 1.45rem); }
+
+    .terminal-top {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px solid var(--line);
+      padding: .9rem 1rem;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .readout-grid,
+    .module-grid,
+    .vault-grid,
+    .strategy-grid,
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: .9rem;
+    }
+
+    .module-grid.four,
+    .readout-grid.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .module-grid.two,
+    .chart-grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .readout {
+      min-height: 132px;
+      padding: 1rem;
+      background: rgba(3,4,3,.58);
+    }
+
+    .readout > * { position: relative; z-index: 1; }
+    .readout span,
+    .memo-file span,
+    .metric-label {
+      display: block;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .66rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .readout b {
+      display: block;
+      margin-top: .38rem;
+      color: var(--ink);
+      font-size: clamp(1.18rem, 2vw, 1.78rem);
+      line-height: 1.02;
+    }
+
+    .readout small,
+    .memo-file p {
+      display: block;
+      margin-top: .5rem;
+      color: var(--muted);
+      font-size: .84rem;
+      line-height: 1.45;
+    }
+
+    .classification,
+    .legal-band {
+      border: 1px solid rgba(255,155,84,.24);
+      border-radius: 8px;
+      background: linear-gradient(90deg, rgba(255,155,84,.10), rgba(247,241,232,.025));
+      color: #ffd8c1;
+      padding: .9rem 1rem;
+      font-family: var(--mono);
+      font-size: .73rem;
+      letter-spacing: .08em;
+      line-height: 1.55;
+      text-transform: uppercase;
+    }
+
+    .legal-band {
+      color: #d8d0c4;
+      border-color: rgba(247,241,232,.16);
+      background: rgba(247,241,232,.035);
+      text-transform: none;
+      font-family: var(--sans);
+      font-size: .85rem;
+      letter-spacing: 0;
+    }
+
+    .pill-row { display: flex; flex-wrap: wrap; gap: .5rem; }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: .42rem;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(247,241,232,.035);
+      color: var(--ink-2);
+      padding: .42rem .58rem;
+      font-family: var(--mono);
+      font-size: .63rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .pill.green { border-color: rgba(0,240,168,.28); color: var(--green-2); }
+    .pill.blue { border-color: rgba(117,185,255,.32); color: #cfe6ff; }
+    .pill.amber { border-color: rgba(255,155,84,.34); color: #ffd8c1; }
+    .pill.red { border-color: rgba(255,89,103,.34); color: #ffd7db; }
+
+    .dossier-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .78fr) minmax(360px, .62fr);
+      gap: 1rem;
+      align-items: stretch;
+    }
+
+    .paper-memo {
+      position: relative;
+      min-height: 560px;
+      border-radius: 10px;
+      background:
+        linear-gradient(180deg, rgba(245,239,228,.97), rgba(235,227,215,.92));
+      color: var(--paper-ink);
+      padding: clamp(1.4rem, 3vw, 2.4rem);
+      box-shadow: 0 34px 110px rgba(0,0,0,.38);
+      overflow: hidden;
+    }
+
+    .paper-memo::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(20,21,17,.08) 1px, transparent 1px),
+        linear-gradient(rgba(20,21,17,.055) 1px, transparent 1px);
+      background-size: 32px 32px;
+      opacity: .35;
+    }
+
+    .paper-memo > * { position: relative; z-index: 1; }
+    .paper-memo .kicker { color: #006f50; }
+    .paper-memo h2,
+    .paper-memo h3,
+    .paper-memo p { color: var(--paper-ink); }
+    .paper-memo p { max-width: 780px; line-height: 1.65; }
+
+    .access-grid {
+      min-height: calc(100vh - var(--nav));
+      display: grid;
+      grid-template-columns: minmax(0, .82fr) minmax(360px, .58fr);
+      gap: clamp(2rem, 5vw, 5rem);
+      align-items: center;
+      padding: clamp(3rem, 6vw, 5rem) 0;
+    }
+
+    .access-terminal {
+      border-color: rgba(255,155,84,.22);
+    }
+
+    .input-row {
+      position: relative;
+      display: grid;
+      gap: .42rem;
+      margin-top: 1rem;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .7rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .input-row input,
+    .input-row textarea {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(0,0,0,.32);
+      color: var(--ink);
+      padding: .92rem .9rem;
+      font-family: var(--sans);
+      font-size: 1rem;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+
+    .input-row textarea { min-height: 150px; resize: vertical; }
+    .error-msg,
+    .success-msg {
+      border: 1px solid rgba(255,89,103,.34);
+      border-radius: 6px;
+      background: rgba(255,89,103,.08);
+      color: #ffd7db;
+      padding: .82rem .9rem;
+      font-size: .86rem;
+    }
+
+    .success-msg {
+      border-color: rgba(0,240,168,.34);
+      background: rgba(0,240,168,.08);
+      color: var(--green-2);
+    }
+
+    .attempt-line {
+      height: 2px;
+      margin-top: 1rem;
+      background: rgba(247,241,232,.09);
+      overflow: hidden;
+      border-radius: 999px;
+    }
+
+    .attempt-line i {
+      display: block;
+      height: 100%;
+      width: 22%;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+      transform: translateX(-120%);
+    }
+
+    .attempt-line.is-running i { animation: attempt 900ms var(--ease); }
+    @keyframes attempt { to { transform: translateX(520%); } }
+
+    .dashboard-layout {
+      display: grid;
+      grid-template-columns: minmax(260px, .34fr) minmax(0, .44fr) minmax(260px, .34fr);
+      gap: 1rem;
+    }
+
+    .status-stack { display: grid; gap: 1rem; }
+
+    .mini-graph {
+      position: relative;
+      min-height: 330px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: radial-gradient(circle at 50% 45%, rgba(0,240,168,.13), transparent 38%), rgba(0,0,0,.22);
+      overflow: hidden;
+    }
+
+    .mini-graph svg { width: 100%; height: 100%; position: absolute; inset: 0; }
+
+    .vault-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .memo-file {
+      min-height: 250px;
+      padding: 1rem;
+      background:
+        linear-gradient(180deg, rgba(247,241,232,.055), rgba(247,241,232,.018)),
+        rgba(5,7,6,.72);
+      transition: transform 180ms var(--ease), border-color 180ms var(--ease);
+    }
+
+    .memo-file:hover { transform: translateY(-3px); border-color: rgba(0,240,168,.32); }
+    .memo-id { color: var(--dim); font-family: var(--mono); font-size: .63rem; letter-spacing: .1em; }
+    .memo-file h3 { margin-top: 1.1rem; }
+
+    .classification-stamp {
+      display: inline-flex;
+      border: 1px solid currentColor;
+      border-radius: 4px;
+      padding: .28rem .4rem;
+      font-family: var(--mono);
+      font-size: .62rem;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+    }
+
+    .stamp-public { color: var(--green-2); }
+    .stamp-confidential { color: #ffd8c1; }
+    .stamp-restricted { color: #ffd7db; }
+    .stamp-redacted { color: #cfe6ff; }
+
+    .capital-graph {
+      position: relative;
+      min-height: 580px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: radial-gradient(circle at 50% 52%, rgba(255,89,103,.12), transparent 22%), rgba(3,4,3,.62);
+      overflow: hidden;
+    }
+
+    .capital-graph svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .graph-node {
+      fill: rgba(3,4,3,.92);
+      stroke: rgba(247,241,232,.24);
+      stroke-width: 1;
+      transition: stroke 180ms var(--ease), filter 180ms var(--ease);
+    }
+
+    .graph-node:hover { stroke: var(--green); filter: drop-shadow(0 0 14px rgba(0,240,168,.28)); }
+    .graph-label { fill: var(--ink); font-family: var(--mono); font-size: 10px; letter-spacing: .08em; }
+    .graph-sub { fill: var(--muted); font-family: var(--mono); font-size: 8px; }
+    .graph-edge { stroke: rgba(247,241,232,.18); stroke-width: 1; }
+    .graph-pulse { stroke: var(--green); stroke-width: 1.2; stroke-dasharray: 7 18; animation: dash 4s linear infinite; opacity: .78; }
+    .risk-core { fill: rgba(255,89,103,.12); stroke: rgba(255,89,103,.58); stroke-width: 1.2; }
+
+    .flow-steps {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: .7rem;
+    }
+
+    .flow-step {
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: rgba(0,0,0,.22);
+      padding: .9rem;
+      min-height: 120px;
+    }
+
+    .flow-step::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: -.7rem;
+      width: .7rem;
+      border-top: 1px solid rgba(0,240,168,.32);
+    }
+
+    .flow-step:last-child::after { display: none; }
+
+    .control-surface {
+      display: grid;
+      grid-template-columns: minmax(0, .75fr) minmax(300px, .45fr);
+      gap: 1rem;
+    }
+
+    body.halt-active .risk-surface {
+      border-color: rgba(255,89,103,.55);
+      box-shadow: 0 0 0 1px rgba(255,89,103,.18), 0 30px 120px rgba(255,89,103,.08);
+    }
+
+    .limit-row {
+      display: grid;
+      grid-template-columns: 1fr 130px;
+      gap: 1rem;
+      align-items: center;
+      border-bottom: 1px solid var(--line);
+      padding: .8rem 0;
+    }
+
+    .limit-row:last-child { border-bottom: 0; }
+    .fake-control {
+      height: 8px;
+      border-radius: 999px;
+      background: rgba(247,241,232,.1);
+      overflow: hidden;
+    }
+    .fake-control i { display: block; height: 100%; width: var(--w); background: linear-gradient(90deg, var(--green), var(--blue)); opacity: .75; }
+
+    .chart-grid { margin-top: 1rem; }
+    .chart-box {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(0,0,0,.24);
+      padding: 1rem;
+      min-height: 320px;
+      overflow: hidden;
+    }
+
+    .chart-box svg { display: block; width: 100%; height: auto; }
+    .chart-tooltip {
+      min-height: 32px;
+      margin-top: .65rem;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: .68rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .split-stack { display: grid; gap: 1rem; }
+    .split-line { display: grid; gap: .42rem; }
+    .split-line small { color: var(--muted); font-family: var(--mono); font-size: .68rem; letter-spacing: .08em; text-transform: uppercase; }
+    .split-track { height: 8px; border-radius: 999px; background: rgba(247,241,232,.1); overflow: hidden; }
+    .split-fill { height: 100%; width: var(--w); background: linear-gradient(90deg, var(--green), var(--blue)); }
+
+    .strategy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .strategy-dossier {
+      min-height: 640px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: linear-gradient(180deg, rgba(247,241,232,.052), rgba(247,241,232,.016)), rgba(3,4,3,.66);
+      padding: clamp(1rem, 2vw, 1.35rem);
+      overflow: hidden;
+    }
+
+    .dossier-section {
+      border-top: 1px solid var(--line);
+      padding-top: .85rem;
+      margin-top: .85rem;
+    }
+
+    .dossier-section b {
+      display: block;
+      color: var(--green-2);
+      font-family: var(--mono);
+      font-size: .67rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .dossier-section p { margin-top: .35rem; color: var(--muted); font-size: .88rem; line-height: 1.48; }
+
+    .command-grid {
+      display: grid;
+      grid-template-columns: minmax(300px, .42fr) minmax(0, .58fr) minmax(300px, .42fr);
+      gap: 1rem;
+      align-items: start;
+    }
+
+    .command-map {
+      min-height: 450px;
+      position: relative;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: radial-gradient(circle at 50% 48%, rgba(0,240,168,.14), transparent 26%), rgba(0,0,0,.28);
+      overflow: hidden;
+    }
+
+    .command-map svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .log-stream {
+      display: grid;
+      gap: .55rem;
+      max-height: 420px;
+      overflow: auto;
+      padding-right: .25rem;
+    }
+
+    .log-line {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: .7rem;
+      border: 1px solid rgba(247,241,232,.09);
+      border-radius: 6px;
+      background: rgba(0,0,0,.2);
+      padding: .62rem .7rem;
+      color: var(--ink-2);
+      font-family: var(--mono);
+      font-size: .72rem;
+      line-height: 1.35;
+    }
+
+    .log-line time { color: var(--green-2); }
+
+    .market-price {
+      display: grid;
+      gap: .35rem;
+      border-bottom: 1px solid var(--line);
+      padding: .75rem 0;
+    }
+
+    .market-price:last-child { border-bottom: 0; }
+    .market-price b { font-size: 1.45rem; }
+
+    .contact-layout {
+      display: grid;
+      grid-template-columns: minmax(0, .65fr) minmax(320px, .42fr);
+      gap: 1rem;
+    }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 220;
+      display: none;
+      place-items: center;
+      padding: 1rem;
+      background: rgba(0,0,0,.76);
+      backdrop-filter: blur(12px);
+    }
+
+    .modal[aria-hidden="false"] { display: grid; }
+    .modal-card { width: min(820px, 100%); max-height: min(760px, 90vh); overflow: auto; }
+    .modal-head {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      border-bottom: 1px solid var(--line);
+      padding: 1rem;
+    }
+    .modal-body { position: relative; z-index: 1; padding: 1rem; }
+    .close-button {
+      width: 38px;
+      height: 38px;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: rgba(247,241,232,.06);
+      color: var(--ink);
+      font-size: 1.15rem;
+      line-height: 1;
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 2rem 0;
+      color: var(--muted);
+      font-size: .84rem;
+    }
+
+    @media (max-width: 1180px) {
+      .nav { grid-template-columns: auto auto; }
+      .nav-links {
+        position: absolute;
+        top: var(--nav);
+        left: 0;
+        right: 0;
+        display: none !important;
+        grid-template-columns: 1fr;
+        justify-self: stretch;
+        border-bottom: 1px solid var(--line);
+        background: rgba(3,4,3,.97);
+        padding: 1rem 20px;
+      }
+      .nav-links.is-open { display: grid !important; }
+      body.is-nda .private-nav.is-open { display: grid !important; }
+      .mobile-toggle { display: inline-flex; }
+      .status-chip { display: none; }
+      .hero-grid,
+      .dossier-layout,
+      .access-grid,
+      .dashboard-layout,
+      .control-surface,
+      .command-grid,
+      .contact-layout,
+      .section-head { grid-template-columns: 1fr; }
+      .hero-orbit { min-height: 430px; }
+      .flow-steps { grid-template-columns: 1fr; }
+      .flow-step::after { display: none; }
+      .vault-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 780px) {
+      :root { --nav: 66px; }
+      .shell { width: min(100% - 28px, var(--max)); }
+      .brand { grid-template-columns: 38px auto; }
+      .cyg-mark { width: 38px; height: 38px; }
+      .brand span span { display: none; }
+      .nav-actions .btn:not(.primary):not(.mobile-toggle):not(.private-only) { display: none; }
+      h1 { font-size: clamp(4rem, 18vw, 6rem); }
+      .route:not([data-route="home"]) h1 { font-size: clamp(2.75rem, 14vw, 4.5rem); }
+      .system-strip,
+      .readout-grid,
+      .readout-grid.four,
+      .module-grid,
+      .module-grid.two,
+      .module-grid.four,
+      .chart-grid.two,
+      .strategy-grid,
+      .vault-grid { grid-template-columns: 1fr; }
+      .strip-cell { border-right: 0; border-bottom: 1px solid var(--line); }
+      .strip-cell:last-child { border-bottom: 0; }
+      .paper-memo { min-height: auto; }
+      .hero-orbit { min-height: 360px; }
+      .orbit-readout { grid-template-columns: 1fr; }
+      .table-row { grid-template-columns: 1fr; }
+      .command-map { min-height: 360px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="os-scanline" aria-hidden="true"></div>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="shell nav">
+      <a class="brand" href="/" aria-label="Cygnus X-1 public site">
+        <span class="cyg-mark" aria-hidden="true"><i></i></span>
+        <span><strong>CYGNUS OS</strong><span>Governed capital operating system</span></span>
+      </a>
+
+      <nav class="nav-links public-nav" id="publicNav" aria-label="Public navigation">
+        <a href="/">Public site</a>
+        <a href="/thesis/">Thesis</a>
+        <a href="#login" data-nav="login">Investor access</a>
+      </nav>
+
+      <nav class="nav-links private-nav" id="privateNav" aria-label="Investor navigation">
+        <a href="#dashboard" data-nav="dashboard">Snapshot</a>
+        <a href="#data-room" data-nav="data-room">Vault</a>
+        <a href="#platform" data-nav="platform">Graph</a>
+        <a href="#risk" data-nav="risk">Risk</a>
+        <a href="#performance" data-nav="performance">Paper</a>
+        <a href="#strategy" data-nav="strategy">Strategy</a>
+        <a href="#command" data-nav="command">Command</a>
+        <a href="#contact" data-nav="contact">IR</a>
+      </nav>
+
+      <div class="nav-actions">
+        <span class="status-chip"><i class="led"></i><span id="accessState">Public surface</span></span>
+        <button class="btn small mobile-toggle" type="button" id="menuToggle" aria-expanded="false" aria-controls="publicNav privateNav">Menu</button>
+        <a class="btn small public-only" href="/thesis/">Public thesis</a>
+        <a class="btn primary small public-only" href="#login" data-nav="login">Investor access</a>
+        <button class="btn small private-only" type="button" id="logoutButton">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="route" data-route="home" id="home">
+      <div class="hero-os">
+        <div class="shell">
+          <div class="hero-grid">
+            <div>
+              <p class="eyebrow"><i class="led" aria-hidden="true"></i> CYGNUS OS / ALLOCATOR REVIEW PREVIEW</p>
+              <h1>CYGNUS <span class="no-break">X-1</span></h1>
+              <p class="lead">Governed autonomous capital allocation.</p>
+              <p class="copy" style="max-width:720px;margin-top:1rem;">An investor operating terminal for a simulated AI-native hedge fund architecture: market data, agent reasoning, risk veto, paper execution, and allocator diligence in one classified surface.</p>
+              <div class="hero-actions">
+                <a class="btn primary" href="#thesis" data-nav="thesis">Read Public Thesis</a>
+                <a class="btn" href="#login" data-nav="login">Investor Access</a>
+              </div>
+            </div>
+
+            <div class="hero-orbit" aria-label="Animated Cygnus orbital capital system">
+              <svg viewBox="0 0 500 500" aria-hidden="true">
+                <defs>
+                  <radialGradient id="g1"><stop offset="0%" stop-color="#00f0a8" stop-opacity=".8"/><stop offset="100%" stop-color="#00f0a8" stop-opacity="0"/></radialGradient>
+                </defs>
+                <line class="orbit-line" x1="42" y1="250" x2="458" y2="250"/>
+                <line class="orbit-line" x1="250" y1="42" x2="250" y2="458"/>
+                <path class="pulse-edge" d="M70 385 C180 285 310 205 430 96"/>
+                <path class="pulse-edge" d="M72 118 C170 205 295 305 430 390"/>
+                <ellipse class="orbit-ring r1" cx="250" cy="250" rx="186" ry="66" transform="rotate(-18 250 250)"/>
+                <ellipse class="orbit-ring r2" cx="250" cy="250" rx="138" ry="96" transform="rotate(34 250 250)"/>
+                <ellipse class="orbit-ring r3" cx="250" cy="250" rx="216" ry="118" transform="rotate(16 250 250)"/>
+                <circle cx="96" cy="118" r="4" fill="#75b9ff"/>
+                <circle cx="426" cy="96" r="5" fill="#ff9b54"/>
+                <circle cx="430" cy="390" r="4" fill="#00f0a8"/>
+                <circle cx="250" cy="250" r="92" fill="url(#g1)" opacity=".22"/>
+              </svg>
+              <div class="singularity"></div>
+              <div class="orbit-readout">
+                <div class="readout"><span>Ontology</span><b>Capital graph</b><small>Signals, venues, limits, paper routes, and outcomes.</small></div>
+                <div class="readout"><span>Authority</span><b>Risk veto</b><small>Refusal is a first-class operating primitive.</small></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="system-strip" aria-label="System readout strip">
+            <div class="strip-cell"><span>Mode</span><b>Review surface</b></div>
+            <div class="strip-cell"><span>Execution</span><b>Simulation only</b></div>
+            <div class="strip-cell"><span>Markets</span><b>BTC / ETH / PERPS</b></div>
+            <div class="strip-cell"><span>Control</span><b>Risk veto</b></div>
+          </div>
+        </div>
+      </div>
+
+      <section class="section">
+        <div class="shell">
+          <div class="section-head">
+            <div><p class="kicker">Capital-machine thesis</p><h2>A private allocator has opened a classified capital-machine terminal.</h2></div>
+            <p class="section-copy">Cygnus OS presents the fund not as a normal dashboard, but as a control perimeter: data universe, intelligence layer, agent swarm, risk veto, paper execution, and learning memory.</p>
+          </div>
+          <div class="module-grid four">
+            <article class="readout"><span>Current posture</span><b>Paper validation</b><small>Investor workflow, reporting, and simulation controls before live-capital claims.</small></article>
+            <article class="readout"><span>Initial market</span><b>Crypto first</b><small>BTC, ETH, perpetuals, fragmented venues, and always-on risk states.</small></article>
+            <article class="readout"><span>Operating model</span><b>Human-supervised</b><small>Machine autonomy remains bounded, observable, and gated.</small></article>
+            <article class="readout"><span>Diligence path</span><b>Qualified review</b><small>Public thesis first. Vault summaries only after demo access and acknowledgement.</small></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="shell">
+          <div class="classification">Public-hosted review gate. Confidential documents are not embedded or downloadable.</div>
+          <div class="legal-band" style="margin-top:1rem;">Not an offer to sell securities. For qualified investors only. Confidential material. Simulated/paper performance only. Not investment advice. No real trading or live order execution from this review surface.</div>
+        </div>
+      </section>
+    </section>
+
+    <section class="route" data-route="thesis" id="thesis" hidden>
+      <div class="shell page-hero">
+        <p class="eyebrow">Public review layer / dossier preview</p>
+        <h1>Public Thesis</h1>
+        <p class="lead">The first diligence layer: worldview, market structure, AI-native fund architecture, risk containment, and the path from governed autonomy to institutional review.</p>
+      </div>
+
+      <section class="section" style="padding-top:0;">
+        <div class="shell dossier-layout">
+          <article class="paper-memo">
+            <p class="kicker">CYG-THESIS-001 / Public memo</p>
+            <h2 style="margin-top:.8rem;">The next institutional edge is not more data. It is governed autonomous cognition.</h2>
+            <p style="margin-top:1.4rem;">Cygnus X-1 starts from a specific view of markets: price is the temporary clearing level created by constrained participants, fragmented venues, leverage, latency, regulation, and narrative pressure. The investment problem is not simply prediction. It is state inference under constraint.</p>
+            <p style="margin-top:1rem;">An AI-native fund should not merely summarize research or accelerate analysts. It should become the native decision architecture for signal ingestion, hypothesis generation, strategy testing, risk veto, execution routing, attribution, and continuous learning.</p>
+          </article>
+          <aside class="os-panel">
+            <div class="terminal-top"><span>Dossier metadata</span><b>Open layer</b></div>
+            <div class="panel-inner">
+              <div class="module-grid two">
+                <div class="readout"><span>Access</span><b>Public</b><small>No confidential data included.</small></div>
+                <div class="readout"><span>Format</span><b>Inline preview</b><small>No external asset required.</small></div>
+              </div>
+              <div class="classification" style="margin-top:1rem;">Public thesis preview. Full PDF remains available through the public thesis route.</div>
+              <div class="actions">
+                <button class="btn primary" type="button" data-open-doc="public-thesis">Open memo summary</button>
+                <a class="btn" href="#home" data-nav="home">Return to OS</a>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </section>
+
+    <section class="route" data-route="login" id="login" hidden>
+      <div class="shell access-grid">
+        <div>
+          <p class="eyebrow">Allocator access terminal</p>
+          <h1>Access Gate</h1>
+          <p class="lead">Private materials are represented as controlled summaries for this public-hosted investor review surface. Confidential documents remain outside public hosting.</p>
+          <div class="classification" style="margin-top:1.2rem;">Review gate only. Confidential documents are not embedded or downloadable.</div>
+          <div class="legal-band" style="margin-top:1rem;">For review by qualified investors and approved reviewers only. Not an offer to sell securities. Not investment advice.</div>
+        </div>
+
+        <div class="terminal access-terminal">
+          <div class="terminal-top"><span>CYG-AUTH-REVIEW</span><b>Client hash check</b></div>
+          <div class="panel-inner">
+            <form id="loginForm">
+              <p class="micro">Credential prompt</p>
+              <label class="input-row">Demo investor password<input id="passwordInput" type="password" autocomplete="current-password" required></label>
+              <p class="muted" style="margin-top:.65rem;font-size:.84rem;">Demo access credential: <strong>cygnus-demo</strong></p>
+              <div class="attempt-line" id="attemptLine"><i></i></div>
+              <p class="error-msg" id="loginError" hidden>Access could not be validated. Check the demo credential and try again.</p>
+              <button class="form-button" type="submit" style="margin-top:1rem;width:100%;">Continue to acknowledgement</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="route" data-route="nda" id="nda" hidden>
+      <div class="shell page-hero">
+        <p class="eyebrow">Classified review acknowledgement</p>
+        <h1>Confidentiality Gate</h1>
+        <p class="lead">Acknowledge the review perimeter before entering the investor operating console.</p>
+      </div>
+
+      <section class="section" style="padding-top:0;">
+        <div class="shell dossier-layout">
+          <div class="os-panel">
+            <div class="terminal-top"><span>CYG-NDA-REVIEW</span><b id="ndaTime">Timestamp pending</b></div>
+            <div class="panel-inner">
+              <div class="classification">Confidential review surface. No embedded private files.</div>
+              <h3 style="margin-top:1.2rem;">By continuing, you agree to treat this portal as confidential.</h3>
+              <p class="copy" style="margin-top:.85rem;">You acknowledge that this investor review surface is for qualified investor review only, may include proprietary mock material, and must not be shared, forwarded, copied, or used as investment advice. All performance, order flow, agent activity, and command center views are simulated or paper-only.</p>
+              <button class="form-button" type="button" id="ackButton" style="margin-top:1rem;">I acknowledge and agree</button>
+            </div>
+          </div>
+          <div class="legal-band">Not an offer to sell securities. For qualified investors only. Confidential material. Simulated/paper performance only. Not investment advice. No real trading or live order execution from this review surface.</div>
+        </div>
+      </section>
+    </section>
+
+    <section class="route" data-route="dashboard" id="dashboard" hidden>
+      <div class="shell page-hero">
+        <p class="eyebrow">Investor operating snapshot</p>
+        <h1>Operating Console</h1>
+        <p class="lead">A classified overview of system posture, paper validation state, risk authority, and investor review paths.</p>
+      </div>
+
+      <section class="section" style="padding-top:0;">
+        <div class="shell">
+          <div class="dashboard-layout">
+            <div class="status-stack">
+              <div class="os-panel">
+                <div class="terminal-top"><span>Capital system</span><b>Online</b></div>
+                <div class="panel-inner" id="dashboardLeft"></div>
+              </div>
+              <div class="os-panel">
+                <div class="terminal-top"><span>Access state</span><b>Session</b></div>
+                <div class="panel-inner">
+                  <div class="pill-row"><span class="pill green">Access active</span><span class="pill amber">NDA acknowledged</span><span class="pill red">No live execution</span></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="os-panel">
+              <div class="terminal-top"><span>Capital operating graph</span><b>Risk perimeter</b></div>
+              <div class="panel-inner">
+                <div class="mini-graph" aria-label="Capital operating graph mini preview">
+                  <svg viewBox="0 0 520 330" aria-hidden="true">
+                    <path class="graph-edge" d="M70 70 L260 165 L450 70"/>
+                    <path class="graph-edge" d="M70 260 L260 165 L450 260"/>
+                    <path class="graph-pulse" d="M70 70 L260 165 L450 260"/>
+                    <circle class="graph-node" cx="70" cy="70" r="44"/>
+                    <circle class="graph-node" cx="450" cy="70" r="44"/>
+                    <circle class="risk-core" cx="260" cy="165" r="58"/>
+                    <circle class="graph-node" cx="70" cy="260" r="44"/>
+                    <circle class="graph-node" cx="450" cy="260" r="44"/>
+                    <text class="graph-label" x="70" y="68" text-anchor="middle">DATA</text>
+                    <text class="graph-label" x="450" y="68" text-anchor="middle">AGENTS</text>
+                    <text class="graph-label" x="260" y="162" text-anchor="middle">RISK</text>
+                    <text class="graph-sub" x="260" y="178" text-anchor="middle">VETO</text>
+                    <text class="graph-label" x="70" y="258" text-anchor="middle">PAPER</text>
+                    <text class="graph-label" x="450" y="258" text-anchor="middle">LEARN</text>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <div class="status-stack">
+              <div class="os-panel">
+                <div class="terminal-top"><span>Paper validation</span><b>Simulated</b></div>
+                <div class="panel-inner" id="dashboardRight"></div>
+              </div>
+              <div class="os-panel">
+                <div class="terminal-top"><span>Quick access</span><b>Review path</b></div>
+                <div class="panel-inner">
+                  <div class="actions" style="margin-top:0;"><a class="btn primary" href="#data-room" data-nav="data-room">Vault</a><a class="btn" href="#platform" data-nav="platform">Graph</a><a class="btn" href="#command" data-nav="command">Command</a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="module-grid four" id="dashboardCards" style="margin-top:1rem;"></div>
+          <div class="legal-band" style="margin-top:1rem;">Not an offer to sell securities. For qualified investors only. Simulated/paper performance only. No real trading or live order execution from this review surface.</div>
+        </div>
+      </section>
+    </section>
+
+    <section class="route" data-route="data-room" id="data-room" hidden>
+      <div class="shell page-hero">
+        <p class="eyebrow">Classified document vault</p>
+        <h1>Data Room</h1>
+        <p class="lead">View-only dossier summaries. No confidential PDFs are embedded. No download buttons are provided.</p>
+      </div>
+
+      <section class="section" style="padding-top:0;">
+        <div class="shell">
+          <div class="section-head">
+            <div><p class="kicker">Vault registry</p><h2>Institutional memo files, not public assets.</h2></div>
+            <p class="section-copy">The GitHub Pages review surface keeps document cards to secure-style modal summaries without exposing private file URLs.</p>
+          </div>
+          <div class="vault-grid" id="documentGrid"></div>
+          <div class="classification" style="margin-top:1rem;">View-only summaries. No confidential PDF embedded. No private download route exists.</div>
+        </div>
+      </section>
+    </section>
+
+    <section class="route" data-route="platform" id="platform" hidden>
+      <div class="shell page-hero">
+        <p class="eyebrow">Platform architecture</p>
+        <h1>Capital Graph</h1>
+        <p class="lead">Five layers, seven agents, and a risk-veto control perimeter. Execution remains simulation-only.</p>
+      </div>
+
+      <section class="section" style="padding-top:0;">
+        <div class="shell">
+          <div class="capital-graph" id="capitalGraph">
+            <svg viewBox="0 0 1100 580" aria-label="Cygnus capital operating graph">
+              <path class="graph-edge" d="M90 290 L270 145 L520 145 L760 290 L1010 290"/>
+              <path class="graph-edge" d="M90 290 L270 435 L520 435 L760 290"/>
+              <path class="graph-pulse" d="M90 290 L270 145 L520 145 L760 290 L1010 290"/>
+              <path class="graph-pulse" d="M90 290 L270 435 L520 435 L760 290"/>
+              <circle class="graph-node" cx="90" cy="290" r="58"/>
+              <circle class="graph-node" cx="270" cy="145" r="58"/>
+              <circle class="graph-node" cx="520" cy="145" r="58"/>
+              <circle class="risk-core" cx="760" cy="290" r="78"/>
+              <circle class="graph-node" cx="1010" cy="290" r="58"/>
+              <circle class="graph-node" cx="270" cy="435" r="58"/>
+              <circle class="graph-node" cx="520" cy="435" r="58"/>
+              <text class="graph-label" x="90" y="288" text-anchor="middle">DATA</text><text class="graph-sub" x="90" y="306" text-anchor="middle">Universe</text>
+              <text class="graph-label" x="270" y="143" text-anchor="middle">INTEL</text><text class="graph-sub" x="270" y="161" text-anchor="middle">Layer</text>
+              <text class="graph-label" x="520" y="143" text-anchor="middle">AGENTS</text><text class="graph-sub" x="520" y="161" text-anchor="middle">Swarm</text>
+              <text class="graph-label" x="760" y="285" text-anchor="middle">RISK</text><text class="graph-sub" x="760" y="304" text-anchor="middle">VETO / HUMAN GATE</text>
+              <text class="graph-label" x="1010" y="288" text-anchor="middle">PAPER</text><text class="graph-sub" x="1010" y="306" text-anchor="middle">Execution</text>
+              <text class="graph-label" x="270" y="433" text-anchor="middle">LEARN</text><text class="graph-sub" x="270" y="451" text-anchor="middle">Memory</text>
+              <text class="graph-label" x="520" y="433" text-anchor="middle">SYNTH</text><text class="graph-sub" x="520" y="451" text-anchor="middle">Memo state</text>
+              <text class="graph-sub" x="660" y="248">refusal edge</text>
+              <text class="graph-sub" x="842" y="382">no live execution endpoint attached</text>
+            </svg>
+          </div>
+          <div class="module-grid" id="architectureLayers" style="margin-top:1rem;"></div>
+          <div class="section-head" style="margin-top:3rem;"><div><p class="kicker">Seven operating agents</p><h2>Specialized roles, bounded mandates.</h2></div><p class="section-copy">Each agent has a defined contribution, boundary, and failure mode. Coordination happens under audit, not theatrical autonomy.</p></div>
+          <div class="module-grid" id="agentGrid"></div>
+        </div>
+      </section>
+    </section>
+
+    <section class="route" data-route="risk" id="risk" hidden>
+      <div class="shell page-hero">
+        <p class="eyebrow">Risk framework</p>
+        <h1>Control Surface</h1>
+        <p class="lead">The first duty of the machine is refusal. This review surface has no live execution endpoint attached.</p>
+      </div>
+
+      <section class="section" style="padding-top:0;">
+        <div class="shell">
+          <div class="control-surface">
+            <div class="os-panel risk-surface">
+              <div class="terminal-top"><span>Risk perimeter</span><b id="riskState">VETO ACTIVE</b></div>
+              <div class="panel-inner">
+                <div class="flow-steps">
+                  <div class="flow-step"><span class="micro">01</span><h3>Candidate Signal</h3><p class="muted">Funding or stat-arb state change.</p></div>
+                  <div class="flow-step"><span class="micro">02</span><h3>Strategy Proposal</h3><p class="muted">Paper candidate with mechanism and cost.</p></div>
+                  <div class="flow-step"><span class="micro">03</span><h3>Risk Veto</h3><p class="muted">Exposure, drawdown, venue, drift, policy.</p></div>
+                  <div class="flow-step"><span class="micro">04</span><h3>Human Review</h3><p class="muted">Launch gate retained.</p></div>
+                  <div class="flow-step"><span class="micro">05</span><h3>Paper Execution</h3><p class="muted">Simulation only.</p></div>
+                </div>
+                <div class="classification" style="margin-top:1rem;">No live execution endpoint attached.</div>
+              </div>
+            </div>
+
+            <aside class="os-panel risk-surface">
+              <div class="terminal-top"><span>Emergency halt</span><b id="haltStatus">ARMED</b></div>
+              <div class="panel-inner">
+                <div class="readout"><span>System state</span><b id="haltReadout">Simulation clear</b><small>Demo halt changes UI state only. No trading system is connected.</small></div>
+                <button class="btn red" id="haltButton" type="button" style="width:100%;margin-top:1rem;">Trigger demo halt</button>
+              </div>
+            </aside>
+          </div>
+
+          <div class="module-grid two" style="margin-top:1rem;">
+            <div class="os-panel"><div class="terminal-top"><span>Read-only loss controls</span><b>Disabled</b></div><div class="panel-inner" id="limitControls"></div></div>
+            <div class="os-panel"><div class="terminal-top"><span>Drawdown monitor</span><b>Paper</b></div><div class="panel-inner"><div class="chart-box" id="riskDrawdown"></div></div></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="route" data-route="performance" id="performance" hidden>
+      <div class="shell page-hero">
+        <p class="eyebrow">Paper trading performance</p>
+        <h1>Investor Report</h1>
+        <p class="lead">Institutional-style paper validation report using inline mock data. Not live, audited, or indicative of future results.</p>
+      </div>
+
+      <section class="section" style="padding-top:0;">
+        <div class="shell">
+          <div class="module-grid four">
+            <article class="readout"><span>Sharpe</span><b>1.84 placeholder</b><small>Paper metric only.</small></article>
+            <article class="readout"><span>Win rate</span><b>57.9%</b><small>Simulated trades.</small></article>
+            <article class="readout"><span>Trade count</span><b>148</b><small>Paper blotter count.</small></article>
+            <article class="readout"><span>Max drawdown</span><b>-0.25%</b><small>Mock drawdown.</small></article>
+          </div>
+          <div class="chart-grid two">
+            <div class="os-panel"><div class="terminal-top"><span>Equity curve</span><b>Paper</b></div><div class="panel-inner"><div class="chart-box" id="equityChart"></div><div class="chart-tooltip" id="equityTip">Hover chart for paper readout.</div></div></div>
+            <div class="os-panel"><div class="terminal-top"><span>Daily P&L</span><b>Paper</b></div><div class="panel-inner"><div class="chart-box" id="pnlChart"></div><div class="chart-tooltip" id="pnlTip">Green positive / red negative.</div></div></div>
+            <div class="os-panel"><div class="terminal-top"><span>Drawdown</span><b>Monitor</b></div><div class="panel-inner"><div class="chart-box" id="drawdownChart"></div><div class="chart-tooltip" id="drawdownTip">Mock drawdown series.</div></div></div>
+            <div class="os-panel"><div class="terminal-top"><span>Attribution</span><b>Split</b></div><div class="panel-inner"><div id="splitCharts"></div></div></div>
+          </div>
+          <div class="os-panel" style="margin-top:1rem;"><div class="terminal-top"><span>Paper trade tape</span><b>Simulated</b></div><div class="panel-inner"><div class="table" id="performanceTape"></div></div></div>
+          <div class="legal-band" style="margin-top:1rem;">Simulated/paper performance only. Not investment advice. Not indicative of future results.</div>
+        </div>
+      </section>
+    </section>
+
+    <section class="route" data-route="strategy" id="strategy" hidden>
+      <div class="shell page-hero">
+        <p class="eyebrow">Strategy universe</p>
+        <h1>Two Dossiers</h1>
+        <p class="lead">The launch scope stays narrow because the goal is risk-reviewed paper validation, not broad strategy theater.</p>
+      </div>
+
+      <section class="section" style="padding-top:0;">
+        <div class="shell strategy-grid" id="strategyDossiers"></div>
+      </section>
+    </section>
+
+    <section class="route" data-route="command" id="command" hidden>
+      <div class="shell page-hero">
+        <p class="eyebrow">Demo command center</p>
+        <h1>Command Room</h1>
+        <p class="lead">The visual climax: public/mock market data, agent state, simulated signal feed, paper blotter, risk console, and terminal logs.</p>
+      </div>
+
+      <section class="section" style="padding-top:0;">
+        <div class="shell">
+          <div class="classification" style="border-color:rgba(255,89,103,.42);color:#ffd7db;">SIMULATION ONLY — NO LIVE ORDERS</div>
+          <div class="command-grid" style="margin-top:1rem;">
+            <aside class="os-panel">
+              <div class="terminal-top"><span>Market data</span><b id="marketUpdated">Mock</b></div>
+              <div class="panel-inner" id="marketGrid"></div>
+            </aside>
+
+            <div class="os-panel">
+              <div class="terminal-top"><span>Agent swarm map</span><b>Active</b></div>
+              <div class="panel-inner">
+                <div class="command-map">
+                  <svg viewBox="0 0 560 450" aria-hidden="true">
+                    <path class="graph-edge" d="M280 80 L110 190 L165 365 L395 365 L450 190 Z"/>
+                    <path class="graph-pulse" d="M280 80 L450 190 L395 365 L165 365 L110 190 Z"/>
+                    <circle class="risk-core" cx="280" cy="225" r="72"/>
+                    <circle class="graph-node" cx="280" cy="80" r="42"/><text class="graph-label" x="280" y="84" text-anchor="middle">SIGNAL</text>
+                    <circle class="graph-node" cx="110" cy="190" r="42"/><text class="graph-label" x="110" y="194" text-anchor="middle">RESEARCH</text>
+                    <circle class="graph-node" cx="450" cy="190" r="42"/><text class="graph-label" x="450" y="194" text-anchor="middle">STRAT</text>
+                    <circle class="graph-node" cx="165" cy="365" r="42"/><text class="graph-label" x="165" y="369" text-anchor="middle">EXEC</text>
+                    <circle class="graph-node" cx="395" cy="365" r="42"/><text class="graph-label" x="395" y="369" text-anchor="middle">LEARN</text>
+                    <text class="graph-label" x="280" y="220" text-anchor="middle">RISK</text><text class="graph-sub" x="280" y="238" text-anchor="middle">VETO ACTIVE</text>
+                  </svg>
+                </div>
+                <div class="pill-row" id="commandAgents" style="margin-top:1rem;"></div>
+              </div>
+            </div>
+
+            <aside class="os-panel">
+              <div class="terminal-top"><span>Execution lock</span><b>No endpoint</b></div>
+              <div class="panel-inner">
+                <div class="readout"><span>Live trading</span><b>Disabled</b><small>No execution endpoint attached. No API keys. No private exchange routes. No order endpoint.</small></div>
+                <div class="readout" style="margin-top:1rem;"><span>Risk console</span><b>Veto retained</b><small>Candidate actions remain paper-only.</small></div>
+              </div>
+            </aside>
+          </div>
+
+          <div class="command-grid" style="margin-top:1rem;">
+            <div class="os-panel"><div class="terminal-top"><span>Signal feed</span><b>Simulated</b></div><div class="panel-inner"><div class="table" id="signalFeed"></div></div></div>
+            <div class="os-panel"><div class="terminal-top"><span>Terminal log stream</span><b>Auto-updating</b></div><div class="panel-inner"><div class="log-stream" id="terminalLog"></div></div></div>
+            <div class="os-panel"><div class="terminal-top"><span>Paper order blotter</span><b>Simulation</b></div><div class="panel-inner"><div class="table" id="orderBlotter"></div></div></div>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="route" data-route="contact" id="contact" hidden>
+      <div class="shell page-hero">
+        <p class="eyebrow">Investor relations intake</p>
+        <h1>Request Review</h1>
+        <p class="lead">Investor relations request path with a mail fallback to nik@cygnusx1.xyz.</p>
+      </div>
+
+      <section class="section" style="padding-top:0;">
+        <div class="shell contact-layout">
+          <div class="os-panel">
+            <div class="terminal-top"><span>IR request form</span><b>Mail fallback</b></div>
+            <div class="panel-inner">
+              <form id="contactForm">
+              <p class="success-msg" id="contactSuccess" hidden>Request prepared locally. Use the email fallback to send it.</p>
+                <label class="input-row">Name<input id="contactName" autocomplete="name" required></label>
+                <label class="input-row">Email<input id="contactEmail" inputmode="email" autocomplete="email" required></label>
+                <label class="input-row">Firm<input id="contactFirm" autocomplete="organization"></label>
+                <label class="input-row">Message<textarea id="contactMessage" required></textarea></label>
+                <button class="form-button" type="submit" style="margin-top:1rem;">Request call</button>
+              </form>
+            </div>
+          </div>
+          <aside class="os-panel">
+            <div class="terminal-top"><span>Contact route</span><b>Mail fallback</b></div>
+            <div class="panel-inner">
+              <div class="classification">Mail fallback opens a prepared email draft. No form data is stored by this site.</div>
+              <h3 style="margin-top:1rem;">Investor relations intake</h3>
+              <p class="copy" style="margin-top:.8rem;">Use the mailto fallback to open an email draft with the current form details.</p>
+              <a class="btn primary" id="mailtoLink" href="mailto:nik@cygnusx1.xyz?subject=Cygnus%20X-1%20Investor%20Call%20Request" style="margin-top:1rem;">Open email draft</a>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell">Cygnus OS investor review surface. Not an offer to sell securities. For qualified investors only. Simulated/paper performance only. No live trading or order execution.</div>
+  </footer>
+
+  <div class="modal" id="documentModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <div class="modal-head">
+        <div>
+          <p class="kicker" id="modalCategory">Document summary</p>
+          <h3 id="modalTitle">Document</h3>
+        </div>
+        <button class="close-button" type="button" id="modalClose" aria-label="Close modal">x</button>
+      </div>
+      <div class="modal-body">
+        <div class="classification" id="modalClass">Classified summary</div>
+        <p class="copy" id="modalBody" style="margin-top:1rem;"></p>
+        <div class="module-grid two" id="modalMeta" style="margin-top:1rem;"></div>
+        <div class="legal-band" style="margin-top:1rem;">View-only summary. No confidential PDF is embedded. No download is provided.</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var PASSWORD_HASH = "66b8d163db6080b58d8b65d4bb1cc060a50f93f7765e15e4fdec14e42c345e8a";
+      var SESSION_KEYS = { access: "cygnus_static_access", nda: "cygnus_static_nda" };
+      var routes = ["home", "thesis", "login", "nda", "dashboard", "data-room", "platform", "risk", "performance", "strategy", "command", "contact"];
+      var privateRoutes = ["dashboard", "data-room", "platform", "risk", "performance", "strategy", "command", "contact"];
+      var lastFocus = null;
+      var haltActive = false;
+
+      var legalShort = "Not an offer to sell securities. For qualified investors only. Simulated/paper performance only. Not investment advice. No real trading or live order execution.";
+
+      var dashboardCards = [
+        ["Platform stage", "Review / paper-trading", "Allocator terminal with paper validation state."],
+        ["Execution mode", "Simulation only", "No live order placement exists in this file."],
+        ["Markets", "BTC, ETH, perpetuals", "Reference prices with optional public ticker fallback."],
+        ["Venues", "Binance + Bybit public data", "No API keys. No private exchange endpoints."],
+        ["Strategies", "Funding Rate Arb + Stat Arb", "Narrow launch scope for paper validation."],
+        ["Autonomy", "L2 demo / supervised", "Human review gates retained."],
+        ["Risk posture", "Kill-switch first", "Risk veto is central to the operating graph."],
+        ["Data room", "View-only review", "No confidential PDFs embedded or downloadable."]
+      ];
+
+      var documents = [
+        { id: "public-thesis", code: "CYG-THESIS-001", title: "Public Investment Thesis", type: "PUBLIC", className: "stamp-public", category: "Public review layer", summary: "Worldview, market inefficiency thesis, autonomy model, and long-term fund-to-platform direction." },
+        { id: "operating-docs", code: "CYG-OPS-002", title: "Confidential Operating Documents", type: "CONFIDENTIAL", className: "stamp-confidential", category: "Operating package", summary: "Operating policies, review cadence, reporting expectations, and paper validation posture summarized for demo review." },
+        { id: "financial-model", code: "CYG-FIN-003", title: "Financial Model", type: "RESTRICTED", className: "stamp-restricted", category: "Financial model", summary: "Launch assumptions, expense model, paper validation milestones, and strategy-level economics summarized without embedding files." },
+        { id: "engineering-spec", code: "CYG-ENG-004", title: "Platform Engineering Spec", type: "CONFIDENTIAL", className: "stamp-confidential", category: "Engineering spec", summary: "Five-layer system, seven-agent loop, data contracts, auditability, and simulation-only review boundary." },
+        { id: "ground-up-master", code: "CYG-GROUND-005", title: "Ground-Up Execution Master", type: "CONFIDENTIAL", className: "stamp-confidential", category: "Execution master", summary: "Build sequence, fund operating assumptions, promotion gates, and execution discipline for the Cygnus operating model." },
+        { id: "risk-framework", code: "CYG-RISK-006", title: "Risk Framework", type: "RESTRICTED", className: "stamp-restricted", category: "Risk framework", summary: "Kill-switch first operating model, pre-trade veto, drawdown boundaries, venue controls, and human escalation." },
+        { id: "strategy-overview", code: "CYG-STRAT-007", title: "Strategy Overview", type: "CONFIDENTIAL", className: "stamp-confidential", category: "Strategy overview", summary: "Funding rate arbitrage and BTC/ETH statistical arbitrage, plus why the launch scope intentionally stays narrow." },
+        { id: "roadmap", code: "CYG-ROAD-008", title: "Roadmap", type: "REDACTED", className: "stamp-redacted", category: "Roadmap", summary: "Review surface to paper validation to controlled investor review, with production gates before any live-capital claims." }
+      ];
+
+      var layers = [
+        ["Data Universe", "Market data, order books, funding, macro, on-chain state, filings, and narrative velocity."],
+        ["Intelligence Layer", "Signal normalization, market ontology, model registry, and regime inference."],
+        ["Agent Swarm", "Specialist roles coordinate under bounded mandates and explicit failure modes."],
+        ["Risk + Execution", "Pre-trade veto, simulation-only order flow, cost model, and halt controls."],
+        ["RL Feedback Loop", "Paper outcomes become labeled memory for model improvement and governance review."]
+      ];
+
+      var agents = [
+        ["SIGNAL", "online", "Detects anomalies, funding divergence, volatility state, and liquidation density."],
+        ["RESEARCH", "observing", "Maintains context across regimes, market structure, sources, and historical analogues."],
+        ["STRATEGY", "evaluating", "Generates candidate policies with causal mechanism and falsification conditions."],
+        ["RISK", "veto active", "Owns veto power, exposure limits, drawdown limits, and simulation controls."],
+        ["EXECUTION", "simulation-only", "Simulation-only routing, cost estimation, and paper order lifecycle."],
+        ["LEARN", "logging", "Transforms accepted, rejected, and failed actions into structured memory."],
+        ["SYNTHESIS", "summarizing", "Resolves the fund action narrative with audit trail and escalation status."]
+      ];
+
+      var equity = [["04-01",1000000],["04-02",1004200],["04-03",1002100],["04-04",1008900],["04-05",1012600],["04-06",1010200],["04-07",1016100],["04-08",1018400],["04-09",1015900],["04-10",1023300],["04-11",1027400],["04-12",1025100],["04-13",1031900],["04-14",1035600],["04-15",1034100],["04-16",1041200],["04-17",1044400],["04-18",1041800],["04-19",1049800],["04-20",1053300]];
+      var pnl = [["04-01",4200],["04-02",-2100],["04-03",6800],["04-04",3700],["04-05",-2400],["04-06",5900],["04-07",2300],["04-08",-2500],["04-09",7400],["04-10",4100],["04-11",-2300],["04-12",6800],["04-13",3700],["04-14",-1500],["04-15",7100],["04-16",3200],["04-17",-2600],["04-18",8000],["04-19",3500]];
+      var drawdowns = [["04-01",0],["04-02",-0.21],["04-03",0],["04-04",0],["04-05",-0.24],["04-06",0],["04-07",0],["04-08",-0.25],["04-09",0],["04-10",0],["04-11",-0.22],["04-12",0],["04-13",0],["04-14",-0.14],["04-15",0],["04-16",0],["04-17",-0.25],["04-18",0],["04-19",0]];
+
+      var trades = [
+        ["P-2401", "Funding Rate Arb / BTC-PERP", "risk-approved simulation"],
+        ["P-2402", "Statistical Arb / ETHUSDT", "human-review queued"],
+        ["P-2403", "Funding Rate Arb / ETH-PERP", "RISK veto test passed"],
+        ["P-2404", "Funding Rate Arb / ETH-PERP", "learn agent logged outcome"]
+      ];
+
+      var signals = [
+        ["09:12", "BTC funding divergence", "candidate paper spread detected"],
+        ["10:38", "ETH/BTC z-score", "mean reversion watchlist"],
+        ["11:44", "Venue liquidity", "Bybit depth normalized"],
+        ["12:05", "Risk veto", "paper action remains inside drawdown placeholder"]
+      ];
+
+      var strategyDossiers = [
+        {
+          title: "Funding Rate Arbitrage",
+          label: "STRATEGY / CYG-FRA",
+          fields: [
+            ["Mechanism", "Observe funding dislocations across perpetual venues and evaluate whether carry survives fees, timing, unwind path, and liquidation mechanics."],
+            ["Data inputs", "Funding rates, order book depth, venue spreads, fee schedule, mark price, liquidation pressure, and collateral route assumptions."],
+            ["Paper validation logic", "Generate simulated entries only when net spread remains positive after stress costs and risk gate review."],
+            ["Risk controls", "Venue concentration cap, drawdown halt, spread compression exit, simulated hedge-quality check, and RISK veto."],
+            ["Why launch scope", "The mechanism is legible to allocators and naturally exposes execution, cost, and venue risk."],
+            ["Failure modes", "Funding flips, crowding, borrow/collateral mismatch, exchange outage, forced unwind, stale rate assumption."],
+            ["Promotion gates", "Sufficient paper sample, net edge after costs, stress behavior, human review, and independent risk approval."]
+          ]
+        },
+        {
+          title: "Statistical Arbitrage",
+          label: "STRATEGY / CYG-STAT",
+          fields: [
+            ["Mechanism", "Monitor BTC/ETH relationship states and evaluate paper mean-reversion candidates under regime-aware spread logic."],
+            ["Data inputs", "BTC/ETH prices, volatility state, beta regime, volume, funding context, liquidity, and spread z-score."],
+            ["Paper validation logic", "Candidate paper actions require stable liquidity, non-degraded regime context, and explicit falsification thresholds."],
+            ["Risk controls", "Position sizing placeholder, spread stop, drawdown halt, volatility shock guard, and human review gate."],
+            ["Why launch scope", "BTC/ETH is narrow enough to ship and rich enough to reveal whether the intelligence layer is useful."],
+            ["Failure modes", "Regime break, correlation collapse, news shock, funding context reversal, liquidity withdrawal."],
+            ["Promotion gates", "Out-of-sample paper evidence, cost-adjusted edge, false-positive review, and RISK agent veto statistics."]
+          ]
+        }
+      ];
+
+      var marketState = [
+        { symbol: "BTCUSDT", venue: "Binance", price: 68420.12, change: 1.18, status: "mock" },
+        { symbol: "ETHUSDT", venue: "Binance", price: 3420.44, change: -0.42, status: "mock" },
+        { symbol: "BTCUSDT", venue: "Bybit", price: 68416.80, change: 1.11, status: "mock" },
+        { symbol: "ETHUSDT", venue: "Bybit", price: 3418.92, change: -0.36, status: "mock" }
+      ];
+
+      var logEvents = [
+        "Funding spread observed",
+        "Risk veto check passed",
+        "Paper order simulated",
+        "Human review gate retained",
+        "No live execution endpoint attached",
+        "Learn agent logged paper outcome",
+        "Synthesis updated investor memo state"
+      ];
+
+      function el(id) { return document.getElementById(id); }
+      function esc(value) {
+        return String(value).replace(/[&<>"']/g, function (c) {
+          return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" })[c];
+        });
+      }
+      function isAuthed() { return sessionStorage.getItem(SESSION_KEYS.access) === "true"; }
+      function hasNda() { return sessionStorage.getItem(SESSION_KEYS.nda) === "true"; }
+      function routeFromHash() { return (location.hash || "#login").replace("#", "") || "login"; }
+
+      async function sha256(value) {
+        if (window.crypto && crypto.subtle && window.TextEncoder) {
+          var digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(value));
+          return Array.from(new Uint8Array(digest)).map(function (b) { return b.toString(16).padStart(2, "0"); }).join("");
+        }
+        return value === "cygnus-demo" ? PASSWORD_HASH : "";
+      }
+
+      function setBodyState() {
+        document.body.classList.toggle("is-authenticated", isAuthed());
+        document.body.classList.toggle("is-nda", isAuthed() && hasNda());
+        el("accessState").textContent = isAuthed() && hasNda() ? "Investor session" : isAuthed() ? "Awaiting NDA" : "Public surface";
+      }
+
+      function navigate(route) {
+        if (privateRoutes.indexOf(route) >= 0 && !isAuthed()) route = "login";
+        if (privateRoutes.indexOf(route) >= 0 && isAuthed() && !hasNda()) route = "nda";
+        if (route === "nda" && !isAuthed()) route = "login";
+        if (route === "login" && isAuthed() && !hasNda()) route = "nda";
+        if (route === "login" && isAuthed() && hasNda()) route = "dashboard";
+        if (routes.indexOf(route) < 0) route = "home";
+        routes.forEach(function (name) {
+          var node = document.querySelector('[data-route="' + name + '"]');
+          if (node) node.hidden = name !== route;
+        });
+        document.querySelectorAll("[data-nav]").forEach(function (node) {
+          node.classList.toggle("is-active", node.getAttribute("data-nav") === route);
+        });
+        setBodyState();
+        closeMenu();
+        if (location.hash !== "#" + route) history.replaceState(null, "", "#" + route);
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function closeMenu() {
+        ["publicNav", "privateNav"].forEach(function (id) {
+          var node = el(id);
+          if (node) node.classList.remove("is-open");
+        });
+        el("menuToggle").setAttribute("aria-expanded", "false");
+      }
+
+      function tableRow(row) {
+        return '<div class="table-row"><strong>' + esc(row[0]) + '</strong><span>' + esc(row[1]) + '</span><span>' + esc(row[2]) + '</span></div>';
+      }
+
+      function renderStaticContent() {
+        el("dashboardLeft").innerHTML = dashboardCards.slice(0, 4).map(function (c) {
+          return '<div class="market-price"><span class="metric-label">' + esc(c[0]) + '</span><b>' + esc(c[1]) + '</b><small class="muted">' + esc(c[2]) + '</small></div>';
+        }).join("");
+        el("dashboardRight").innerHTML = dashboardCards.slice(4).map(function (c) {
+          return '<div class="market-price"><span class="metric-label">' + esc(c[0]) + '</span><b>' + esc(c[1]) + '</b><small class="muted">' + esc(c[2]) + '</small></div>';
+        }).join("");
+        el("dashboardCards").innerHTML = dashboardCards.map(function (c) {
+          return '<article class="readout"><span>' + esc(c[0]) + '</span><b>' + esc(c[1]) + '</b><small>' + esc(c[2]) + '</small></article>';
+        }).join("");
+        el("documentGrid").innerHTML = documents.map(function (doc) {
+          var actions = '<button class="btn primary" type="button" data-open-doc="' + esc(doc.id) + '">View Summary</button>';
+          if (doc.id === "public-thesis") {
+            actions += '<a class="btn" href="/thesis/">Thesis page</a><a class="btn" href="/assets/docs/cygnus-public-thesis.pdf" target="_blank" rel="noopener" data-pdf-link>Open PDF</a><a class="btn" href="/assets/docs/cygnus-public-thesis.pdf" download data-pdf-link>Download PDF</a>';
+          } else {
+            actions += '<button class="btn" type="button" disabled>No download</button>';
+          }
+          return '<article class="memo-file"><div class="memo-id">' + esc(doc.code) + '</div><div style="margin-top:.7rem;"><span class="classification-stamp ' + doc.className + '">' + esc(doc.type) + '</span></div><h3>' + esc(doc.title) + '</h3><p>' + esc(doc.summary) + '</p><div class="actions">' + actions + '</div></article>';
+        }).join("");
+        el("architectureLayers").innerHTML = layers.map(function (layer) {
+          return '<article class="readout"><span>' + esc(layer[0]) + '</span><b>Layer</b><small>' + esc(layer[1]) + '</small></article>';
+        }).join("");
+        el("agentGrid").innerHTML = agents.map(function (agent) {
+          return '<article class="readout"><span>' + esc(agent[0]) + '</span><b>' + esc(agent[1]) + '</b><small>' + esc(agent[2]) + '</small></article>';
+        }).join("");
+        el("commandAgents").innerHTML = agents.map(function (agent) {
+          return '<span class="pill green"><i class="led"></i>' + esc(agent[0]) + ' / ' + esc(agent[1]) + '</span>';
+        }).join("");
+        el("signalFeed").innerHTML = signals.map(tableRow).join("");
+        el("orderBlotter").innerHTML = trades.map(tableRow).join("");
+        el("performanceTape").innerHTML = trades.map(tableRow).join("");
+        el("limitControls").innerHTML = [
+          ["Daily loss limit", "62%"], ["Strategy loss limit", "48%"], ["Drawdown halt", "30%"], ["Venue concentration", "55%"]
+        ].map(function (row) {
+          return '<div class="limit-row"><div><span class="metric-label">' + esc(row[0]) + '</span><small class="muted">Read-only review control</small></div><div class="fake-control"><i style="--w:' + esc(row[1]) + '"></i></div></div>';
+        }).join("");
+        el("strategyDossiers").innerHTML = strategyDossiers.map(function (strategy) {
+          return '<article class="strategy-dossier"><p class="kicker">' + esc(strategy.label) + '</p><h2 style="margin-top:.55rem;">' + esc(strategy.title) + '</h2>' + strategy.fields.map(function (field) {
+            return '<div class="dossier-section"><b>' + esc(field[0]) + '</b><p>' + esc(field[1]) + '</p></div>';
+          }).join("") + '</article>';
+        }).join("");
+      }
+
+      function renderLineChart(target, data, color, tipId, suffix) {
+        var width = 760, height = 300, pad = 34;
+        var values = data.map(function (p) { return p[1]; });
+        var min = Math.min.apply(null, values), max = Math.max.apply(null, values), range = Math.max(max - min, 1);
+        var coords = data.map(function (p, i) {
+          var x = pad + (i / Math.max(data.length - 1, 1)) * (width - pad * 2);
+          var y = height - pad - ((p[1] - min) / range) * (height - pad * 2);
+          return { x: x, y: y, label: p[0], value: p[1] };
+        });
+        target.innerHTML = '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Paper line chart">' +
+          '<rect width="' + width + '" height="' + height + '" rx="10" fill="rgba(0,0,0,.18)"></rect>' +
+          [0,1,2,3,4].map(function (r) { var y = pad + r * ((height - pad * 2) / 4); return '<line x1="' + pad + '" x2="' + (width - pad) + '" y1="' + y + '" y2="' + y + '" stroke="rgba(247,241,232,.11)"></line>'; }).join("") +
+          '<polygon points="' + coords.map(function (c) { return c.x.toFixed(2) + ',' + c.y.toFixed(2); }).join(" ") + ' ' + (width-pad) + ',' + (height-pad) + ' ' + pad + ',' + (height-pad) + '" fill="' + color + '" opacity=".11"></polygon>' +
+          '<polyline points="' + coords.map(function (c) { return c.x.toFixed(2) + ',' + c.y.toFixed(2); }).join(" ") + '" fill="none" stroke="' + color + '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"></polyline>' +
+          coords.map(function (c, i) { return '<circle tabindex="0" data-tip="' + tipId + '" data-value="' + esc(c.label + ' / ' + c.value.toLocaleString() + suffix) + '" cx="' + c.x.toFixed(2) + '" cy="' + c.y.toFixed(2) + '" r="' + (i % 3 === 0 ? 4 : 3) + '" fill="' + color + '"></circle>'; }).join("") +
+          '<text x="' + pad + '" y="' + (height - 8) + '" fill="rgba(247,241,232,.55)" font-size="12">' + esc(data[0][0]) + '</text><text x="' + (width-pad) + '" y="' + (height - 8) + '" fill="rgba(247,241,232,.55)" font-size="12" text-anchor="end">' + esc(data[data.length-1][0]) + '</text></svg>';
+      }
+
+      function renderBarChart(target, data) {
+        var width = 760, height = 300, pad = 34, zero = height / 2;
+        var maxAbs = Math.max.apply(null, data.map(function (p) { return Math.abs(p[1]); }));
+        var band = (width - pad * 2) / data.length, bw = Math.max(band - 5, 4);
+        target.innerHTML = '<svg viewBox="0 0 ' + width + ' ' + height + '" role="img" aria-label="Daily P and L chart"><rect width="' + width + '" height="' + height + '" rx="10" fill="rgba(0,0,0,.18)"></rect><line x1="' + pad + '" x2="' + (width-pad) + '" y1="' + zero + '" y2="' + zero + '" stroke="rgba(247,241,232,.24)"></line>' +
+          data.map(function (p, i) { var h = (Math.abs(p[1]) / maxAbs) * (height / 2 - pad); var pos = p[1] >= 0; return '<rect tabindex="0" data-tip="pnlTip" data-value="' + esc(p[0] + ' / $' + p[1].toLocaleString()) + '" x="' + (pad + i * band + 2) + '" y="' + (pos ? zero - h : zero) + '" width="' + bw + '" height="' + h + '" rx="3" fill="' + (pos ? 'rgba(0,240,168,.78)' : 'rgba(255,89,103,.78)') + '"></rect>'; }).join("") +
+          '</svg>';
+      }
+
+      function renderSplitCharts() {
+        var groups = [["Strategy attribution", [["Funding Rate Arb", 61], ["BTC/ETH Stat Arb", 39]]], ["Venue split", [["Binance market data", 57], ["Bybit market data", 43]]]];
+        el("splitCharts").innerHTML = '<div class="split-stack">' + groups.map(function (group) {
+          return '<div class="readout"><span>' + esc(group[0]) + '</span>' + group[1].map(function (p) {
+            return '<div class="split-line" style="margin-top:.85rem;"><small>' + esc(p[0]) + ' / ' + p[1] + '%</small><div class="split-track"><div class="split-fill" style="--w:' + p[1] + '%"></div></div></div>';
+          }).join("") + '</div>';
+        }).join("") + '</div>';
+      }
+
+      function renderCharts() {
+        renderLineChart(el("equityChart"), equity, "rgba(0,240,168,.92)", "equityTip", "");
+        renderBarChart(el("pnlChart"), pnl);
+        renderLineChart(el("drawdownChart"), drawdowns, "rgba(255,89,103,.92)", "drawdownTip", "%");
+        renderLineChart(el("riskDrawdown"), drawdowns, "rgba(255,89,103,.92)", "drawdownTip", "%");
+        renderSplitCharts();
+      }
+
+      function renderMarket() {
+        el("marketGrid").innerHTML = marketState.map(function (t) {
+          return '<div class="market-price"><span class="metric-label">' + esc(t.venue) + ' / ' + esc(t.symbol) + '</span><b>$' + t.price.toLocaleString(undefined, { maximumFractionDigits: 2 }) + '</b><small class="muted">24h ' + t.change.toFixed(2) + '% / ' + esc(t.status) + '</small></div>';
+        }).join("");
+        el("marketUpdated").textContent = new Date().toLocaleTimeString();
+      }
+
+      function tickMarket() {
+        marketState = marketState.map(function (t) {
+          var move = (Math.random() - .5) * (t.symbol.indexOf("BTC") >= 0 ? 92 : 10);
+          return Object.assign({}, t, { price: Math.max(1, t.price + move), change: t.change + (Math.random() - .5) * .06 });
+        });
+        renderMarket();
+      }
+
+      function tryFetchMarket() {
+        if (!window.fetch || location.protocol === "file:") return;
+        Promise.all([
+          fetch("https://api.binance.com/api/v3/ticker/24hr?symbol=BTCUSDT").then(function (r) { return r.json(); }),
+          fetch("https://api.binance.com/api/v3/ticker/24hr?symbol=ETHUSDT").then(function (r) { return r.json(); })
+        ]).then(function (r) {
+          if (!r[0] || !r[0].lastPrice) return;
+          marketState[0].price = Number(r[0].lastPrice); marketState[0].change = Number(r[0].priceChangePercent); marketState[0].status = "live";
+          marketState[1].price = Number(r[1].lastPrice); marketState[1].change = Number(r[1].priceChangePercent); marketState[1].status = "live";
+          renderMarket();
+        }).catch(function () { renderMarket(); });
+      }
+
+      function addLog(message) {
+        var now = new Date().toLocaleTimeString();
+        var line = '<div class="log-line"><time>' + esc(now) + '</time><span>' + esc(message) + '</span></div>';
+        el("terminalLog").insertAdjacentHTML("afterbegin", line);
+        while (el("terminalLog").children.length > 10) el("terminalLog").lastElementChild.remove();
+      }
+
+      function openDocument(id) {
+        var doc = documents.find(function (item) { return item.id === id; }) || documents[0];
+        lastFocus = document.activeElement;
+        el("modalCategory").textContent = doc.category + " / " + doc.code;
+        el("modalTitle").textContent = doc.title;
+        el("modalClass").textContent = doc.type + " / VIEW-ONLY REVIEW SUMMARY";
+        el("modalBody").textContent = doc.summary;
+        if (doc.id === "public-thesis") {
+          el("modalMeta").innerHTML = '<div class="readout"><span>Document ID</span><b>' + esc(doc.code) + '</b><small>Public PDF available.</small></div><div class="readout"><span>Access note</span><b>Open / download allowed</b><small>/assets/docs/cygnus-public-thesis.pdf</small></div>';
+        } else {
+          el("modalMeta").innerHTML = '<div class="readout"><span>Document ID</span><b>' + esc(doc.code) + '</b><small>No public file URL.</small></div><div class="readout"><span>Access note</span><b>No download</b><small>No confidential PDF embedded.</small></div>';
+        }
+        el("documentModal").setAttribute("aria-hidden", "false");
+        el("modalClose").focus();
+      }
+
+      function closeModal() {
+        el("documentModal").setAttribute("aria-hidden", "true");
+        if (lastFocus && typeof lastFocus.focus === "function") lastFocus.focus();
+      }
+
+      function updateMailto() {
+        var body = "Name: " + el("contactName").value + "\nEmail: " + el("contactEmail").value + "\nFirm: " + el("contactFirm").value + "\n\n" + el("contactMessage").value;
+        el("mailtoLink").href = "mailto:nik@cygnusx1.xyz?subject=" + encodeURIComponent("Cygnus X-1 Investor Call Request") + "&body=" + encodeURIComponent(body);
+      }
+
+      function configurePdfLinks() {
+        var pdfPath = location.protocol === "file:" ? "../assets/docs/cygnus-public-thesis.pdf" : "/assets/docs/cygnus-public-thesis.pdf";
+        document.querySelectorAll("[data-pdf-link]").forEach(function (node) { node.setAttribute("href", pdfPath); });
+        if (location.protocol === "file:") {
+          document.querySelectorAll("a[href='/']").forEach(function (node) { node.setAttribute("href", "../index.html"); });
+          document.querySelectorAll("a[href='/thesis/']").forEach(function (node) { node.setAttribute("href", "../thesis/index.html"); });
+        }
+      }
+
+      function setupEvents() {
+        document.addEventListener("click", function (event) {
+          var nav = event.target.closest("[data-nav]");
+          if (nav) { event.preventDefault(); navigate(nav.getAttribute("data-nav")); return; }
+          var doc = event.target.closest("[data-open-doc]");
+          if (doc) openDocument(doc.getAttribute("data-open-doc"));
+        });
+        window.addEventListener("hashchange", function () { navigate(routeFromHash()); });
+        el("menuToggle").addEventListener("click", function () {
+          var target = isAuthed() && hasNda() ? el("privateNav") : el("publicNav");
+          var open = !target.classList.contains("is-open");
+          closeMenu();
+          target.classList.toggle("is-open", open);
+          el("menuToggle").setAttribute("aria-expanded", String(open));
+        });
+        el("loginForm").addEventListener("submit", async function (event) {
+          event.preventDefault();
+          el("attemptLine").classList.remove("is-running");
+          void el("attemptLine").offsetWidth;
+          el("attemptLine").classList.add("is-running");
+          var hash = await sha256(el("passwordInput").value);
+          window.setTimeout(function () {
+            if (hash === PASSWORD_HASH) {
+              sessionStorage.setItem(SESSION_KEYS.access, "true");
+              sessionStorage.removeItem(SESSION_KEYS.nda);
+              el("passwordInput").value = "";
+              el("loginError").hidden = true;
+              setBodyState();
+              navigate("nda");
+            } else {
+              el("loginError").hidden = false;
+            }
+          }, 420);
+        });
+        el("ackButton").addEventListener("click", function () {
+          sessionStorage.setItem(SESSION_KEYS.nda, "true");
+          setBodyState();
+          navigate("dashboard");
+        });
+        el("logoutButton").addEventListener("click", function () {
+          sessionStorage.removeItem(SESSION_KEYS.access);
+          sessionStorage.removeItem(SESSION_KEYS.nda);
+          setBodyState();
+          navigate("login");
+        });
+        el("haltButton").addEventListener("click", function () {
+          haltActive = !haltActive;
+          document.body.classList.toggle("halt-active", haltActive);
+          el("haltStatus").textContent = haltActive ? "SIMULATED HALT ASSERTED" : "ARMED";
+          el("riskState").textContent = haltActive ? "SIMULATED HALT ASSERTED" : "VETO ACTIVE";
+          el("haltReadout").textContent = haltActive ? "Halt latched" : "Simulation clear";
+          el("haltButton").textContent = haltActive ? "Reset simulation state" : "Trigger demo halt";
+        });
+        el("contactForm").addEventListener("submit", function (event) {
+          event.preventDefault();
+          el("contactSuccess").hidden = false;
+          updateMailto();
+        });
+        ["contactName", "contactEmail", "contactFirm", "contactMessage"].forEach(function (id) { el(id).addEventListener("input", updateMailto); });
+        el("modalClose").addEventListener("click", closeModal);
+        el("documentModal").addEventListener("click", function (event) { if (event.target === el("documentModal")) closeModal(); });
+        document.addEventListener("keydown", function (event) {
+          if (event.key === "Escape") { closeModal(); closeMenu(); }
+        });
+        document.addEventListener("mouseover", function (event) {
+          var node = event.target.closest("[data-tip]");
+          if (node) el(node.getAttribute("data-tip")).textContent = node.getAttribute("data-value");
+        });
+        document.addEventListener("focusin", function (event) {
+          var node = event.target.closest("[data-tip]");
+          if (node) el(node.getAttribute("data-tip")).textContent = node.getAttribute("data-value");
+        });
+      }
+
+      function init() {
+        renderStaticContent();
+        configurePdfLinks();
+        renderCharts();
+        renderMarket();
+        tryFetchMarket();
+        setupEvents();
+        el("ndaTime").textContent = new Date().toISOString().replace("T", " ").slice(0, 19) + " UTC";
+        setBodyState();
+        navigate(routeFromHash());
+        logEvents.slice(0, 5).forEach(addLog);
+        window.setInterval(tickMarket, 4500);
+        window.setInterval(function () { addLog(logEvents[Math.floor(Math.random() * logEvents.length)]); }, 3200);
+      }
+
+      if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+      else init();
+    }());
+  </script>
+</body>
+</html>
