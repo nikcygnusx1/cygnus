@@ -5,16 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark light">
   <meta name="theme-color" content="#060806">
-  <meta name="description" content="Cygnus X-1 is an AI-native hedge fund architecture for governed autonomous capital allocation, built around market ontology, specialist agents, risk veto, execution controls, and continuous learning.">
+  <meta name="description" content="Cygnus X-1 is an AI-native capital system for governed autonomous capital allocation in machine-scale markets.">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="Cygnus X-1 | AI-Native Hedge Fund">
-  <meta property="og:description" content="A private investor review surface for governed autonomous capital allocation, risk containment, market ontology, and machine-native investment memory.">
+  <meta property="og:title" content="Cygnus X-1 | AI-native capital system for machine-scale markets">
+  <meta property="og:description" content="Governed autonomous capital allocation for fragmented, machine-speed markets.">
   <meta property="og:url" content="https://cygnusx1.xyz/">
   <meta name="thesis:pdf" content="https://cygnusx1.xyz/assets/docs/cygnus-public-thesis.pdf">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="canonical" href="https://cygnusx1.xyz/">
   <link rel="icon" href="data:image/svg+xml,%3Csvg width='64' height='64' viewBox='0 0 64 64' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='64' height='64' rx='11' fill='%23060806'/%3E%3Ccircle cx='32' cy='32' r='22' fill='none' stroke='%23f4efe6' stroke-opacity='.42' stroke-width='1.4'/%3E%3Ccircle cx='32' cy='32' r='12' fill='none' stroke='%2300f0a8' stroke-width='1.8'/%3E%3Cpath d='M10 33h44' stroke='%237ab8ff' stroke-opacity='.75'/%3E%3Ccircle cx='45' cy='19' r='4' fill='%23ff8a4c'/%3E%3Ccircle cx='32' cy='32' r='5' fill='%23000000' stroke='%23f4efe6' stroke-opacity='.35'/%3E%3C/svg%3E">
-  <title>Cygnus X-1 | AI-Native Hedge Fund</title>
+  <title>Cygnus X-1 | AI-native capital system for machine-scale markets</title>
   <style>
     /* =========================================================
        CYGNUS X-1 SINGLE-FILE OPERATING ENVIRONMENT
@@ -51,6 +51,15 @@
       --mono: "SFMono-Regular", "IBM Plex Mono", "Roboto Mono", Consolas, "Liberation Mono", monospace;
       --mx: 48%;
       --my: 28%;
+      --motion-x: 0;
+      --motion-y: 0;
+      --tilt-x: 0deg;
+      --tilt-y: 0deg;
+      --orbital-speed: 1;
+      --risk-pulse: 0.35;
+      --signal-intensity: 0.5;
+      --section-depth: 0;
+      --scroll-depth: 0;
     }
 
     html[data-mode="diligence"] {
@@ -437,6 +446,11 @@
       color: var(--green-soft);
     }
 
+    .eyebrow span:not(.pulse) {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
     .pulse {
       width: 8px;
       height: 8px;
@@ -532,6 +546,10 @@
     .hero-copy {
       display: grid;
       gap: 1.25rem;
+    }
+
+    .mobile-orbital {
+      display: none;
     }
 
     .hero-actions,
@@ -725,31 +743,6 @@
     .readout small {
       color: var(--muted);
       line-height: 1.35;
-    }
-
-    .telemetry-ribbon {
-      border-bottom: 1px solid var(--line);
-      border-top: 1px solid var(--line);
-      background: rgba(5, 8, 7, 0.8);
-      overflow: hidden;
-    }
-
-    .ribbon-track {
-      display: flex;
-      width: max-content;
-      gap: 2.5rem;
-      padding: 0.78rem 0;
-      animation: ticker 32s linear infinite;
-      color: var(--muted);
-      font-family: var(--mono);
-      font-size: 0.72rem;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .ribbon-track span b {
-      color: var(--green-soft);
-      font-weight: 760;
     }
 
     section {
@@ -2195,12 +2188,638 @@
       to { transform: translateY(100%); }
     }
 
-    @keyframes ticker {
-      to { transform: translateX(-50%); }
-    }
-
     @keyframes dash {
       to { stroke-dashoffset: -180; }
+    }
+
+    /* CYGNUS MOTION ENGINE */
+    html[data-motion="full"],
+    html[data-motion="reduced"] {
+      --motion-enabled: 1;
+    }
+
+    html[data-motion="static"] {
+      --motion-enabled: 0;
+    }
+
+    html[data-motion="full"] body::before {
+      transform: translate3d(calc(var(--motion-x) * -16px), calc((var(--scroll-depth) * -1px) - (var(--motion-y) * 14px)), 0);
+      transition: opacity 220ms ease;
+    }
+
+    html[data-motion="full"] body::after {
+      transform: translate3d(calc(var(--motion-x) * 10px), calc(var(--scroll-depth) * -0.55px), 0);
+    }
+
+    .progress {
+      background-size: 240% 100%;
+      animation: telemetryRail 5.6s linear infinite;
+    }
+
+    .site-header {
+      transition: min-height 220ms ease, background 220ms ease, box-shadow 220ms ease, border-color 220ms ease, transform 220ms ease;
+    }
+
+    .site-header.is-condensed {
+      background:
+        linear-gradient(90deg, rgba(0, 240, 168, 0.11), transparent 18%, rgba(122, 184, 255, 0.08)),
+        color-mix(in srgb, var(--bg) 90%, transparent);
+      border-color: color-mix(in srgb, var(--green) 24%, var(--line));
+      box-shadow: 0 18px 80px rgba(0, 0, 0, 0.36), 0 0 24px rgba(0, 240, 168, 0.05);
+    }
+
+    .brand-mark {
+      transform: translateZ(0);
+      animation: logoGravity 9s ease-in-out infinite;
+    }
+
+    .brand-mark .brand-particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 9px var(--green);
+      pointer-events: none;
+    }
+
+    .brand-mark .brand-particle:nth-child(1) {
+      left: 7px;
+      top: 20px;
+      animation: brandParticleA 4.7s linear infinite;
+    }
+
+    .brand-mark .brand-particle:nth-child(2) {
+      right: 8px;
+      bottom: 11px;
+      background: var(--blue);
+      box-shadow: 0 0 9px var(--blue);
+      animation: brandParticleB 6.4s linear infinite reverse;
+    }
+
+    .nav-links a.is-current::after {
+      opacity: 1;
+      transform: scaleX(1);
+    }
+
+    .nav-links a.is-current {
+      color: var(--green-soft);
+    }
+
+    .btn {
+      position: relative;
+      overflow: hidden;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .btn::before {
+      content: "";
+      position: absolute;
+      inset: -1px;
+      pointer-events: none;
+      background:
+        linear-gradient(110deg, transparent 0 32%, rgba(255, 255, 255, 0.24) 44%, transparent 56% 100%);
+      transform: translateX(-130%);
+      opacity: 0;
+    }
+
+    .btn:hover::before,
+    .btn:focus-visible::before {
+      animation: permissionSweep 940ms cubic-bezier(.2, .8, .2, 1);
+      opacity: 1;
+    }
+
+    .btn.primary::after {
+      content: "";
+      position: absolute;
+      inset: 4px;
+      border: 1px solid rgba(0, 240, 168, 0.2);
+      border-radius: 4px;
+      opacity: 0;
+      transform: scale(0.9);
+      pointer-events: none;
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .btn.primary:hover::after,
+    .btn.primary:focus-visible::after {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .motion-magnetic {
+      transition: border-color 220ms ease, box-shadow 220ms ease;
+    }
+
+    .motion-magnetic::before {
+      background-position: var(--local-x, 50%) var(--local-y, 50%);
+    }
+
+    .panel,
+    .stat,
+    .agent-card,
+    .risk-card,
+    .material-card,
+    .timeline-card,
+    .matrix-cell,
+    .graph-card,
+    .founder-card,
+    .access-card,
+    .command-shell,
+    .risk-lab,
+    .document-index,
+    .pdf-reader {
+      transform-style: preserve-3d;
+    }
+
+    .motion-magnetic.is-magnetized {
+      border-color: color-mix(in srgb, var(--green) 42%, var(--line-strong));
+      box-shadow: var(--shadow-tight), 0 0 44px rgba(0, 240, 168, 0.07);
+    }
+
+    .motion-magnetic.is-magnetized :is(h3, b, .kicker, .micro) {
+      text-shadow: 0 0 16px rgba(0, 240, 168, 0.14);
+    }
+
+    .command-shell {
+      transform: translate3d(0, 0, 0);
+    }
+
+    .command-shell::before {
+      background-position:
+        calc(50% + var(--motion-x) * 10px) calc(50% + var(--motion-y) * 10px),
+        calc(50% + var(--motion-x) * -12px) calc(50% + var(--motion-y) * -10px),
+        0 0,
+        0 0;
+    }
+
+    .command-shell.motion-in-view::after {
+      animation-duration: 4.9s;
+    }
+
+    .black-hole {
+      transform: translate3d(calc(var(--motion-x) * 6px), calc(var(--motion-y) * 5px), 0);
+      transform-style: preserve-3d;
+      will-change: transform;
+    }
+
+    .black-hole .motion-canvas {
+      position: absolute;
+      inset: -12%;
+      z-index: 1;
+      width: 124%;
+      height: 124%;
+      opacity: 0.72;
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    .black-hole .lens-ring,
+    .black-hole .memory-ring,
+    .black-hole .risk-ring {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .black-hole .lens-ring {
+      inset: -4%;
+      z-index: 2;
+      border: 1px solid rgba(246, 240, 230, 0.11);
+      background:
+        conic-gradient(from calc(var(--section-depth) * 1deg), transparent 0 8%, rgba(0, 240, 168, 0.18) 10%, transparent 13% 31%, rgba(122, 184, 255, 0.15) 35%, transparent 39% 64%, rgba(255, 138, 76, 0.17) 68%, transparent 72% 100%);
+      filter: drop-shadow(0 0 18px rgba(0, 240, 168, 0.08));
+      animation: orbitalSpin 68s linear infinite;
+    }
+
+    .black-hole .memory-ring {
+      inset: 25%;
+      z-index: 3;
+      border: 1px dotted rgba(0, 240, 168, 0.36);
+      box-shadow: inset 0 0 28px rgba(0, 240, 168, 0.05), 0 0 18px rgba(0, 240, 168, 0.05);
+      animation: orbitalSpin 31s linear infinite reverse;
+    }
+
+    .black-hole .risk-ring {
+      inset: 8%;
+      z-index: 3;
+      border: 1px solid rgba(255, 138, 76, 0.28);
+      box-shadow: 0 0 calc(22px + var(--risk-pulse) * 18px) rgba(255, 138, 76, 0.09);
+      animation: riskAuthority 6.2s ease-in-out infinite;
+    }
+
+    .orbit {
+      z-index: 4;
+      box-shadow: 0 0 26px rgba(246, 240, 230, 0.035);
+    }
+
+    .orbit.one {
+      animation-duration: calc(22s / var(--orbital-speed));
+    }
+
+    .orbit.two {
+      animation-duration: calc(17s / var(--orbital-speed));
+    }
+
+    .orbit.three {
+      animation-duration: calc(13s / var(--orbital-speed));
+    }
+
+    .singularity {
+      z-index: 6;
+      transform: translateZ(32px);
+      filter: drop-shadow(0 0 22px rgba(0, 240, 168, 0.14));
+    }
+
+    .cy-orbit-label {
+      position: absolute;
+      z-index: 7;
+      left: 50%;
+      top: 50%;
+      padding: 0.24rem 0.42rem;
+      border: 1px solid rgba(246, 240, 230, 0.14);
+      border-radius: 999px;
+      background: rgba(3, 5, 4, 0.72);
+      color: var(--ink-2);
+      font-family: var(--mono);
+      font-size: clamp(0.54rem, 1vw, 0.66rem);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      box-shadow: 0 0 18px rgba(0, 0, 0, 0.36);
+      pointer-events: none;
+    }
+
+    .cy-orbit-label[data-state="risk"] {
+      border-color: rgba(255, 138, 76, 0.28);
+      color: #ffd1ae;
+    }
+
+    .cy-orbit-label[data-state="locked"] {
+      border-color: rgba(255, 102, 112, 0.28);
+      color: #ffc5ca;
+    }
+
+    .command-telemetry {
+      position: absolute;
+      z-index: 8;
+      left: 0.85rem;
+      right: 0.85rem;
+      top: 58px;
+      display: grid;
+      gap: 0.42rem;
+      pointer-events: none;
+      opacity: 0.72;
+    }
+
+    .command-event {
+      width: min(360px, 100%);
+      padding: 0.44rem 0.58rem;
+      border: 1px solid rgba(246, 240, 230, 0.12);
+      border-left-color: rgba(0, 240, 168, 0.55);
+      border-radius: 4px;
+      background: rgba(2, 4, 3, 0.72);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.66rem;
+      text-transform: uppercase;
+      box-shadow: 0 14px 42px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateY(-8px);
+      transition: opacity 360ms ease, transform 360ms ease, border-color 360ms ease;
+    }
+
+    .command-event.is-live {
+      opacity: 0.92;
+      transform: translateY(0);
+    }
+
+    .command-event[data-tone="risk"] {
+      border-left-color: rgba(255, 138, 76, 0.7);
+      color: #ffd1ae;
+    }
+
+    .command-event[data-tone="lock"] {
+      border-left-color: rgba(255, 102, 112, 0.62);
+      color: #ffc5ca;
+    }
+
+    .readout {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .readout::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 240, 168, 0.72), transparent);
+      transform: translateX(-110%);
+      opacity: 0.55;
+      animation: readoutPulse 6.2s ease-in-out infinite;
+      animation-delay: calc(var(--readout-delay, 0) * 1s);
+    }
+
+    .architecture-map.motion-in-view .map-stage::before,
+    .risk-lab.motion-in-view::before {
+      animation-play-state: running;
+    }
+
+    .map-stage {
+      transform-style: preserve-3d;
+    }
+
+    .map-stage::before,
+    .map-stage::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    .map-stage::before {
+      z-index: 1;
+      background:
+        radial-gradient(circle at calc(50% + var(--motion-x) * 12%) calc(50% + var(--motion-y) * 12%), rgba(0, 240, 168, 0.16), transparent 14rem),
+        linear-gradient(115deg, transparent 0 42%, rgba(122, 184, 255, 0.12) 49%, transparent 56% 100%);
+      opacity: 0.72;
+      transform: translate3d(calc(var(--motion-x) * 8px), calc(var(--motion-y) * 8px), 0);
+    }
+
+    .map-stage::after {
+      z-index: 2;
+      border: 1px solid rgba(255, 138, 76, 0.18);
+      border-radius: 50%;
+      inset: 29%;
+      box-shadow: 0 0 36px rgba(255, 138, 76, 0.08), inset 0 0 34px rgba(255, 138, 76, 0.045);
+      animation: riskAuthority 7.8s ease-in-out infinite;
+    }
+
+    .map-stage svg {
+      z-index: 2;
+    }
+
+    .map-stage line {
+      vector-effect: non-scaling-stroke;
+      transition: stroke 220ms ease, opacity 220ms ease;
+    }
+
+    .architecture-map.motion-in-view .map-stage line {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+      animation: graphAssemble 1.55s cubic-bezier(.2, .8, .2, 1) forwards;
+    }
+
+    .architecture-map.motion-in-view .map-stage .signal-line {
+      animation: graphAssemble 1.55s cubic-bezier(.2, .8, .2, 1) forwards, dash 9s linear infinite 1.55s;
+    }
+
+    .map-packet {
+      position: absolute;
+      z-index: 5;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 15px var(--green);
+      pointer-events: none;
+      transform: translate3d(-50%, -50%, 0);
+    }
+
+    .map-packet.is-risk {
+      background: var(--amber);
+      box-shadow: 0 0 18px var(--amber);
+    }
+
+    .map-packet.is-rejected {
+      background: var(--red);
+      box-shadow: 0 0 20px var(--red);
+    }
+
+    .graph-label {
+      position: absolute;
+      z-index: 6;
+      padding: 0.22rem 0.38rem;
+      border: 1px solid rgba(246, 240, 230, 0.12);
+      border-radius: 999px;
+      background: rgba(2, 4, 3, 0.76);
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .map-node {
+      transition: transform 520ms cubic-bezier(.2, .8, .2, 1), border-color 220ms ease, opacity 520ms ease;
+    }
+
+    .architecture-map:not(.motion-in-view) .map-node {
+      opacity: 0.82;
+      transform: translate3d(0, 6px, 0) scale(0.985);
+    }
+
+    .architecture-map.motion-in-view .map-node {
+      animation: nodeWake 840ms cubic-bezier(.2, .8, .2, 1) both;
+    }
+
+    .architecture-map.motion-in-view .node-b { animation-delay: 90ms; }
+    .architecture-map.motion-in-view .node-c { animation-delay: 180ms; }
+    .architecture-map.motion-in-view .node-d { animation-delay: 270ms; }
+    .architecture-map.motion-in-view .node-e { animation-delay: 360ms; }
+    .architecture-map.motion-in-view .node-f { animation-delay: 450ms; }
+
+    .map-node:hover {
+      border-color: rgba(0, 240, 168, 0.46);
+      transform: translate3d(0, -3px, 20px) scale(1.015);
+    }
+
+    .risk-lab {
+      transform: translate3d(0, 0, 0);
+    }
+
+    .risk-lab::before {
+      animation: riskGridDrift 10s linear infinite paused;
+    }
+
+    .risk-lab.motion-in-view::before {
+      animation-play-state: running;
+    }
+
+    .risk-lab::after {
+      box-shadow: inset 0 0 90px rgba(0, 0, 0, 0.28), 0 0 calc(32px + var(--risk-pulse) * 28px) rgba(255, 138, 76, 0.07);
+    }
+
+    .risk-lab .risk-sweep {
+      position: absolute;
+      inset: -30% 48% -30% 48%;
+      z-index: 4;
+      width: 2px;
+      background: linear-gradient(180deg, transparent, rgba(255, 138, 76, 0.56), rgba(0, 240, 168, 0.28), transparent);
+      opacity: 0.44;
+      transform-origin: 50% 50%;
+      animation: riskSweep 5.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .risk-lab .risk-packet,
+    .risk-lab .memory-pulse {
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      top: 50%;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 18px var(--green);
+      transform: translate3d(-50%, -50%, 0);
+      pointer-events: none;
+    }
+
+    .risk-lab .risk-packet.is-warning {
+      background: var(--amber);
+      box-shadow: 0 0 20px var(--amber);
+    }
+
+    .risk-lab .risk-packet.is-rejected {
+      background: var(--red);
+      box-shadow: 0 0 22px var(--red);
+    }
+
+    .risk-lab .memory-pulse {
+      width: 92px;
+      height: 92px;
+      border: 1px solid rgba(0, 240, 168, 0.38);
+      background: transparent;
+      box-shadow: none;
+      opacity: 0;
+      animation: memoryWrite 4.4s ease-in-out infinite;
+    }
+
+    .risk-core {
+      transform: translate3d(calc(var(--motion-x) * 9px), calc(var(--motion-y) * 8px), 0);
+      animation: orbitalSpin 19s linear infinite reverse, riskCorePulse 4.6s ease-in-out infinite;
+    }
+
+    .risk-lab.is-rejecting .risk-core {
+      box-shadow: 0 0 96px rgba(255, 102, 112, 0.26), inset 0 0 70px rgba(0, 0, 0, 0.78);
+    }
+
+    .risk-label {
+      animation: labelTension 7.2s ease-in-out infinite;
+      animation-delay: var(--risk-label-delay, 0s);
+    }
+
+    .risk-label.b { --risk-label-delay: -1.2s; }
+    .risk-label.c { --risk-label-delay: -2.3s; }
+    .risk-label.d { --risk-label-delay: -3.4s; }
+
+    section h2 {
+      position: relative;
+    }
+
+    html[data-motion="full"] section h2::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -0.22em;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(0, 240, 168, 0.45), rgba(122, 184, 255, 0.22), transparent);
+      opacity: 0;
+      transform: scaleX(0);
+      transform-origin: left;
+    }
+
+    html[data-motion="full"] section.is-active h2::after {
+      animation: headingScan 1.15s cubic-bezier(.2, .8, .2, 1) forwards;
+    }
+
+    @keyframes telemetryRail {
+      to { background-position: 240% 0; }
+    }
+
+    @keyframes logoGravity {
+      0%, 100% { transform: translateZ(0) rotate(0deg) scale(1); }
+      42% { transform: translateZ(0) rotate(-2deg) scale(1.035); }
+      68% { transform: translateZ(0) rotate(1.5deg) scale(0.99); }
+    }
+
+    @keyframes brandParticleA {
+      0% { transform: rotate(0deg) translateX(16px) rotate(0deg); opacity: 0.35; }
+      50% { opacity: 1; }
+      100% { transform: rotate(360deg) translateX(16px) rotate(-360deg); opacity: 0.35; }
+    }
+
+    @keyframes brandParticleB {
+      0% { transform: rotate(0deg) translateX(12px) rotate(0deg); opacity: 0.2; }
+      50% { opacity: 0.86; }
+      100% { transform: rotate(360deg) translateX(12px) rotate(-360deg); opacity: 0.2; }
+    }
+
+    @keyframes permissionSweep {
+      0% { transform: translateX(-130%); }
+      100% { transform: translateX(130%); }
+    }
+
+    @keyframes riskAuthority {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.68; }
+      46% { transform: scale(1.018) rotate(2deg); opacity: 1; }
+      72% { transform: scale(0.992) rotate(-1deg); opacity: 0.82; }
+    }
+
+    @keyframes readoutPulse {
+      0%, 64%, 100% { transform: translateX(-110%); opacity: 0; }
+      74% { opacity: 0.65; }
+      92% { transform: translateX(110%); opacity: 0; }
+    }
+
+    @keyframes graphAssemble {
+      to { stroke-dashoffset: 0; }
+    }
+
+    @keyframes nodeWake {
+      0% { opacity: 0; transform: translate3d(0, 16px, 0) scale(0.96); }
+      100% { opacity: 1; transform: translate3d(0, 0, 0) scale(1); }
+    }
+
+    @keyframes riskGridDrift {
+      0% { background-position: 0 0, 0 0; }
+      100% { background-position: 32px 32px, 32px 32px; }
+    }
+
+    @keyframes riskSweep {
+      0% { transform: rotate(16deg) translateX(-130px); opacity: 0; }
+      20% { opacity: 0.46; }
+      56% { opacity: 0.24; }
+      100% { transform: rotate(196deg) translateX(130px); opacity: 0; }
+    }
+
+    @keyframes riskCorePulse {
+      0%, 100% { filter: saturate(1); }
+      48% { filter: saturate(1.25) brightness(1.08); }
+    }
+
+    @keyframes memoryWrite {
+      0%, 70%, 100% { transform: translate3d(-50%, -50%, 0) scale(0.55); opacity: 0; }
+      77% { opacity: 0.42; }
+      94% { transform: translate3d(-50%, -50%, 0) scale(1.42); opacity: 0; }
+    }
+
+    @keyframes labelTension {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      34% { transform: translate3d(2px, -3px, 0); }
+      68% { transform: translate3d(-2px, 2px, 0); }
+    }
+
+    @keyframes headingScan {
+      0% { opacity: 0; transform: scaleX(0); }
+      38% { opacity: 0.9; }
+      100% { opacity: 0.32; transform: scaleX(1); }
     }
 
     @media (max-width: 1120px) {
@@ -2435,6 +3054,76 @@
     }
 
     @media (max-width: 760px) {
+      html[data-motion="full"],
+      html[data-motion="reduced"] {
+        --orbital-speed: 0.72;
+        --signal-intensity: 0.28;
+      }
+
+      .mobile-orbital {
+        position: relative;
+        display: block;
+        width: min(68vw, 260px);
+        aspect-ratio: 1;
+        margin: 0.4rem 0 0.1rem;
+        border-radius: 50%;
+        isolation: isolate;
+        opacity: 0.92;
+        background:
+          radial-gradient(circle at 50% 50%, rgba(0, 240, 168, 0.2), transparent 29%),
+          radial-gradient(circle at 62% 38%, rgba(122, 184, 255, 0.12), transparent 38%),
+          conic-gradient(from 110deg, transparent 0 10%, rgba(0, 240, 168, 0.16), transparent 27% 54%, rgba(255, 138, 76, 0.12), transparent 74% 100%);
+      }
+
+      .mobile-orbital::before,
+      .mobile-orbital::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+      }
+
+      .mobile-orbital::before {
+        inset: 0;
+        border: 1px solid rgba(246, 240, 230, 0.16);
+        animation: orbitalSpin 34s linear infinite;
+      }
+
+      .mobile-orbital::after {
+        inset: 18%;
+        border: 1px dashed rgba(0, 240, 168, 0.28);
+        animation: orbitalSpin 28s linear infinite reverse;
+      }
+
+      .mobile-orbital .orbit,
+      .mobile-orbital .singularity {
+        position: absolute;
+      }
+
+      .mobile-orbital .singularity {
+        left: 33%;
+        top: 33%;
+        width: 34%;
+      }
+
+      .command-shell,
+      .risk-lab {
+        transform: none !important;
+      }
+
+      .black-hole .motion-canvas {
+        opacity: 0.62;
+      }
+
+      .command-telemetry {
+        display: none;
+      }
+
+      .cy-orbit-label:nth-of-type(n + 7),
+      .graph-label:nth-of-type(n + 5) {
+        display: none;
+      }
+
       [data-reveal] {
         opacity: 1 !important;
         transform: none !important;
@@ -2443,6 +3132,18 @@
 
       section {
         padding: 3.2rem 0;
+      }
+
+      .eyebrow {
+        display: grid;
+        grid-template-columns: 8px minmax(0, 1fr);
+        align-items: flex-start;
+      }
+
+      .eyebrow span:not(.pulse) {
+        max-width: 100%;
+        white-space: normal;
+        line-height: 1.45;
       }
 
       #public-thesis,
@@ -2481,6 +3182,21 @@
         opacity: 1;
         transform: none;
       }
+
+      .motion-canvas,
+      .map-packet,
+      .risk-packet,
+      .memory-pulse,
+      .command-telemetry {
+        display: none !important;
+      }
+
+      .command-shell,
+      .black-hole,
+      .risk-lab,
+      .motion-magnetic {
+        transform: none !important;
+      }
     }
   </style>
 </head>
@@ -2499,18 +3215,18 @@
       </a>
 
       <nav class="nav-links" id="navLinks" aria-label="Primary navigation">
-        <a href="#thesis">Thesis</a>
+        <a href="/thesis/">Thesis</a>
         <a href="#market-structure">Why now</a>
         <a href="#architecture">Architecture</a>
         <a href="#risk">Risk</a>
         <a href="#diligence">Diligence</a>
-        <a href="#access">Access</a>
+        <a href="/investor/">Access</a>
       </nav>
 
       <div class="nav-actions">
         <button class="btn small command-open" type="button" data-command-open>Command</button>
         <button class="btn small mode-toggle" type="button" data-mode-toggle aria-pressed="false">Diligence mode</button>
-        <a class="btn primary small" href="#access">Initiate review</a>
+        <a class="btn primary small" href="/investor/">Investor Access</a>
         <button class="menu-toggle" type="button" id="menuToggle" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span></button>
       </div>
     </div>
@@ -2521,19 +3237,25 @@
     <section class="hero" id="top">
       <div class="shell hero-grid">
         <div class="hero-copy" data-reveal>
-          <p class="eyebrow"><span class="pulse" aria-hidden="true"></span><span>Private investor review / paper validation / L3 conditional autonomy</span></p>
-          <h1>AI native capital system for machine scale markets.</h1>
-          <p class="lead">Cygnus X-1 is being built as a governed autonomous capital system: a crypto first hedge fund architecture where market ontology, specialist agents, risk veto, execution controls, and continuous learning operate as one auditable investment loop.</p>
+          <p class="eyebrow"><span class="pulse" aria-hidden="true"></span><span>Private review / paper validation</span></p>
+          <div class="mobile-orbital" aria-hidden="true">
+            <span class="orbit one"><i></i></span>
+            <span class="orbit two"><i></i></span>
+            <span class="orbit three"><i></i></span>
+            <span class="singularity"></span>
+          </div>
+          <h1>AI-native capital system for machine-scale markets.</h1>
+          <p class="lead">Governed autonomous capital allocation for fragmented, machine-speed markets. Cygnus X-1 is being built as a crypto first hedge fund architecture where market ontology, specialist agents, risk veto, execution controls, and continuous learning operate as one auditable investment loop.</p>
           <ul class="memo-list" aria-label="Executive summary">
             <li><span>What it is</span><p>A fund architecture, not an AI wrapper: agents participate in research, strategy generation, risk review, execution, attribution, and learning.</p></li>
             <li><span>Why it matters</span><p>Markets are increasingly machine scale. The edge shifts toward systems that can infer state, route decisions, refuse bad trades, and preserve richer operating memory.</p></li>
             <li><span>Investor path</span><p>Public thesis first. Qualified diligence second. Live capital only after controls, reporting, and paper validation deserve review.</p></li>
           </ul>
           <div class="hero-actions">
-            <a class="btn primary" href="#access">Initiate investor review</a>
-            <a class="btn" href="#public-thesis">Review public thesis</a>
+            <a class="btn primary" href="/investor/">Investor Access</a>
+            <a class="btn" href="/thesis/">Read Public Thesis</a>
             <a class="btn" href="#diligence">Review diligence structure</a>
-            <a class="btn" href="https://cal.com/nik.xyz" target="_blank" rel="noreferrer">Book strategic conversation</a>
+            <a class="btn" href="/investor/">Enter Investor OS</a>
           </div>
         </div>
 
@@ -2557,21 +3279,6 @@
       </div>
     </section>
 
-    <div class="telemetry-ribbon" aria-label="Operating status ribbon">
-      <div class="ribbon-track">
-        <span><b>Mandate</b> AI native capital allocation</span>
-        <span><b>Initial domain</b> crypto structural and behavioral inefficiency</span>
-        <span><b>Default exposure</b> delta-neutral first</span>
-        <span><b>Governance</b> conditional autonomy with human override</span>
-        <span><b>Diligence</b> public thesis separated from gated materials</span>
-        <span><b>Mandate</b> AI native capital allocation</span>
-        <span><b>Initial domain</b> crypto structural and behavioral inefficiency</span>
-        <span><b>Default exposure</b> delta-neutral first</span>
-        <span><b>Governance</b> conditional autonomy with human override</span>
-        <span><b>Diligence</b> public thesis separated from gated materials</span>
-      </div>
-    </div>
-
     <!-- 2. OPERATING STATUS / FRAMING -->
     <section id="status" aria-label="Cygnus X-1 operating status">
       <div class="shell status-grid">
@@ -2587,9 +3294,9 @@
       <div class="shell thesis-grid">
         <div class="panel thesis-panel" data-reveal>
           <p class="kicker">Investment thesis</p>
-          <h2>The next institutional edge is not more data. It is governed autonomous cognition.</h2>
+          <h2>The thesis is governed cognition, not more data.</h2>
           <p class="section-copy">Cygnus X-1 starts from a specific view of markets: price is the temporary clearing level created by constrained participants, fragmented venues, leverage, latency, regulation, and narrative pressure. The investment problem is therefore not simply prediction. It is state inference under constraint.</p>
-          <p class="section-copy">An AI native fund should not merely summarize research or accelerate analysts. It should become the native decision architecture for signal ingestion, hypothesis generation, strategy testing, risk veto, execution routing, attribution, and continuous learning.</p>
+          <p class="section-copy">An AI-native capital system for machine-scale markets should not merely summarize research or accelerate analysts. It should become the native decision architecture for signal ingestion, hypothesis generation, strategy testing, risk veto, execution routing, attribution, and continuous learning.</p>
         </div>
 
         <div class="panel thesis-panel" data-reveal>
@@ -2701,9 +3408,9 @@
         <div class="section-head">
           <div>
             <p class="kicker">Execution and control stack</p>
-            <h2>The first duty of the machine is to become real without becoming fragile.</h2>
+            <h2>The first duty of the machine is refusal.</h2>
           </div>
-          <p class="section-copy">Cygnus X-1 is ambitious in final architecture and conservative in initial deployment. The V1 surface is intentionally narrow: prove execution quality, risk containment, and learning discipline before expanding the strategy universe.</p>
+          <p class="section-copy">Cygnus X-1 is ambitious in final architecture and conservative in initial deployment. The V1 surface is intentionally narrow: prove execution quality, risk containment, and learning discipline before expanding the strategy universe. Simulation only. No live orders.</p>
         </div>
 
         <div class="stack-grid">
@@ -2730,7 +3437,7 @@
         <div class="section-head">
           <div>
             <p class="kicker">Risk containment and oversight</p>
-            <h2>Risk is the operating perimeter, not the post trade explanation.</h2>
+            <h2>Risk veto is not a feature. It is the operating perimeter.</h2>
           </div>
           <p class="section-copy">Serious investors do not underwrite autonomy unless they understand how it is constrained. Cygnus X-1 frames risk as a sovereign control surface: limits, vetoes, escalation paths, model monitoring, auditability, and human override at launch.</p>
         </div>
@@ -2804,13 +3511,13 @@
           <h2>A controlled review process, not a client side security claim.</h2>
           <p class="section-copy">The diligence layer is organized like an investor data room: clear review lanes, version discipline, public versus gated separation, and a practical sequence for evaluating thesis, controls, operating readiness, and fit.</p>
           <div class="workflow" style="margin-top:1rem;">
-            <div class="workflow-step"><b>Step 01</b><div><strong>Public thesis review</strong><p>Evaluate worldview, market structure rationale, AI native definition, and risk philosophy.</p><p style="margin-top:0.45rem;"><a href="#public-thesis" style="color:#a7ffd9;text-decoration:underline;text-underline-offset:3px;">Review public thesis on page</a></p></div><small>Public</small></div>
+            <div class="workflow-step"><b>Step 01</b><div><strong>Public thesis review</strong><p>Evaluate worldview, market structure rationale, AI native definition, and risk philosophy.</p><p style="margin-top:0.45rem;"><a href="/thesis/" style="color:#a7ffd9;text-decoration:underline;text-underline-offset:3px;">Open public thesis page</a></p></div><small>Public</small></div>
             <div class="workflow-step"><b>Step 02</b><div><strong>Qualified diligence request</strong><p>Identify allocator, counterpart, or builder fit and route the conversation to the correct review lane.</p></div><small>Gated request</small></div>
             <div class="workflow-step"><b>Step 03</b><div><strong>Private materials review</strong><p>Review fund formation, controls, model governance, architecture, roadmap, and operating assumptions.</p></div><small>Gated review</small></div>
           </div>
           <div class="section-actions" style="margin-top:1.2rem;">
-            <a class="btn primary" href="#materials">Review materials index</a>
-            <a class="btn" href="assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download">Download public thesis</a>
+            <a class="btn primary" href="/investor/">Enter Investor OS</a>
+            <a class="btn" href="/assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download">Download public thesis</a>
             <button class="btn" type="button" data-mode-toggle>Toggle site mode</button>
           </div>
         </div>
@@ -2840,9 +3547,9 @@
             <li><span>Action</span>Read here, open the dedicated route, download the PDF, then initiate qualified review if the operating model is relevant to mandate.</li>
           </ul>
           <div class="section-actions">
-            <a class="btn primary" href="assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download">Download thesis PDF</a>
-            <a class="btn" href="thesis/">Open at /thesis</a>
-            <a class="btn" href="#access">Initiate review</a>
+            <a class="btn primary" href="/assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download">Download thesis PDF</a>
+            <a class="btn" href="/thesis/">Open Public Thesis</a>
+            <a class="btn" href="/investor/">Investor Access</a>
           </div>
         </div>
 
@@ -2850,9 +3557,9 @@
           <div class="pdf-toolbar">
             <span>CYG-PUBLIC-THESIS / PAGE READER</span>
             <div class="pdf-toolbar-actions">
-              <a href="thesis/">Open route</a>
-              <a href="assets/docs/cygnus-public-thesis.pdf" target="_blank" rel="noopener" data-thesis-pdf="open">Open PDF</a>
-              <a href="assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download">Download</a>
+              <a href="/thesis/">Open route</a>
+              <a href="/assets/docs/cygnus-public-thesis.pdf" target="_blank" rel="noopener" data-thesis-pdf="open">Open PDF</a>
+              <a href="/assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download">Download</a>
             </div>
           </div>
           <div class="thesis-page-stack" aria-label="Cygnus X-1 public thesis page images">
@@ -2898,15 +3605,15 @@
               <div class="material-detail">
                 Intended to support the first pass: does the operating model deserve a private review?
                 <div class="material-actions" aria-label="Public thesis actions">
-                  <a href="#public-thesis">View on page</a>
-                  <a href="assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download">Download PDF</a>
+                  <a href="/thesis/">Open thesis page</a>
+                  <a href="/assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download">Download PDF</a>
                 </div>
               </div>
             </article>
             <button class="material-card" type="button" aria-expanded="false">
               <div><span class="material-type">Gated</span><h3>Fund formation and allocator package</h3><p>Structure, launch posture, review process, reporting expectations, and capital readiness assumptions.</p></div>
               <span class="lock">02</span>
-              <div class="material-detail">Shared only after fit is established. Not represented as server-secured in this static file.</div>
+              <div class="material-detail">Shared only after fit is established. Confidential operating files remain outside public hosting.</div>
             </button>
             <button class="material-card" type="button" aria-expanded="false">
               <div><span class="material-type">Gated</span><h3>Risk, autonomy, and control spec</h3><p>Pre trade veto, drawdown rules, venue constraints, model monitoring, audit trail, override, and kill switch escalation.</p></div>
@@ -2923,15 +3630,15 @@
 
         <div class="panel thesis-panel" data-reveal>
           <p class="kicker">Materials logic</p>
-          <h2>Public thesis. Gated operating documents. No static site overclaim.</h2>
-          <p class="section-copy">A static site can communicate the structure of diligence. It should not imply that confidential materials are protected by client side theatrics. Cygnus X-1 keeps the thesis public and routes fund formation, controls, model governance, architecture, roadmap, and operating assumptions into qualified review.</p>
+          <h2>Public thesis. Gated operating documents. No public-hosting overclaim.</h2>
+          <p class="section-copy">The public site communicates the structure of diligence without implying that confidential materials live here. Cygnus X-1 keeps the thesis public and routes fund formation, controls, model governance, architecture, roadmap, and operating assumptions into qualified review.</p>
           <div class="public-gated" style="margin-top:1rem;">
             <article class="review-card"><b>Public layer</b><h3>Decision relevant thesis</h3><p>Category argument, operating model, risk philosophy, and high level architecture.</p></article>
             <article class="review-card"><b>Gated layer</b><h3>Operating review</h3><p>Controls, formation detail, roadmap, model governance, materials, and operating documents.</p></article>
           </div>
           <div class="section-actions" style="margin-top:1.1rem;">
-            <a class="btn primary" href="#public-thesis">Review public thesis</a>
-            <a class="btn" href="assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download">Download thesis</a>
+            <a class="btn primary" href="/thesis/">Review public thesis</a>
+            <a class="btn" href="/assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download">Download thesis</a>
             <a class="btn" href="mailto:nik@cygnusx1.xyz?subject=Cygnus%20X-1%20materials%20access%20request">Submit materials inquiry</a>
           </div>
           <p class="thesis-download-note">Public thesis is open. Operating documents remain gated for qualified review.</p>
@@ -2945,7 +3652,7 @@
         <div class="section-head">
           <div>
             <p class="kicker">Access flow</p>
-            <h2>Route the review according to mandate and fit.</h2>
+            <h2>Qualified diligence begins inside Cygnus OS.</h2>
           </div>
           <p class="section-copy">The access path is intentionally specific. Cygnus X-1 is seeking serious allocator review, strategic counterpart discussions, and senior builders who understand fund operations, market structure, risk, and autonomous systems.</p>
         </div>
@@ -2960,7 +3667,7 @@
             <h3 id="personaTitle">Initiate allocator review.</h3>
             <p id="personaBody">For institutional LPs, family offices, and crypto-native allocators evaluating stage, controls, reporting, formation path, risk governance, and the evidence required before capital deployment.</p>
             <div class="section-actions" style="margin-top:1.1rem;">
-              <a class="btn primary" id="personaPrimary" href="https://cal.com/nik.xyz" target="_blank" rel="noreferrer">Book review conversation</a>
+              <a class="btn primary" id="personaPrimary" href="/investor/">Enter Investor OS</a>
               <a class="btn" id="personaSecondary" href="mailto:nik@cygnusx1.xyz?subject=Cygnus%20X-1%20allocator%20review">Email Nikhil</a>
             </div>
           </div>
@@ -2970,14 +3677,14 @@
             <h3>Submit review context.</h3>
             <div class="form-grid" style="margin-top:1rem;">
               <label><span>Name</span><input name="name" autocomplete="name" required></label>
-              <label><span>Email</span><input name="email" type="email" autocomplete="email" required></label>
+              <label><span>Email</span><input name="email" inputmode="email" autocomplete="email" required></label>
               <label><span>Profile</span><select name="profile" required><option>Institutional allocator</option><option>Family office</option><option>Crypto-native investor</option><option>Strategic counterpart</option><option>Senior builder</option></select></label>
               <label><span>Intent</span><select name="intent" required><option>Initiate investor review</option><option>Request diligence materials</option><option>Open strategic counterpart discussion</option><option>Begin senior builder discussion</option></select></label>
               <label class="wide"><span>Review context</span><textarea name="context" placeholder="Mandate, allocation context, partnership angle, operating background, or specific diligence questions." required></textarea></label>
             </div>
             <div class="form-actions" style="margin-top:1rem;">
               <button class="btn primary" type="submit">Prepare review email</button>
-              <a class="btn" href="https://cal.com/nik.xyz" target="_blank" rel="noreferrer">Book conversation</a>
+              <a class="btn" href="/investor/">Open Investor Access</a>
             </div>
           </form>
         </div>
@@ -3003,7 +3710,7 @@
           <p>The company is being built against a specific problem: most AI-in-finance narratives stop at research acceleration, while the harder institutional problem is controlled delegation across signal, strategy, risk, execution, and learning.</p>
           <div class="section-actions" style="margin-top:1.1rem;">
             <a class="btn primary" href="mailto:nik@cygnusx1.xyz">Email</a>
-            <a class="btn" href="https://cal.com/nik.xyz" target="_blank" rel="noreferrer">Book</a>
+            <a class="btn" href="/investor/">Investor OS</a>
             <a class="btn" href="https://x.com/xenothene" target="_blank" rel="noreferrer">X</a>
             <a class="btn" href="https://www.linkedin.com/in/nikhil-cygnus" target="_blank" rel="noreferrer">LinkedIn</a>
           </div>
@@ -3018,8 +3725,8 @@
         <h2>If this operating model is relevant to your mandate, initiate review.</h2>
         <p class="lead" style="margin-top:1rem;">The claim is deliberately narrow: a governed autonomous capital system may be able to infer more market state, test more policy surfaces, reject more fragile action, and compound operating memory faster than a human-centered fund architecture. The next step is not hype. It is diligence.</p>
         <div class="hero-actions" style="margin-top:1.4rem;">
-          <a class="btn primary" href="#access">Initiate investor review</a>
-          <a class="btn" href="https://cal.com/nik.xyz" target="_blank" rel="noreferrer">Book strategic conversation</a>
+          <a class="btn primary" href="/investor/">Initiate investor review</a>
+          <a class="btn" href="/investor/">Enter Investor OS</a>
           <a class="btn" href="mailto:nik@cygnusx1.xyz?subject=Cygnus%20X-1%20diligence%20review">Submit diligence inquiry</a>
         </div>
       </div>
@@ -3028,7 +3735,7 @@
     <section class="compliance" aria-label="Important legal and risk information">
       <div class="shell">
         <p>This website is informational only and does not constitute an offer to sell securities, a solicitation to buy, investment advice, legal advice, tax advice, or a recommendation of any security, digital asset, fund interest, or investment strategy. Any future offering would be made solely through definitive offering documents and only to eligible, qualified, accredited, professional, or otherwise permitted investors in applicable jurisdictions.</p>
-        <p>Digital assets and private funds involve substantial risk, including loss of capital, illiquidity, technology risk, regulatory risk, volatility, custody risk, model risk, and operational risk. Past, simulated, backtested, or paper performance does not guarantee future results. Final legal, regulatory, tax, and investment analysis requires qualified professional advisers.</p>
+        <p>Digital assets and private funds involve substantial risk, including loss of capital, illiquidity, technology risk, regulatory risk, volatility, custody risk, model risk, and operational risk. Past, simulated, backtested, or paper performance does not guarantee future results. No real trading or live order execution is available from this public review surface. Final legal, regulatory, tax, and investment analysis requires qualified professional advisers.</p>
       </div>
     </section>
   </main>
@@ -3040,11 +3747,12 @@
         <p>AI native hedge fund / governed autonomy / private diligence</p>
       </div>
       <div class="footer-links">
-        <a href="#public-thesis">Public thesis</a>
+        <a href="/thesis/">Public thesis</a>
         <a href="#risk">Risk</a>
         <a href="#diligence">Diligence</a>
         <a href="#materials">Materials</a>
-        <a href="#access">Access</a>
+        <a href="/investor/">Access</a>
+        <a href="/login/">Login</a>
         <a href="https://x.com/xenothene" target="_blank" rel="noreferrer">X</a>
       </div>
     </div>
@@ -3060,12 +3768,12 @@
         <button class="btn small" type="button" data-command-close>Close</button>
       </header>
       <div class="palette-actions">
-        <a href="#access" data-command-choice><strong>Initiate investor review</strong><span>Allocator path</span></a>
-        <a href="#public-thesis" data-command-choice><strong>Open public thesis</strong><span>On-page thesis</span></a>
+        <a href="/investor/" data-command-choice><strong>Initiate investor review</strong><span>Allocator path</span></a>
+        <a href="/thesis/" data-command-choice><strong>Open public thesis</strong><span>Thesis route</span></a>
         <a href="#diligence" data-command-choice><strong>Open diligence structure</strong><span>Review lanes</span></a>
         <a href="#risk" data-command-choice><strong>Inspect risk layer</strong><span>Containment</span></a>
-        <a href="assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download" data-command-choice><strong>Download thesis PDF</strong><span>Public artifact</span></a>
-        <a href="https://cal.com/nik.xyz" target="_blank" rel="noreferrer" data-command-choice><strong>Book strategic conversation</strong><span>Calendar</span></a>
+        <a href="/assets/docs/cygnus-public-thesis.pdf" download="cygnus-x-1-public-thesis.pdf" data-thesis-pdf="download" data-command-choice><strong>Download thesis PDF</strong><span>Public artifact</span></a>
+        <a href="/investor/" data-command-choice><strong>Enter Investor OS</strong><span>Secure review surface</span></a>
         <button type="button" data-mode-toggle data-command-choice><strong>Toggle site mode</strong><span>Command / diligence</span></button>
       </div>
     </div>
@@ -3075,6 +3783,10 @@
   <script>
     (() => {
       "use strict";
+      if ("scrollRestoration" in history) history.scrollRestoration = "manual";
+      if (!location.hash) {
+        addEventListener("load", () => setTimeout(() => scrollTo(0, 0), 0), { once: true });
+      }
 
       const root = document.documentElement;
       const $ = (selector, scope = document) => scope.querySelector(selector);
@@ -3082,6 +3794,21 @@
       const reducedMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
       const saveData = Boolean(navigator.connection && navigator.connection.saveData);
       const modeKey = "cygnus_x_1_mode";
+      const routeHref = (absolutePath, localPath) => location.protocol === "file:" ? localPath : absolutePath;
+      const connectStaticRoutes = () => {
+        const routes = [
+          ["/thesis/", "thesis/index.html"],
+          ["/investor/", "investor/index.html"],
+          ["/login/", "login/index.html"],
+          ["/assets/docs/cygnus-public-thesis.pdf", "assets/docs/cygnus-public-thesis.pdf"]
+        ];
+        routes.forEach(([absolutePath, localPath]) => {
+          $$(`a[href="${absolutePath}"]`).forEach((link) => {
+            link.href = routeHref(absolutePath, localPath);
+          });
+        });
+      };
+      connectStaticRoutes();
       const embeddedPdfData = $("#publicThesisPdfData")?.textContent?.trim();
       if (embeddedPdfData) {
         try {
@@ -3257,6 +3984,481 @@
         });
       }
 
+      const CygnusMotionEngine = (() => {
+        const coarsePointer = matchMedia("(pointer: coarse)").matches;
+        const smallViewport = matchMedia("(max-width: 760px)").matches;
+        const lowPower = saveData || (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4);
+        const intensity = reducedMotion ? "static" : (coarsePointer || smallViewport || lowPower ? "reduced" : "full");
+        const state = {
+          targetX: 0.48,
+          targetY: 0.28,
+          x: 0.48,
+          y: 0.28,
+          scrollDepth: 0,
+          last: 0,
+          raf: 0,
+          heroActive: true,
+          graphActive: false,
+          riskActive: false,
+          paused: false
+        };
+        const motion = {
+          intensity,
+          full: intensity === "full",
+          reduced: intensity === "reduced",
+          static: intensity === "static",
+          orbital: null,
+          graph: null,
+          risk: null,
+          telemetry: null
+        };
+
+        const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+        const lerp = (a, b, t) => a + (b - a) * t;
+        const jitter = (seed) => Math.sin(seed * 999.13) * 0.5 + 0.5;
+        const schedule = () => {
+          if (!state.raf && !motion.static) state.raf = requestAnimationFrame(frame);
+        };
+
+        const init = () => {
+          root.dataset.motion = intensity;
+          document.body.classList.add("cygnus-motion-ready");
+          initBrandMark();
+          initPointerField();
+          initSectionObservers();
+          initOrbitalSystems();
+          initSignalFlows();
+          initRiskField();
+          initMagneticCards();
+          initCommandTelemetry();
+          updateScrollState();
+          schedule();
+        };
+
+        const initBrandMark = () => {
+          const mark = $(".brand-mark");
+          if (!mark || mark.querySelector(".brand-particle")) return;
+          for (let i = 0; i < 2; i += 1) {
+            const particle = document.createElement("i");
+            particle.className = "brand-particle";
+            mark.appendChild(particle);
+          }
+        };
+
+        const initPointerField = () => {
+          if (motion.static || coarsePointer) return;
+          addEventListener("pointermove", (event) => {
+            state.targetX = clamp(event.clientX / innerWidth, 0, 1);
+            state.targetY = clamp(event.clientY / innerHeight, 0, 1);
+            schedule();
+          }, { passive: true });
+        };
+
+        const initSectionObservers = () => {
+          const header = $("#siteHeader");
+          const navLinks = $$(".nav-links a[href^='#']");
+          let scrollQueued = false;
+          addEventListener("scroll", () => {
+            if (!scrollQueued) {
+              scrollQueued = true;
+              requestAnimationFrame(() => {
+                scrollQueued = false;
+                updateScrollState();
+                header?.classList.toggle("is-condensed", scrollY > 48);
+              });
+            }
+          }, { passive: true });
+
+          if (!("IntersectionObserver" in window)) return;
+          const motionObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              const node = entry.target;
+              const active = entry.isIntersecting;
+              node.classList.toggle("motion-in-view", active);
+              if (node.matches(".hero, .command-shell")) state.heroActive = active || scrollY < innerHeight * 1.2;
+              if (node.matches(".architecture-map")) state.graphActive = active;
+              if (node.matches(".risk-lab")) state.riskActive = active;
+            });
+            schedule();
+          }, { threshold: 0.18, rootMargin: "120px 0px 120px 0px" });
+          $$(".hero, .command-shell, .architecture-map, .risk-lab").forEach((node) => motionObserver.observe(node));
+
+          const navObserver = new IntersectionObserver((entries) => {
+            const visible = entries
+              .filter((entry) => entry.isIntersecting)
+              .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+            if (!visible) return;
+            const id = visible.target.id;
+            navLinks.forEach((link) => link.classList.toggle("is-current", link.getAttribute("href") === `#${id}`));
+          }, { threshold: [0.18, 0.32, 0.48], rootMargin: "-20% 0px -55% 0px" });
+          $$("main > section[id]").forEach((section) => navObserver.observe(section));
+        };
+
+        const updateScrollState = () => {
+          const max = Math.max(1, document.documentElement.scrollHeight - innerHeight);
+          state.scrollDepth = clamp((scrollY || document.documentElement.scrollTop) / max, 0, 1);
+          root.style.setProperty("--scroll-depth", (state.scrollDepth * 100).toFixed(3));
+          root.style.setProperty("--section-depth", (state.scrollDepth * 360).toFixed(2));
+        };
+
+        const initOrbitalSystems = () => {
+          const blackHole = $(".black-hole");
+          if (!blackHole) return;
+          ["lens-ring", "risk-ring", "memory-ring"].forEach((className) => {
+            if (!blackHole.querySelector(`.${className}`)) {
+              const ring = document.createElement("span");
+              ring.className = className;
+              blackHole.prepend(ring);
+            }
+          });
+
+          const labels = ["DATA", "SIGNAL", "RISK", "MEMORY", "REVIEW GATE", "NO LIVE ENDPOINT"];
+          const labelNodes = labels.map((text, index) => {
+            const label = document.createElement("span");
+            label.className = "cy-orbit-label";
+            label.textContent = text;
+            if (text === "RISK") label.dataset.state = "risk";
+            if (text.includes("ENDPOINT")) label.dataset.state = "locked";
+            label.dataset.index = String(index);
+            blackHole.appendChild(label);
+            return label;
+          });
+
+          const canvas = document.createElement("canvas");
+          canvas.className = "motion-canvas";
+          const context = canvas.getContext && canvas.getContext("2d");
+          if (context) blackHole.prepend(canvas);
+          const count = motion.full ? 44 : 22;
+          const particles = Array.from({ length: count }, (_, index) => ({
+            angle: index * 2.399 + jitter(index) * 0.7,
+            radius: 0.22 + jitter(index + 4) * 0.42,
+            speed: (0.00022 + jitter(index + 9) * 0.00042) * (index % 4 === 0 ? -1 : 1),
+            size: 1.2 + jitter(index + 13) * (motion.full ? 2.2 : 1.2),
+            seed: index + 1,
+            tone: index % 11 === 0 ? "risk" : index % 7 === 0 ? "memory" : "signal"
+          }));
+
+          motion.orbital = { el: blackHole, canvas, context, labels: labelNodes, particles, width: 0, height: 0, dpr: 1 };
+          const resize = () => resizeOrbital();
+          if ("ResizeObserver" in window) new ResizeObserver(resize).observe(blackHole);
+          addEventListener("resize", resize, { passive: true });
+          resize();
+        };
+
+        const resizeOrbital = () => {
+          const orbital = motion.orbital;
+          if (!orbital || !orbital.context) return;
+          const rect = orbital.el.getBoundingClientRect();
+          orbital.dpr = Math.min(devicePixelRatio || 1, motion.full ? 1.65 : 1.2);
+          orbital.width = Math.max(1, rect.width * 1.24);
+          orbital.height = Math.max(1, rect.height * 1.24);
+          orbital.canvas.width = Math.floor(orbital.width * orbital.dpr);
+          orbital.canvas.height = Math.floor(orbital.height * orbital.dpr);
+        };
+
+        const drawOrbital = (now, dt) => {
+          const orbital = motion.orbital;
+          if (!orbital || !orbital.context || !state.heroActive) return;
+          const ctx = orbital.context;
+          const dpr = orbital.dpr;
+          const w = orbital.canvas.width;
+          const h = orbital.canvas.height;
+          const cx = w / 2 + (state.x - 0.5) * w * 0.055;
+          const cy = h / 2 + (state.y - 0.5) * h * 0.048;
+          ctx.clearRect(0, 0, w, h);
+          ctx.save();
+          ctx.globalCompositeOperation = "lighter";
+          ctx.lineWidth = Math.max(1, dpr);
+          const base = Math.min(w, h);
+          for (let ring = 0; ring < 5; ring += 1) {
+            ctx.beginPath();
+            ctx.ellipse(cx, cy, base * (0.19 + ring * 0.075), base * (0.08 + ring * 0.036), (ring * 0.34) + now * 0.00004, 0, Math.PI * 2);
+            ctx.strokeStyle = ring === 3 ? "rgba(255,138,76,0.11)" : "rgba(122,184,255,0.08)";
+            ctx.stroke();
+          }
+          orbital.particles.forEach((particle, index) => {
+            particle.angle += particle.speed * dt * (motion.full ? 1 : 0.62);
+            const veto = Math.sin(now * 0.0014 + particle.seed * 0.72) > 0.972 && particle.radius > 0.42;
+            const inward = 1 - (veto ? 0.38 : 0);
+            const rx = base * particle.radius * 0.44 * inward;
+            const ry = base * particle.radius * 0.19 * inward;
+            const wobble = Math.sin(now * 0.001 + particle.seed) * base * 0.006;
+            const x = cx + Math.cos(particle.angle) * (rx + wobble);
+            const y = cy + Math.sin(particle.angle) * (ry - wobble);
+            const color = veto ? "255,102,112" : particle.tone === "risk" ? "255,138,76" : particle.tone === "memory" ? "122,184,255" : "0,240,168";
+            ctx.beginPath();
+            ctx.arc(x, y, particle.size * dpr * (veto ? 1.42 : 1), 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${color},${veto ? 0.92 : 0.5})`;
+            ctx.shadowColor = `rgba(${color},0.58)`;
+            ctx.shadowBlur = (veto ? 18 : 9) * dpr;
+            ctx.fill();
+            if (veto && index % 2 === 0) {
+              ctx.beginPath();
+              ctx.moveTo(x, y);
+              ctx.lineTo(cx + Math.cos(particle.angle + Math.PI) * base * 0.18, cy + Math.sin(particle.angle + Math.PI) * base * 0.08);
+              ctx.strokeStyle = "rgba(255,102,112,0.32)";
+              ctx.stroke();
+            }
+          });
+          ctx.restore();
+        };
+
+        const updateOrbitLabels = (now) => {
+          const orbital = motion.orbital;
+          if (!orbital || !state.heroActive) return;
+          const rect = orbital.el.getBoundingClientRect();
+          const rx = rect.width * (motion.full ? 0.43 : 0.36);
+          const ry = rect.height * (motion.full ? 0.24 : 0.2);
+          orbital.labels.forEach((label, index) => {
+            if (motion.reduced && index > 4) {
+              label.style.opacity = "0";
+              return;
+            }
+            const angle = now * (0.000065 + index * 0.000004) + index * (Math.PI * 2 / orbital.labels.length);
+            const depth = Math.sin(angle);
+            const x = Math.cos(angle) * rx + (state.x - 0.5) * 18;
+            const y = depth * ry + (state.y - 0.5) * 16;
+            label.style.opacity = String(0.38 + Math.max(0, depth) * 0.48);
+            label.style.transform = `translate(-50%, -50%) translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, ${depth > 0 ? 18 : 0}px) scale(${(0.86 + Math.max(0, depth) * 0.18).toFixed(3)})`;
+          });
+        };
+
+        const initSignalFlows = () => {
+          const stage = $(".map-stage");
+          if (!stage) return;
+          const edges = [
+            [18, 18, 50, 50, "signal"],
+            [82, 18, 50, 50, "data"],
+            [88, 50, 50, 50, "risk"],
+            [76, 82, 50, 50, "memory"],
+            [22, 82, 50, 50, "signal"],
+            [12, 50, 50, 50, "audit"]
+          ];
+          const packets = edges.flatMap((edge, edgeIndex) => Array.from({ length: motion.full ? 2 : 1 }, (_, lane) => {
+            const packet = document.createElement("span");
+            packet.className = "map-packet";
+            packet.dataset.kind = edge[4];
+            stage.appendChild(packet);
+            return { el: packet, edge, t: (edgeIndex * 0.17 + lane * 0.48) % 1, speed: 0.00012 + edgeIndex * 0.000012, seed: edgeIndex + lane + 1 };
+          }));
+          [
+            ["schema verified", 11, 28],
+            ["veto check", 57, 39],
+            ["paper route", 66, 67],
+            ["memory write", 30, 68],
+            ["no live endpoint attached", 48, 84]
+          ].forEach(([text, x, y]) => {
+            const label = document.createElement("span");
+            label.className = "graph-label";
+            label.textContent = text;
+            label.style.left = `${x}%`;
+            label.style.top = `${y}%`;
+            stage.appendChild(label);
+          });
+          motion.graph = { stage, packets, width: 0, height: 0 };
+          const resize = () => {
+            const rect = stage.getBoundingClientRect();
+            motion.graph.width = rect.width;
+            motion.graph.height = rect.height;
+          };
+          if ("ResizeObserver" in window) new ResizeObserver(resize).observe(stage);
+          addEventListener("resize", resize, { passive: true });
+          resize();
+        };
+
+        const updateGraph = (dt) => {
+          const graph = motion.graph;
+          if (!graph || !state.graphActive) return;
+          graph.packets.forEach((packet) => {
+            packet.t = (packet.t + packet.speed * dt * (motion.full ? 1 : 0.72)) % 1;
+            const [x1, y1, x2, y2, kind] = packet.edge;
+            const riskWindow = kind === "risk" && packet.t > 0.48 && packet.t < 0.64;
+            const rejected = riskWindow && Math.sin(packet.seed * 5.1 + performance.now() * 0.002) > 0.2;
+            const t = rejected ? 1 - Math.abs(packet.t - 0.56) * 1.9 : packet.t;
+            const x = lerp(x1, x2, t) / 100 * graph.width;
+            const y = lerp(y1, y2, t) / 100 * graph.height;
+            packet.el.classList.toggle("is-risk", riskWindow);
+            packet.el.classList.toggle("is-rejected", rejected);
+            packet.el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, -50%)`;
+          });
+        };
+
+        const initRiskField = () => {
+          const lab = $(".risk-lab");
+          if (!lab) return;
+          const sweep = document.createElement("span");
+          sweep.className = "risk-sweep";
+          lab.appendChild(sweep);
+          const packets = Array.from({ length: motion.full ? 4 : 2 }, (_, index) => {
+            const packet = document.createElement("span");
+            packet.className = "risk-packet";
+            lab.appendChild(packet);
+            return { el: packet, t: index / (motion.full ? 4 : 2), angle: index * 1.71, speed: 0.00011 + index * 0.000024 };
+          });
+          const memory = document.createElement("span");
+          memory.className = "memory-pulse";
+          lab.appendChild(memory);
+          motion.risk = { lab, packets, memory, width: 0, height: 0 };
+          const resize = () => {
+            const rect = lab.getBoundingClientRect();
+            motion.risk.width = rect.width;
+            motion.risk.height = rect.height;
+          };
+          if ("ResizeObserver" in window) new ResizeObserver(resize).observe(lab);
+          addEventListener("resize", resize, { passive: true });
+          resize();
+        };
+
+        const updateRisk = (dt) => {
+          const risk = motion.risk;
+          if (!risk || !state.riskActive) return;
+          let rejecting = false;
+          const cx = risk.width / 2;
+          const cy = risk.height / 2;
+          const outer = Math.min(risk.width, risk.height) * 0.38;
+          risk.packets.forEach((packet, index) => {
+            packet.t = (packet.t + packet.speed * dt * (motion.full ? 1 : 0.68)) % 1;
+            const angle = packet.angle + performance.now() * 0.00018 * (index % 2 ? -1 : 1);
+            const inbound = packet.t < 0.5;
+            const riskCheck = packet.t >= 0.42 && packet.t <= 0.62;
+            const rejected = packet.t > 0.52 && packet.t < 0.72;
+            rejecting = rejecting || rejected;
+            const distance = inbound ? lerp(outer, outer * 0.25, packet.t * 2) : lerp(outer * 0.25, outer * 0.74, (packet.t - 0.5) * 2);
+            const x = cx + Math.cos(angle) * distance + (state.x - 0.5) * 10;
+            const y = cy + Math.sin(angle) * distance * 0.72 + (state.y - 0.5) * 8;
+            packet.el.classList.toggle("is-warning", riskCheck);
+            packet.el.classList.toggle("is-rejected", rejected);
+            packet.el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0) translate(-50%, -50%) scale(${rejected ? 1.28 : 1})`;
+          });
+          risk.lab.classList.toggle("is-rejecting", rejecting);
+        };
+
+        const initMagneticCards = () => {
+          if (!motion.full || coarsePointer) return;
+          const selector = ".command-shell, .panel, .stat, .agent-card, .risk-card, .material-card, .timeline-card, .matrix-cell, .graph-card, .founder-card, .access-card, .document-index, .pdf-reader, .btn";
+          $$(selector).forEach((node) => {
+            node.classList.add("motion-magnetic");
+            let rect = null;
+            let queued = false;
+            let x = 0;
+            let y = 0;
+            const flush = () => {
+              queued = false;
+              if (!rect) return;
+              const px = clamp((x - rect.left) / rect.width, 0, 1);
+              const py = clamp((y - rect.top) / rect.height, 0, 1);
+              node.style.setProperty("--local-x", `${(px * 100).toFixed(2)}%`);
+              node.style.setProperty("--local-y", `${(py * 100).toFixed(2)}%`);
+            };
+            node.addEventListener("pointerenter", (event) => {
+              rect = node.getBoundingClientRect();
+              x = event.clientX;
+              y = event.clientY;
+              node.classList.add("is-magnetized");
+              if (!queued) {
+                queued = true;
+                requestAnimationFrame(flush);
+              }
+            }, { passive: true });
+            node.addEventListener("pointermove", (event) => {
+              x = event.clientX;
+              y = event.clientY;
+              if (!queued) {
+                queued = true;
+                requestAnimationFrame(flush);
+              }
+            }, { passive: true });
+            node.addEventListener("pointerleave", () => {
+              rect = null;
+              node.classList.remove("is-magnetized");
+              node.style.transform = "";
+              node.style.removeProperty("--local-x");
+              node.style.removeProperty("--local-y");
+            }, { passive: true });
+          });
+        };
+
+        const initCommandTelemetry = () => {
+          const shell = $(".command-shell");
+          if (!shell) return;
+          const stack = document.createElement("div");
+          stack.className = "command-telemetry";
+          shell.appendChild(stack);
+          const lines = Array.from({ length: motion.full ? 3 : 2 }, () => {
+            const line = document.createElement("div");
+            line.className = "command-event";
+            stack.appendChild(line);
+            return line;
+          });
+          const events = [
+            ["SIGNAL / funding spread observed / paper only", "signal"],
+            ["RISK / veto perimeter retained", "risk"],
+            ["MEMORY / rejected candidate logged", "signal"],
+            ["EXECUTION / no live endpoint attached", "lock"],
+            ["SYNTH / thesis state updated", "signal"],
+            ["LEARN / paper outcome queued", "signal"],
+            ["REVIEW / human authority retained", "risk"]
+          ];
+          $$(".readout").forEach((readout, index) => readout.style.setProperty("--readout-delay", String(index * 1.15)));
+          motion.telemetry = { lines, events, index: 0, last: 0, interval: motion.full ? 2400 : 3900 };
+          updateTelemetry(0, true);
+        };
+
+        const updateTelemetry = (now, force = false) => {
+          const telemetry = motion.telemetry;
+          if (!telemetry || !state.heroActive) return;
+          if (!force && now - telemetry.last < telemetry.interval) return;
+          telemetry.last = now;
+          telemetry.lines.forEach((line, lineIndex) => {
+            const event = telemetry.events[(telemetry.index + lineIndex) % telemetry.events.length];
+            line.textContent = event[0];
+            line.dataset.tone = event[1];
+            line.classList.remove("is-live");
+            requestAnimationFrame(() => line.classList.add("is-live"));
+          });
+          telemetry.index = (telemetry.index + 1) % telemetry.events.length;
+        };
+
+        const frame = (now) => {
+          state.raf = 0;
+          if (state.paused || motion.static) return;
+          const dt = state.last ? Math.min(48, now - state.last) : 16;
+          state.last = now;
+          const ease = motion.full ? 0.08 : 0.045;
+          state.x += (state.targetX - state.x) * ease;
+          state.y += (state.targetY - state.y) * ease;
+          const mx = (state.x - 0.5) * 2;
+          const my = (state.y - 0.5) * 2;
+          root.style.setProperty("--mx", `${(state.x * 100).toFixed(2)}%`);
+          root.style.setProperty("--my", `${(state.y * 100).toFixed(2)}%`);
+          root.style.setProperty("--motion-x", mx.toFixed(4));
+          root.style.setProperty("--motion-y", my.toFixed(4));
+          root.style.setProperty("--orbital-speed", (motion.full ? 1 + Math.abs(mx) * 0.22 : 0.72).toFixed(3));
+          root.style.setProperty("--risk-pulse", (0.32 + Math.abs(Math.sin(now * 0.0012)) * 0.68).toFixed(3));
+          root.style.setProperty("--signal-intensity", (motion.full ? 0.72 + Math.abs(mx * my) * 0.28 : 0.32).toFixed(3));
+          drawOrbital(now, dt);
+          updateOrbitLabels(now);
+          updateGraph(dt);
+          updateRisk(dt);
+          updateTelemetry(now);
+          if (state.heroActive || state.graphActive || state.riskActive || Math.abs(state.targetX - state.x) > 0.002 || Math.abs(state.targetY - state.y) > 0.002) {
+            schedule();
+          }
+        };
+
+        document.addEventListener("visibilitychange", () => {
+          state.paused = document.hidden;
+          if (!state.paused) {
+            state.last = 0;
+            schedule();
+          }
+        });
+
+        return { init };
+      })();
+
+      CygnusMotionEngine.init();
+
       const personas = {
         lp: {
           title: "Initiate allocator review.",
@@ -3291,8 +4493,10 @@
           $$("[data-persona]").forEach((item) => item.setAttribute("aria-selected", String(item === tab)));
           title.textContent = persona.title;
           body.textContent = persona.body;
-          primary.textContent = persona.primary;
-          primary.href = "https://cal.com/nik.xyz";
+          primary.textContent = "Enter Investor OS";
+          primary.href = routeHref("/investor/", "investor/index.html");
+          primary.removeAttribute("target");
+          primary.removeAttribute("rel");
           secondary.href = mailto(persona.subject, "Hi Nikhil,\n\nI would like to connect about Cygnus X-1.\n\nContext:\n");
         });
       });
